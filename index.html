@@ -1,213 +1,220 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Glass Login</title>
+<title>Katalog Jualan</title>
 
-<!-- Google Font -->
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
 
-<!-- Font Awesome -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-
 <style>
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: 'Poppins', sans-serif;
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif}
+
+/* ===== BACKGROUND ===== */
+body{
+display:flex;justify-content:center;align-items:center;
+min-height:100vh;
+background:url('https://images.unsplash.com/photo-1501785888041-af3ef285b470') no-repeat center/cover;
 }
 
-body {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    background-image: url('https://images.unsplash.com/photo-1501785888041-af3ef285b470');
-    background-size: cover;
-    background-position: center;
-    background-attachment: fixed;
-    overflow: hidden;
-    position: relative;
+/* ===== LOGIN ===== */
+.login-box{
+width:340px;padding:40px;background:rgba(255,255,255,0.08);
+border-radius:16px;backdrop-filter:blur(12px);
+box-shadow:0 25px 50px rgba(0,0,0,0.3);
+color:#fff
 }
 
-/* Overlay */
-body::before {
-    content: "";
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    background: rgba(15, 23, 42, 0.3);
-    z-index: 1;
+.login-box h2{text-align:center;margin-bottom:30px}
+
+.input-group{margin-bottom:20px}
+.input-group input{
+width:100%;padding:12px;border:none;
+border-bottom:1px solid #fff;background:transparent;color:#fff
 }
 
-/* Login Box */
-.login-box {
-    position: relative;
-    width: 350px;
-    padding: 45px 35px;
-    background: rgba(255, 255, 255, 0.08);
-    border-radius: 16px;
-    backdrop-filter: blur(12px);
-    border: 1px solid rgba(255,255,255,0.2);
-    box-shadow: 0 25px 50px rgba(0,0,0,0.25);
-    z-index: 10;
+.login-btn{
+width:100%;padding:12px;background:#0ea5e9;
+border:none;border-radius:6px;color:#fff;cursor:pointer
 }
 
-/* Title */
-h2 {
-    color: #fff;
-    text-align: center;
-    margin-bottom: 40px;
-    font-weight: 500;
-    letter-spacing: 2px;
+/* ===== APP ===== */
+.app{
+display:none;
+width:100%;
+padding:20px;
 }
 
-/* Input */
-.input-group {
-    position: relative;
-    margin-bottom: 30px;
+.header{
+display:flex;justify-content:space-between;align-items:center;
+color:#fff;margin-bottom:20px
 }
 
-.input-group i {
-    position: absolute;
-    top: 12px;
-    left: 0;
-    color: rgba(255,255,255,0.6);
+.btn{
+padding:8px 12px;background:#0ea5e9;border:none;color:#fff;border-radius:6px;cursor:pointer
 }
 
-.input-group input {
-    width: 100%;
-    padding: 12px 5px 12px 30px;
-    background: transparent;
-    border: none;
-    border-bottom: 1.5px solid rgba(255,255,255,0.4);
-    outline: none;
-    color: #fff;
-    font-size: 15px;
-    transition: 0.3s;
+.products{
+display:grid;
+grid-template-columns:repeat(auto-fill,minmax(150px,1fr));
+gap:15px;
 }
 
-.input-group label {
-    position: absolute;
-    top: 12px;
-    left: 30px;
-    color: rgba(255,255,255,0.8);
-    pointer-events: none;
-    transition: 0.3s;
+.card{
+background:#fff;border-radius:10px;padding:10px;text-align:center
 }
 
-/* Animation */
-.input-group input:focus ~ label,
-.input-group input:valid ~ label {
-    top: -18px;
-    left: 0;
-    font-size: 12px;
-    color: #38bdf8;
+.card img{
+width:100%;height:120px;object-fit:cover;border-radius:8px
 }
 
-.input-group input:focus {
-    border-bottom: 1.5px solid #38bdf8;
+.card h4{font-size:14px;margin:5px 0}
+.card p{color:green;font-weight:600}
+
+.wa{
+margin-top:5px;
+background:#25D366;
+border:none;color:#fff;padding:6px;border-radius:6px;cursor:pointer
 }
 
-.input-group input:focus ~ i {
-    color: #38bdf8;
+.delete{
+background:red;margin-top:5px
 }
 
-/* Button */
-.login-btn {
-    width: 100%;
-    padding: 14px;
-    background: #0ea5e9;
-    border: none;
-    border-radius: 8px;
-    color: #fff;
-    font-weight: 600;
-    letter-spacing: 1px;
-    cursor: pointer;
-    transition: 0.3s;
+/* ===== FORM ===== */
+.form{
+margin-bottom:20px;
+background:#fff;padding:10px;border-radius:10px
 }
 
-.login-btn:hover {
-    background: #0284c7;
-    transform: translateY(-1px);
-    box-shadow: 0 10px 20px rgba(14,165,233,0.3);
-}
-
-.login-btn:active {
-    transform: translateY(0);
-}
-
-/* Signup */
-.signup-link {
-    text-align: center;
-    margin-top: 25px;
-    color: #fff;
-    font-size: 13px;
-}
-
-.signup-link a {
-    color: #38bdf8;
-    text-decoration: none;
-    font-weight: 600;
-}
-
-.signup-link a:hover {
-    text-decoration: underline;
+.form input{
+width:100%;margin-bottom:5px;padding:8px
 }
 </style>
-
 </head>
+
 <body>
 
-<div class="login-box">
-    <form id="loginForm">
-        <h2>LOGIN</h2>
+<!-- LOGIN -->
+<div class="login-box" id="loginBox">
+<h2>LOGIN</h2>
+<form id="loginForm">
+<div class="input-group">
+<input type="text" id="username" placeholder="Username" required>
+</div>
+<div class="input-group">
+<input type="password" id="password" placeholder="Password" required>
+</div>
+<button class="login-btn">Sign In</button>
+</form>
+</div>
 
-        <div class="input-group">
-            <i class="fas fa-user"></i>
-            <input type="text" id="username" required>
-            <label>Username</label>
-        </div>
+<!-- APP -->
+<div class="app" id="app">
 
-        <div class="input-group">
-            <i class="fas fa-lock"></i>
-            <input type="password" id="password" required>
-            <label>Password</label>
-        </div>
+<div class="header">
+<h3>Katalog Jualan</h3>
+<button class="btn" onclick="logout()">Logout</button>
+</div>
 
-        <button type="submit" class="login-btn" id="submitBtn">Sign In</button>
+<!-- FORM ADMIN -->
+<div id="adminForm" class="form" style="display:none">
+<input type="text" id="nama" placeholder="Nama Produk">
+<input type="number" id="harga" placeholder="Harga">
+<input type="text" id="gambar" placeholder="Link Gambar">
+<button class="btn" onclick="tambahProduk()">Tambah</button>
+</div>
 
-        <p class="signup-link">
-            New here? <a href="#">Create Account</a>
-        </p>
-    </form>
+<div class="products" id="produkList"></div>
+
 </div>
 
 <script>
-document.addEventListener('DOMContentLoaded', () => {
-    const loginForm = document.getElementById('loginForm');
-    const submitBtn = document.getElementById('submitBtn');
+let isAdmin = false;
+let WA = "6281234567890"; // GANTI NOMOR KAMU
 
-    loginForm.addEventListener('submit', function(e) {
-        e.preventDefault();
+// LOGIN
+document.getElementById("loginForm").onsubmit = function(e){
+e.preventDefault();
 
-        submitBtn.innerText = 'Verifying...';
-        submitBtn.disabled = true;
+let user = username.value;
+let pass = password.value;
 
-        const username = document.getElementById('username').value;
+if(user=="admin" && pass=="123"){
+isAdmin = true;
+document.getElementById("adminForm").style.display="block";
+}
 
-        setTimeout(() => {
-            alert(`Welcome back, ${username}!`);
+loginBox.style.display="none";
+app.style.display="block";
+loadProduk();
+}
 
-            submitBtn.innerText = 'Sign In';
-            submitBtn.disabled = false;
+// LOGOUT
+function logout(){
+location.reload();
+}
 
-            loginForm.reset();
-        }, 1200);
-    });
+// DATA PRODUK
+function getProduk(){
+return JSON.parse(localStorage.getItem("produk")||"[]");
+}
+
+function saveProduk(data){
+localStorage.setItem("produk",JSON.stringify(data));
+}
+
+// LOAD PRODUK
+function loadProduk(){
+let data = getProduk();
+let html = "";
+
+data.forEach((p,i)=>{
+html+=`
+<div class="card">
+<img src="${p.gambar}">
+<h4>${p.nama}</h4>
+<p>Rp ${p.harga}</p>
+<button class="wa" onclick="order('${p.nama}','${p.harga}')">Order WA</button>
+${isAdmin? `<button class="delete" onclick="hapus(${i})">Hapus</button>`:""}
+</div>
+`;
 });
+
+produkList.innerHTML = html;
+}
+
+// TAMBAH
+function tambahProduk(){
+let data = getProduk();
+
+data.push({
+nama:nama.value,
+harga:harga.value,
+gambar:gambar.value
+});
+
+saveProduk(data);
+loadProduk();
+
+nama.value="";
+harga.value="";
+gambar.value="";
+}
+
+// HAPUS
+function hapus(i){
+let data = getProduk();
+data.splice(i,1);
+saveProduk(data);
+loadProduk();
+}
+
+// ORDER WA
+function order(nama,harga){
+let pesan = `Halo, saya mau pesan:\n${nama}\nHarga: Rp ${harga}`;
+window.open(`https://wa.me/${WA}?text=`+encodeURIComponent(pesan));
+}
 </script>
 
 </body>
