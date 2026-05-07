@@ -5,10 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Katalog Pro</title>
 
-<!-- FONT -->
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
 
-<!-- FIREBASE -->
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
@@ -16,61 +14,34 @@
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif}
 
-/* ===== BACKGROUND ===== */
 body{
 min-height:100vh;
 background:url('https://images.unsplash.com/photo-1501785888041-af3ef285b470') no-repeat center/cover;
-display:flex;
-justify-content:center;
-align-items:center;
-color:#fff;
+display:flex;justify-content:center;align-items:center;color:#fff;
 }
 
-/* ===== LOGIN ===== */
+/* LOGIN */
 #login{
-width:320px;
-padding:40px;
-background:rgba(255,255,255,0.08);
-border-radius:16px;
-backdrop-filter:blur(12px);
+width:320px;padding:40px;background:rgba(255,255,255,0.08);
+border-radius:16px;backdrop-filter:blur(12px);
 box-shadow:0 25px 50px rgba(0,0,0,0.3);
 }
 
-#login h2{margin-bottom:20px}
-
 input{
-width:100%;
-padding:12px;
-margin-bottom:15px;
-border:none;
-border-bottom:1px solid #fff;
-background:transparent;
-color:#fff;
+width:100%;padding:12px;margin-bottom:15px;
+border:none;border-bottom:1px solid #fff;
+background:transparent;color:#fff;
 }
 
 button{
-width:100%;
-padding:12px;
-margin-top:5px;
-background:#0ea5e9;
-border:none;
-color:#fff;
-border-radius:6px;
-cursor:pointer;
+width:100%;padding:12px;margin-top:5px;
+background:#0ea5e9;border:none;color:#fff;border-radius:6px;
 }
 
-/* ===== APP ===== */
-#app{
-display:none;
-width:100%;
-padding:15px;
-}
+/* APP */
+#app{display:none;width:100%;padding:15px}
 
-.header{
-display:flex;
-justify-content:space-between;
-margin-bottom:15px;
-}
+.header{display:flex;justify-content:space-between;margin-bottom:15px}
 
 .products{
 display:grid;
@@ -79,39 +50,19 @@ gap:10px;
 }
 
 .card{
-background:#fff;
-color:#000;
-padding:10px;
-border-radius:10px;
+background:#fff;color:#000;padding:10px;border-radius:10px
 }
 
 .card img{
-width:100%;
-height:120px;
-object-fit:cover;
-border-radius:8px;
+width:100%;height:120px;object-fit:cover;border-radius:8px
 }
-
-.card h4{font-size:14px;margin:5px 0}
-.card p{color:green}
 
 .wa{background:#25D366}
-.delete{background:red}
-
-/* CART */
-#cart{
-background:#fff;
-color:#000;
-padding:10px;
-border-radius:10px;
-margin-top:10px;
-}
 </style>
 </head>
 
 <body>
 
-<!-- LOGIN -->
 <div id="login">
 <h2>Login</h2>
 <input id="email" placeholder="Email">
@@ -120,9 +71,7 @@ margin-top:10px;
 <button onclick="register()">Register</button>
 </div>
 
-<!-- APP -->
 <div id="app">
-
 <div class="header">
 <h3>Katalog</h3>
 <button onclick="logout()">Logout</button>
@@ -141,37 +90,52 @@ margin-top:10px;
 <h3>Total: Rp <span id="total">0</span></h3>
 
 <button class="wa" onclick="checkout()">Checkout WhatsApp</button>
-
 </div>
 
 <script>
+// CONFIG
 const firebaseConfig = {
   apiKey: "AIzaSyDruQxhQfsmsDAubunSrohBX9ZALlXtp5E",
   authDomain: "toko-pakaian-91050.firebaseapp.com",
-  databaseURL: "https://toko-pakaian-91050-default-rtdb.firebaseio.com",
   projectId: "toko-pakaian-91050",
-  storageBucket: "toko-pakaian-91050.firebasestorage.app",
-  messagingSenderId: "418943349139",
-  appId: "1:418943349139:web:6e0a3ab8c71e784c7b7866"
 };
+
 firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
 const db = firebase.firestore();
 
 let cart = [];
-let isAdmin = false;
-let WA = "6281234567890"; // ganti nomor kamu
+let WA = "6281234567890";
 
 // LOGIN
 function login(){
-auth.signInWithEmailAndPassword(email.value, pass.value)
-.catch(e=>alert(e.message));
+const email = document.getElementById("email").value.trim();
+const pass = document.getElementById("pass").value.trim();
+
+console.log("klik login");
+
+auth.signInWithEmailAndPassword(email, pass)
+.then(()=>{
+  console.log("LOGIN BERHASIL");
+})
+.catch(e=>{
+  console.error(e);
+  alert(e.message);
+});
 }
 
 // REGISTER
 function register(){
-auth.createUserWithEmailAndPassword(email.value, pass.value)
-.catch(e=>alert(e.message));
+const email = document.getElementById("email").value.trim();
+const pass = document.getElementById("pass").value.trim();
+
+auth.createUserWithEmailAndPassword(email, pass)
+.then(()=>{
+  alert("Register berhasil, silakan login");
+})
+.catch(e=>{
+  alert(e.message);
+});
 }
 
 // LOGOUT
@@ -181,29 +145,28 @@ auth.signOut();
 
 // DETECT USER
 auth.onAuthStateChanged(user=>{
+console.log("USER:", user);
+
+const loginBox = document.getElementById("login");
+const appBox = document.getElementById("app");
+
 if(user){
-login.style.display="none";
-app.style.display="block";
-
-if(user.email=="admin@gmail.com"){
-isAdmin=true;
-admin.style.display="block";
-}
-
-loadProduk();
+  loginBox.style.display="none";
+  appBox.style.display="block";
+  loadProduk();
 }else{
-login.style.display="block";
-app.style.display="none";
+  loginBox.style.display="block";
+  appBox.style.display="none";
 }
 });
 
 // TAMBAH PRODUK
 function tambah(){
-db.collection("produk").add({
-nama:nama.value,
-harga:harga.value,
-gambar:gambar.value
-});
+const nama = document.getElementById("nama").value;
+const harga = document.getElementById("harga").value;
+const gambar = document.getElementById("gambar").value;
+
+db.collection("produk").add({nama,harga,gambar});
 }
 
 // LOAD PRODUK
@@ -220,7 +183,7 @@ html+=`
 <button onclick="addCart('${p.nama}','${p.harga}')">Tambah</button>
 </div>`;
 });
-list.innerHTML = html;
+document.getElementById("list").innerHTML = html;
 });
 }
 
@@ -239,7 +202,7 @@ html+=`<p>${c.nama} - Rp ${c.harga}</p>`;
 total+=parseInt(c.harga);
 });
 
-cart.innerHTML = html;
+document.getElementById("cart").innerHTML = html;
 document.getElementById("total").innerText = total;
 }
 
