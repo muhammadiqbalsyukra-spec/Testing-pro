@@ -5,14 +5,107 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Katalog Pro</title>
 
-<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js"></script>
+<!-- FONT -->
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+<!-- FIREBASE -->
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
 
 <style>
-body{font-family:sans-serif;background:#0f172a;color:#fff;padding:20px}
-input,button{padding:10px;margin:5px;width:100%}
-.card{background:#fff;color:#000;padding:10px;margin:10px;border-radius:10px}
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif}
+
+/* ===== BACKGROUND ===== */
+body{
+min-height:100vh;
+background:url('https://images.unsplash.com/photo-1501785888041-af3ef285b470') no-repeat center/cover;
+display:flex;
+justify-content:center;
+align-items:center;
+color:#fff;
+}
+
+/* ===== LOGIN ===== */
+#login{
+width:320px;
+padding:40px;
+background:rgba(255,255,255,0.08);
+border-radius:16px;
+backdrop-filter:blur(12px);
+box-shadow:0 25px 50px rgba(0,0,0,0.3);
+}
+
+#login h2{margin-bottom:20px}
+
+input{
+width:100%;
+padding:12px;
+margin-bottom:15px;
+border:none;
+border-bottom:1px solid #fff;
+background:transparent;
+color:#fff;
+}
+
+button{
+width:100%;
+padding:12px;
+margin-top:5px;
+background:#0ea5e9;
+border:none;
+color:#fff;
+border-radius:6px;
+cursor:pointer;
+}
+
+/* ===== APP ===== */
+#app{
+display:none;
+width:100%;
+padding:15px;
+}
+
+.header{
+display:flex;
+justify-content:space-between;
+margin-bottom:15px;
+}
+
+.products{
+display:grid;
+grid-template-columns:repeat(auto-fill,minmax(150px,1fr));
+gap:10px;
+}
+
+.card{
+background:#fff;
+color:#000;
+padding:10px;
+border-radius:10px;
+}
+
+.card img{
+width:100%;
+height:120px;
+object-fit:cover;
+border-radius:8px;
+}
+
+.card h4{font-size:14px;margin:5px 0}
+.card p{color:green}
+
+.wa{background:#25D366}
+.delete{background:red}
+
+/* CART */
+#cart{
+background:#fff;
+color:#000;
+padding:10px;
+border-radius:10px;
+margin-top:10px;
+}
 </style>
 </head>
 
@@ -28,42 +121,36 @@ input,button{padding:10px;margin:5px;width:100%}
 </div>
 
 <!-- APP -->
-<div id="app" style="display:none">
+<div id="app">
 
-<h2>Katalog</h2>
+<div class="header">
+<h3>Katalog</h3>
 <button onclick="logout()">Logout</button>
-
-<div id="admin" style="display:none">
-<h3>Tambah Produk</h3>
-<input id="nama" placeholder="Nama">
-<input id="harga" placeholder="Harga">
-<input id="gambar" placeholder="Link Gambar">
-<button onclick="tambah()">Tambah</button>
 </div>
 
-<h3>Produk</h3>
-<div id="list"></div>
+<div id="admin" style="display:none">
+<input id="nama" placeholder="Nama Produk">
+<input id="harga" placeholder="Harga">
+<input id="gambar" placeholder="Link Gambar">
+<button onclick="tambah()">Tambah Produk</button>
+</div>
 
-<h3>Keranjang</h3>
+<div class="products" id="list"></div>
+
 <div id="cart"></div>
-<h4>Total: Rp <span id="total">0</span></h4>
+<h3>Total: Rp <span id="total">0</span></h3>
 
-<button onclick="checkout()">Checkout WA</button>
+<button class="wa" onclick="checkout()">Checkout WhatsApp</button>
 
 </div>
 
 <script>
-  const firebaseConfig = {
-  apiKey: "AIzaSyDruQxhQfsmsDAubunSrohBX9ZALlXtp5E",
-  authDomain: "toko-pakaian-91050.firebaseapp.com",
-  databaseURL: "https://toko-pakaian-91050-default-rtdb.firebaseio.com",
-  projectId: "toko-pakaian-91050",
-  storageBucket: "toko-pakaian-91050.firebasestorage.app",
-  messagingSenderId: "418943349139",
-  appId: "1:418943349139:web:6e0a3ab8c71e784c7b7866"
+// 🔥 CONFIG FIREBASE
+const firebaseConfig = {
+  apiKey: "ISI",
+  authDomain: "ISI",
+  projectId: "ISI",
 };
-
-
 
 firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
@@ -71,16 +158,18 @@ const db = firebase.firestore();
 
 let cart = [];
 let isAdmin = false;
-let WA = "6281234567890";
+let WA = "6281234567890"; // ganti nomor kamu
 
 // LOGIN
 function login(){
-auth.signInWithEmailAndPassword(email.value, pass.value);
+auth.signInWithEmailAndPassword(email.value, pass.value)
+.catch(e=>alert(e.message));
 }
 
 // REGISTER
 function register(){
-auth.createUserWithEmailAndPassword(email.value, pass.value);
+auth.createUserWithEmailAndPassword(email.value, pass.value)
+.catch(e=>alert(e.message));
 }
 
 // LOGOUT
@@ -115,7 +204,7 @@ gambar:gambar.value
 });
 }
 
-// LOAD PRODUK REALTIME
+// LOAD PRODUK
 function loadProduk(){
 db.collection("produk").onSnapshot(snap=>{
 let html="";
@@ -123,12 +212,11 @@ snap.forEach(doc=>{
 let p = doc.data();
 html+=`
 <div class="card">
-<img src="${p.gambar}" width="100%">
+<img src="${p.gambar}">
 <h4>${p.nama}</h4>
 <p>Rp ${p.harga}</p>
 <button onclick="addCart('${p.nama}','${p.harga}')">Tambah</button>
-</div>
-`;
+</div>`;
 });
 list.innerHTML = html;
 });
@@ -153,7 +241,7 @@ cart.innerHTML = html;
 document.getElementById("total").innerText = total;
 }
 
-// CHECKOUT WA
+// CHECKOUT
 function checkout(){
 let pesan="Halo, saya pesan:\n";
 cart.forEach(c=>{
