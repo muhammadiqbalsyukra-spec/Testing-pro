@@ -3,216 +3,162 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Katalog Jualan</title>
+<title>Katalog Pro</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js"></script>
 
 <style>
-*{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif}
-
-/* ===== BACKGROUND ===== */
-body{
-display:flex;justify-content:center;align-items:center;
-min-height:100vh;
-background:url('https://images.unsplash.com/photo-1501785888041-af3ef285b470') no-repeat center/cover;
-}
-
-/* ===== LOGIN ===== */
-.login-box{
-width:340px;padding:40px;background:rgba(255,255,255,0.08);
-border-radius:16px;backdrop-filter:blur(12px);
-box-shadow:0 25px 50px rgba(0,0,0,0.3);
-color:#fff
-}
-
-.login-box h2{text-align:center;margin-bottom:30px}
-
-.input-group{margin-bottom:20px}
-.input-group input{
-width:100%;padding:12px;border:none;
-border-bottom:1px solid #fff;background:transparent;color:#fff
-}
-
-.login-btn{
-width:100%;padding:12px;background:#0ea5e9;
-border:none;border-radius:6px;color:#fff;cursor:pointer
-}
-
-/* ===== APP ===== */
-.app{
-display:none;
-width:100%;
-padding:20px;
-}
-
-.header{
-display:flex;justify-content:space-between;align-items:center;
-color:#fff;margin-bottom:20px
-}
-
-.btn{
-padding:8px 12px;background:#0ea5e9;border:none;color:#fff;border-radius:6px;cursor:pointer
-}
-
-.products{
-display:grid;
-grid-template-columns:repeat(auto-fill,minmax(150px,1fr));
-gap:15px;
-}
-
-.card{
-background:#fff;border-radius:10px;padding:10px;text-align:center
-}
-
-.card img{
-width:100%;height:120px;object-fit:cover;border-radius:8px
-}
-
-.card h4{font-size:14px;margin:5px 0}
-.card p{color:green;font-weight:600}
-
-.wa{
-margin-top:5px;
-background:#25D366;
-border:none;color:#fff;padding:6px;border-radius:6px;cursor:pointer
-}
-
-.delete{
-background:red;margin-top:5px
-}
-
-/* ===== FORM ===== */
-.form{
-margin-bottom:20px;
-background:#fff;padding:10px;border-radius:10px
-}
-
-.form input{
-width:100%;margin-bottom:5px;padding:8px
-}
+body{font-family:sans-serif;background:#0f172a;color:#fff;padding:20px}
+input,button{padding:10px;margin:5px;width:100%}
+.card{background:#fff;color:#000;padding:10px;margin:10px;border-radius:10px}
 </style>
 </head>
 
 <body>
 
 <!-- LOGIN -->
-<div class="login-box" id="loginBox">
-<h2>LOGIN</h2>
-<form id="loginForm">
-<div class="input-group">
-<input type="text" id="username" placeholder="Username" required>
-</div>
-<div class="input-group">
-<input type="password" id="password" placeholder="Password" required>
-</div>
-<button class="login-btn">Sign In</button>
-</form>
+<div id="login">
+<h2>Login</h2>
+<input id="email" placeholder="Email">
+<input id="pass" type="password" placeholder="Password">
+<button onclick="login()">Login</button>
+<button onclick="register()">Register</button>
 </div>
 
 <!-- APP -->
-<div class="app" id="app">
+<div id="app" style="display:none">
 
-<div class="header">
-<h3>Katalog Jualan</h3>
-<button class="btn" onclick="logout()">Logout</button>
+<h2>Katalog</h2>
+<button onclick="logout()">Logout</button>
+
+<div id="admin" style="display:none">
+<h3>Tambah Produk</h3>
+<input id="nama" placeholder="Nama">
+<input id="harga" placeholder="Harga">
+<input id="gambar" placeholder="Link Gambar">
+<button onclick="tambah()">Tambah</button>
 </div>
 
-<!-- FORM ADMIN -->
-<div id="adminForm" class="form" style="display:none">
-<input type="text" id="nama" placeholder="Nama Produk">
-<input type="number" id="harga" placeholder="Harga">
-<input type="text" id="gambar" placeholder="Link Gambar">
-<button class="btn" onclick="tambahProduk()">Tambah</button>
-</div>
+<h3>Produk</h3>
+<div id="list"></div>
 
-<div class="products" id="produkList"></div>
+<h3>Keranjang</h3>
+<div id="cart"></div>
+<h4>Total: Rp <span id="total">0</span></h4>
+
+<button onclick="checkout()">Checkout WA</button>
 
 </div>
 
 <script>
+  const firebaseConfig = {
+  apiKey: "AIzaSyDruQxhQfsmsDAubunSrohBX9ZALlXtp5E",
+  authDomain: "toko-pakaian-91050.firebaseapp.com",
+  databaseURL: "https://toko-pakaian-91050-default-rtdb.firebaseio.com",
+  projectId: "toko-pakaian-91050",
+  storageBucket: "toko-pakaian-91050.firebasestorage.app",
+  messagingSenderId: "418943349139",
+  appId: "1:418943349139:web:6e0a3ab8c71e784c7b7866"
+};
+
+
+
+firebase.initializeApp(firebaseConfig);
+const auth = firebase.auth();
+const db = firebase.firestore();
+
+let cart = [];
 let isAdmin = false;
-let WA = "6281234567890"; // GANTI NOMOR KAMU
+let WA = "6281234567890";
 
 // LOGIN
-document.getElementById("loginForm").onsubmit = function(e){
-e.preventDefault();
-
-let user = username.value;
-let pass = password.value;
-
-if(user=="admin" && pass=="123"){
-isAdmin = true;
-document.getElementById("adminForm").style.display="block";
+function login(){
+auth.signInWithEmailAndPassword(email.value, pass.value);
 }
 
-loginBox.style.display="none";
-app.style.display="block";
-loadProduk();
+// REGISTER
+function register(){
+auth.createUserWithEmailAndPassword(email.value, pass.value);
 }
 
 // LOGOUT
 function logout(){
-location.reload();
+auth.signOut();
 }
 
-// DATA PRODUK
-function getProduk(){
-return JSON.parse(localStorage.getItem("produk")||"[]");
+// DETECT USER
+auth.onAuthStateChanged(user=>{
+if(user){
+login.style.display="none";
+app.style.display="block";
+
+if(user.email=="admin@gmail.com"){
+isAdmin=true;
+admin.style.display="block";
 }
 
-function saveProduk(data){
-localStorage.setItem("produk",JSON.stringify(data));
+loadProduk();
+}else{
+login.style.display="block";
+app.style.display="none";
 }
-
-// LOAD PRODUK
-function loadProduk(){
-let data = getProduk();
-let html = "";
-
-data.forEach((p,i)=>{
-html+=`
-<div class="card">
-<img src="${p.gambar}">
-<h4>${p.nama}</h4>
-<p>Rp ${p.harga}</p>
-<button class="wa" onclick="order('${p.nama}','${p.harga}')">Order WA</button>
-${isAdmin? `<button class="delete" onclick="hapus(${i})">Hapus</button>`:""}
-</div>
-`;
 });
 
-produkList.innerHTML = html;
-}
-
-// TAMBAH
-function tambahProduk(){
-let data = getProduk();
-
-data.push({
+// TAMBAH PRODUK
+function tambah(){
+db.collection("produk").add({
 nama:nama.value,
 harga:harga.value,
 gambar:gambar.value
 });
-
-saveProduk(data);
-loadProduk();
-
-nama.value="";
-harga.value="";
-gambar.value="";
 }
 
-// HAPUS
-function hapus(i){
-let data = getProduk();
-data.splice(i,1);
-saveProduk(data);
-loadProduk();
+// LOAD PRODUK REALTIME
+function loadProduk(){
+db.collection("produk").onSnapshot(snap=>{
+let html="";
+snap.forEach(doc=>{
+let p = doc.data();
+html+=`
+<div class="card">
+<img src="${p.gambar}" width="100%">
+<h4>${p.nama}</h4>
+<p>Rp ${p.harga}</p>
+<button onclick="addCart('${p.nama}','${p.harga}')">Tambah</button>
+</div>
+`;
+});
+list.innerHTML = html;
+});
 }
 
-// ORDER WA
-function order(nama,harga){
-let pesan = `Halo, saya mau pesan:\n${nama}\nHarga: Rp ${harga}`;
+// CART
+function addCart(nama,harga){
+cart.push({nama,harga});
+renderCart();
+}
+
+function renderCart(){
+let html="";
+let total=0;
+
+cart.forEach(c=>{
+html+=`<p>${c.nama} - Rp ${c.harga}</p>`;
+total+=parseInt(c.harga);
+});
+
+cart.innerHTML = html;
+document.getElementById("total").innerText = total;
+}
+
+// CHECKOUT WA
+function checkout(){
+let pesan="Halo, saya pesan:\n";
+cart.forEach(c=>{
+pesan+=`${c.nama} - Rp ${c.harga}\n`;
+});
 window.open(`https://wa.me/${WA}?text=`+encodeURIComponent(pesan));
 }
 </script>
