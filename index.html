@@ -21,7 +21,6 @@ background:url('https://images.unsplash.com/photo-1501785888041-af3ef285b470') n
 color:#fff;
 }
 
-/* LOGIN */
 #login{
 width:320px;margin:100px auto;padding:40px;
 background:rgba(255,255,255,0.15);
@@ -203,29 +202,40 @@ document.getElementById("preview").src = URL.createObjectURL(file);
 }
 }
 
-// 🔥 TAMBAH PRODUK FIX
+// 🔥 TAMBAH PRODUK FINAL FIX
 async function tambah(){
-try{
 const nama = document.getElementById("namaInput").value.trim();
 const harga = document.getElementById("hargaInput").value.trim();
-const file = document.getElementById("file").files[0];
+const fileInput = document.getElementById("file");
+const file = fileInput.files[0];
 
 if(!nama || !harga || !file){
 alert("Lengkapi semua data!");
 return;
 }
 
+try{
+const user = auth.currentUser;
+if(!user){
+alert("Kamu belum login!");
+return;
+}
+
 const fileName = Date.now() + "_" + file.name.replace(/\s/g,"");
+
 const storageRef = storage.ref().child("produk/" + fileName);
 
-const snapshot = await storageRef.put(file);
+const snapshot = await storageRef.put(file,{
+contentType: file.type
+});
+
 const url = await snapshot.ref.getDownloadURL();
 
 await db.collection("produk").add({
 nama,
 harga: parseInt(harga),
 gambar: url,
-createdAt: new Date()
+createdAt: firebase.firestore.FieldValue.serverTimestamp()
 });
 
 alert("✅ Produk berhasil diupload!");
