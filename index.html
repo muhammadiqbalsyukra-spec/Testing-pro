@@ -24,9 +24,11 @@ color:#fff;
 /* LOGIN */
 #login{
 width:320px;margin:100px auto;padding:40px;
-background:rgba(255,255,255,0.1);
+background:rgba(255,255,255,0.15);
 border-radius:16px;
 backdrop-filter:blur(12px);
+position:relative;
+z-index:10;
 }
 
 input,button{
@@ -34,7 +36,15 @@ width:100%;padding:12px;margin-bottom:10px;
 border:none;border-radius:6px;
 }
 
-button{background:#0ea5e9;color:#fff;cursor:pointer}
+input{color:#000}
+
+button{
+background:#0ea5e9;color:#fff;
+cursor:pointer;
+transition:0.2s;
+}
+
+button:hover{opacity:0.9}
 
 /* APP */
 #app{display:none;padding:15px}
@@ -80,7 +90,7 @@ padding:6px;
 /* ADMIN */
 #admin{
 display:none;
-background:rgba(0,0,0,0.4);
+background:rgba(0,0,0,0.5);
 padding:10px;
 border-radius:10px;
 margin-bottom:10px;
@@ -120,11 +130,11 @@ margin-bottom:10px;
 <div id="admin">
 <h4>Admin Panel</h4>
 
-<input id="nama" placeholder="Nama Produk">
-<input id="harga" placeholder="Harga">
+<input id="namaInput" placeholder="Nama Produk">
+<input id="hargaInput" placeholder="Harga">
 
 <input type="file" id="file" onchange="previewImage()">
-<img id="preview" src="">
+<img id="preview">
 
 <button onclick="tambah()">Upload Produk</button>
 </div>
@@ -140,13 +150,12 @@ margin-bottom:10px;
 const firebaseConfig = {
   apiKey: "AIzaSyDruQxhQfsmsDAubunSrohBX9ZALlXtp5E",
   authDomain: "toko-pakaian-91050.firebaseapp.com",
-  databaseURL: "https://toko-pakaian-91050-default-rtdb.firebaseio.com",
   projectId: "toko-pakaian-91050",
-  storageBucket: "toko-pakaian-91050.firebasestorage.app",
-  messagingSenderId: "418943349139",
-  appId: "1:418943349139:web:6e0a3ab8c71e784c7b7866"
+  storageBucket: "toko-pakaian-91050.appspot.com",
 };
+
 firebase.initializeApp(firebaseConfig);
+
 const auth = firebase.auth();
 const db = firebase.firestore();
 const storage = firebase.storage();
@@ -157,14 +166,18 @@ let WA = "6282285712293";
 
 // LOGIN
 function login(){
-auth.signInWithEmailAndPassword(email.value, pass.value)
-.catch(e=>alert(e.message));
+auth.signInWithEmailAndPassword(
+document.getElementById("email").value,
+document.getElementById("pass").value
+).catch(e=>alert(e.message));
 }
 
 // REGISTER
 function register(){
-auth.createUserWithEmailAndPassword(email.value, pass.value)
-.catch(e=>alert(e.message));
+auth.createUserWithEmailAndPassword(
+document.getElementById("email").value,
+document.getElementById("pass").value
+).catch(e=>alert(e.message));
 }
 
 // LOGOUT
@@ -172,20 +185,20 @@ function logout(){
 auth.signOut();
 }
 
-// AUTH
+// AUTH STATE
 auth.onAuthStateChanged(user=>{
 if(user){
-login.style.display="none";
-app.style.display="block";
+document.getElementById("login").style.display="none";
+document.getElementById("app").style.display="block";
 
 if(user.email===ADMIN_EMAIL){
-admin.style.display="block";
+document.getElementById("admin").style.display="block";
 }
 
 loadProduk();
 }else{
-login.style.display="block";
-app.style.display="none";
+document.getElementById("login").style.display="block";
+document.getElementById("app").style.display="none";
 }
 });
 
@@ -197,10 +210,10 @@ document.getElementById("preview").src = URL.createObjectURL(file);
 }
 }
 
-// TAMBAH PRODUK + UPLOAD
+// TAMBAH PRODUK
 async function tambah(){
-const nama = nama.value;
-const harga = harga.value;
+const nama = document.getElementById("namaInput").value;
+const harga = document.getElementById("hargaInput").value;
 const file = document.getElementById("file").files[0];
 
 if(!nama || !harga || !file){
@@ -212,11 +225,18 @@ const ref = storage.ref("produk/"+Date.now());
 await ref.put(file);
 const url = await ref.getDownloadURL();
 
-db.collection("produk").add({nama,harga,gambar:url});
+await db.collection("produk").add({nama,harga,gambar:url});
+
 alert("Berhasil upload!");
+
+// reset form
+document.getElementById("namaInput").value="";
+document.getElementById("hargaInput").value="";
+document.getElementById("file").value="";
+document.getElementById("preview").src="";
 }
 
-// LOAD
+// LOAD PRODUK
 function loadProduk(){
 db.collection("produk").onSnapshot(snap=>{
 let html="";
@@ -241,7 +261,7 @@ ${auth.currentUser?.email===ADMIN_EMAIL ? `
 </div>`;
 });
 
-list.innerHTML = html;
+document.getElementById("list").innerHTML = html;
 });
 }
 
@@ -277,7 +297,7 @@ cart.forEach(c=>total+=parseInt(c.harga));
 document.getElementById("total").innerText = total;
 }
 
-// CHECKOUT
+// CHECKOUT WA
 function checkout(){
 let pesan="Halo, saya pesan:\n";
 cart.forEach(c=>{
