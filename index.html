@@ -10,6 +10,7 @@
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-storage-compat.js"></script>
 
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif}
@@ -17,68 +18,90 @@
 body{
 min-height:100vh;
 background:url('https://images.unsplash.com/photo-1501785888041-af3ef285b470') no-repeat center/cover;
-display:flex;justify-content:center;align-items:center;color:#fff;
+color:#fff;
 }
 
 /* LOGIN */
 #login{
-width:320px;padding:40px;background:rgba(255,255,255,0.08);
-border-radius:16px;backdrop-filter:blur(12px);
-box-shadow:0 25px 50px rgba(0,0,0,0.3);
+width:320px;margin:100px auto;padding:40px;
+background:rgba(255,255,255,0.1);
+border-radius:16px;
+backdrop-filter:blur(12px);
 }
 
-input{
-width:100%;padding:12px;margin-bottom:15px;
-border:none;border-bottom:1px solid #fff;
-background:transparent;color:#fff;
+input,button{
+width:100%;padding:12px;margin-bottom:10px;
+border:none;border-radius:6px;
 }
 
-button{
-width:100%;padding:12px;margin-top:5px;
-background:#0ea5e9;border:none;color:#fff;border-radius:6px;
-cursor:pointer;
-}
+button{background:#0ea5e9;color:#fff;cursor:pointer}
 
 /* APP */
-#app{display:none;width:100%;padding:15px}
+#app{display:none;padding:15px}
 
-.header{display:flex;justify-content:space-between;margin-bottom:15px}
+.header{
+display:flex;justify-content:space-between;
+align-items:center;margin-bottom:15px;
+}
 
 .products{
 display:grid;
-grid-template-columns:repeat(auto-fill,minmax(150px,1fr));
-gap:10px;
+grid-template-columns:repeat(auto-fill,minmax(160px,1fr));
+gap:15px;
 }
 
 .card{
-background:#fff;color:#000;padding:10px;border-radius:10px
+background:#fff;
+color:#000;
+border-radius:12px;
+overflow:hidden;
+box-shadow:0 10px 20px rgba(0,0,0,0.2);
 }
 
 .card img{
-width:100%;height:120px;object-fit:cover;border-radius:8px
+width:100%;
+height:140px;
+object-fit:cover;
 }
 
-.wa{background:#25D366}
+.card-body{
+padding:10px;
+}
+
+.card h4{font-size:14px}
+.price{color:green;font-weight:600}
+
+.card button{
+margin-top:5px;
+font-size:12px;
+padding:6px;
+}
 
 /* ADMIN */
 #admin{
 display:none;
-background:rgba(255,255,255,0.1);
+background:rgba(0,0,0,0.4);
 padding:10px;
 border-radius:10px;
 margin-bottom:10px;
 }
 
-#formProduk{
-display:none;
-margin-top:10px;
+#preview{
+width:100%;
+height:120px;
+object-fit:cover;
+border-radius:8px;
+margin-bottom:10px;
 }
+
+.wa{background:#25D366}
+.delete{background:red}
+.edit{background:orange}
 </style>
 </head>
 
 <body>
 
-<!-- LOGIN -->
 <div id="login">
 <h2>Login</h2>
 <input id="email" placeholder="Email">
@@ -87,7 +110,6 @@ margin-top:10px;
 <button onclick="register()">Register</button>
 </div>
 
-<!-- APP -->
 <div id="app">
 
 <div class="header">
@@ -95,64 +117,53 @@ margin-top:10px;
 <button onclick="logout()">Logout</button>
 </div>
 
-<!-- ADMIN -->
 <div id="admin">
+<h4>Admin Panel</h4>
 
-<h4>Menu Admin</h4>
-<button onclick="toggleForm()">➕ Tambah Produk</button>
-
-<div id="formProduk">
 <input id="nama" placeholder="Nama Produk">
 <input id="harga" placeholder="Harga">
-<input id="gambar" placeholder="Link Gambar">
 
-<button onclick="tambah()">Simpan</button>
-<button onclick="toggleForm()" style="background:#555">Batal</button>
-</div>
+<input type="file" id="file" onchange="previewImage()">
+<img id="preview" src="">
 
+<button onclick="tambah()">Upload Produk</button>
 </div>
 
 <div class="products" id="list"></div>
 
-<div id="cart"></div>
 <h3>Total: Rp <span id="total">0</span></h3>
-
 <button class="wa" onclick="checkout()">Checkout WhatsApp</button>
 
 </div>
 
 <script>
-// CONFIG FIREBASE
 const firebaseConfig = {
   apiKey: "AIzaSyDruQxhQfsmsDAubunSrohBX9ZALlXtp5E",
   authDomain: "toko-pakaian-91050.firebaseapp.com",
+  databaseURL: "https://toko-pakaian-91050-default-rtdb.firebaseio.com",
   projectId: "toko-pakaian-91050",
+  storageBucket: "toko-pakaian-91050.firebasestorage.app",
+  messagingSenderId: "418943349139",
+  appId: "1:418943349139:web:6e0a3ab8c71e784c7b7866"
 };
-
 firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
 const db = firebase.firestore();
+const storage = firebase.storage();
 
+let ADMIN_EMAIL = "muhammadiqbalsyukra@gmail.com";
 let cart = [];
-let WA = "6282285712293"; // ganti nomor kamu
-let ADMIN_EMAIL = "muhammadiqbalsyukra@gmail.com"; // ganti email kamu
+let WA = "6282285712293";
 
 // LOGIN
 function login(){
-const email = document.getElementById("email").value.trim();
-const pass = document.getElementById("pass").value.trim();
-
-auth.signInWithEmailAndPassword(email, pass)
+auth.signInWithEmailAndPassword(email.value, pass.value)
 .catch(e=>alert(e.message));
 }
 
 // REGISTER
 function register(){
-const email = document.getElementById("email").value.trim();
-const pass = document.getElementById("pass").value.trim();
-
-auth.createUserWithEmailAndPassword(email, pass)
-.then(()=>alert("Register berhasil, silakan login"))
+auth.createUserWithEmailAndPassword(email.value, pass.value)
 .catch(e=>alert(e.message));
 }
 
@@ -161,79 +172,97 @@ function logout(){
 auth.signOut();
 }
 
-// DETECT USER
+// AUTH
 auth.onAuthStateChanged(user=>{
-const loginBox = document.getElementById("login");
-const appBox = document.getElementById("app");
-const adminBox = document.getElementById("admin");
-
 if(user){
-  loginBox.style.display="none";
-  appBox.style.display="block";
+login.style.display="none";
+app.style.display="block";
 
-  if(user.email === ADMIN_EMAIL){
-    adminBox.style.display="block";
-  }else{
-    adminBox.style.display="none";
-  }
+if(user.email===ADMIN_EMAIL){
+admin.style.display="block";
+}
 
-  loadProduk();
+loadProduk();
 }else{
-  loginBox.style.display="block";
-  appBox.style.display="none";
+login.style.display="block";
+app.style.display="none";
 }
 });
 
-// TOGGLE FORM
-function toggleForm(){
-const form = document.getElementById("formProduk");
-form.style.display = form.style.display === "block" ? "none" : "block";
+// PREVIEW
+function previewImage(){
+const file = document.getElementById("file").files[0];
+if(file){
+document.getElementById("preview").src = URL.createObjectURL(file);
+}
 }
 
-// TAMBAH PRODUK
-function tambah(){
-const nama = document.getElementById("nama").value.trim();
-const harga = document.getElementById("harga").value.trim();
-const gambar = document.getElementById("gambar").value.trim();
+// TAMBAH PRODUK + UPLOAD
+async function tambah(){
+const nama = nama.value;
+const harga = harga.value;
+const file = document.getElementById("file").files[0];
 
-if(!nama || !harga || !gambar){
-  alert("Isi semua data!");
-  return;
+if(!nama || !harga || !file){
+alert("Lengkapi data!");
+return;
 }
 
-db.collection("produk").add({
-  nama,
-  harga,
-  gambar,
-  createdAt: Date.now()
-})
-.then(()=>{
-  alert("Produk berhasil ditambahkan!");
+const ref = storage.ref("produk/"+Date.now());
+await ref.put(file);
+const url = await ref.getDownloadURL();
 
-  document.getElementById("nama").value="";
-  document.getElementById("harga").value="";
-  document.getElementById("gambar").value="";
-
-  toggleForm();
-});
+db.collection("produk").add({nama,harga,gambar:url});
+alert("Berhasil upload!");
 }
 
-// LOAD PRODUK
+// LOAD
 function loadProduk(){
-db.collection("produk").orderBy("createdAt","desc").onSnapshot(snap=>{
+db.collection("produk").onSnapshot(snap=>{
 let html="";
 snap.forEach(doc=>{
 let p = doc.data();
+
 html+=`
 <div class="card">
 <img src="${p.gambar}">
+<div class="card-body">
 <h4>${p.nama}</h4>
-<p>Rp ${p.harga}</p>
+<p class="price">Rp ${p.harga}</p>
+
 <button onclick="addCart('${p.nama}','${p.harga}')">Tambah</button>
+
+${auth.currentUser?.email===ADMIN_EMAIL ? `
+<button class="edit" onclick="editProduk('${doc.id}','${p.nama}','${p.harga}')">Edit</button>
+<button class="delete" onclick="hapus('${doc.id}')">Hapus</button>
+`: ""}
+
+</div>
 </div>`;
 });
-document.getElementById("list").innerHTML = html;
+
+list.innerHTML = html;
 });
+}
+
+// EDIT
+function editProduk(id,namaLama,hargaLama){
+const namaBaru = prompt("Nama:",namaLama);
+const hargaBaru = prompt("Harga:",hargaLama);
+
+if(namaBaru && hargaBaru){
+db.collection("produk").doc(id).update({
+nama:namaBaru,
+harga:hargaBaru
+});
+}
+}
+
+// HAPUS
+function hapus(id){
+if(confirm("Hapus produk?")){
+db.collection("produk").doc(id).delete();
+}
 }
 
 // CART
@@ -243,15 +272,8 @@ renderCart();
 }
 
 function renderCart(){
-let html="";
 let total=0;
-
-cart.forEach(c=>{
-html+=`<p>${c.nama} - Rp ${c.harga}</p>`;
-total+=parseInt(c.harga);
-});
-
-document.getElementById("cart").innerHTML = html;
+cart.forEach(c=>total+=parseInt(c.harga));
 document.getElementById("total").innerText = total;
 }
 
@@ -261,7 +283,7 @@ let pesan="Halo, saya pesan:\n";
 cart.forEach(c=>{
 pesan+=`${c.nama} - Rp ${c.harga}\n`;
 });
-window.open(`https://wa.me/${082285712293}?text=`+encodeURIComponent(pesan));
+window.open(`https://wa.me/${WA}?text=`+encodeURIComponent(pesan));
 }
 </script>
 
