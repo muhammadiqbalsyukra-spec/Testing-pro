@@ -27,8 +27,6 @@ width:320px;margin:100px auto;padding:40px;
 background:rgba(255,255,255,0.15);
 border-radius:16px;
 backdrop-filter:blur(12px);
-position:relative;
-z-index:10;
 }
 
 input,button{
@@ -61,33 +59,24 @@ gap:15px;
 }
 
 .card{
-background:#fff;
-color:#000;
+background:#fff;color:#000;
 border-radius:12px;
 overflow:hidden;
 box-shadow:0 10px 20px rgba(0,0,0,0.2);
 }
 
 .card img{
-width:100%;
-height:140px;
-object-fit:cover;
+width:100%;height:140px;object-fit:cover;
 }
 
-.card-body{
-padding:10px;
-}
+.card-body{padding:10px}
 
-.card h4{font-size:14px}
 .price{color:green;font-weight:600}
 
 .card button{
-margin-top:5px;
-font-size:12px;
-padding:6px;
+margin-top:5px;font-size:12px;padding:6px;
 }
 
-/* ADMIN */
 #admin{
 display:none;
 background:rgba(0,0,0,0.5);
@@ -97,8 +86,7 @@ margin-bottom:10px;
 }
 
 #preview{
-width:100%;
-height:120px;
+width:100%;height:120px;
 object-fit:cover;
 border-radius:8px;
 margin-bottom:10px;
@@ -131,7 +119,7 @@ margin-bottom:10px;
 <h4>Admin Panel</h4>
 
 <input id="namaInput" placeholder="Nama Produk">
-<input id="hargaInput" placeholder="Harga">
+<input id="hargaInput" type="number" placeholder="Harga">
 
 <input type="file" id="file" onchange="previewImage()">
 <img id="preview">
@@ -166,18 +154,30 @@ let WA = "6282285712293";
 
 // LOGIN
 function login(){
-auth.signInWithEmailAndPassword(
-document.getElementById("email").value,
-document.getElementById("pass").value
-).catch(e=>alert(e.message));
+const email = document.getElementById("email").value.trim();
+const pass = document.getElementById("pass").value.trim();
+
+if(!email || !pass){
+alert("Email & Password wajib diisi!");
+return;
+}
+
+auth.signInWithEmailAndPassword(email, pass)
+.catch(e=>alert(e.message));
 }
 
 // REGISTER
 function register(){
-auth.createUserWithEmailAndPassword(
-document.getElementById("email").value,
-document.getElementById("pass").value
-).catch(e=>alert(e.message));
+const email = document.getElementById("email").value.trim();
+const pass = document.getElementById("pass").value.trim();
+
+if(!email || !pass){
+alert("Email & Password wajib diisi!");
+return;
+}
+
+auth.createUserWithEmailAndPassword(email, pass)
+.catch(e=>alert(e.message));
 }
 
 // LOGOUT
@@ -191,9 +191,8 @@ if(user){
 document.getElementById("login").style.display="none";
 document.getElementById("app").style.display="block";
 
-if(user.email===ADMIN_EMAIL){
-document.getElementById("admin").style.display="block";
-}
+document.getElementById("admin").style.display =
+(user.email===ADMIN_EMAIL) ? "block" : "none";
 
 loadProduk();
 }else{
@@ -212,8 +211,8 @@ document.getElementById("preview").src = URL.createObjectURL(file);
 
 // TAMBAH PRODUK
 async function tambah(){
-const nama = document.getElementById("namaInput").value;
-const harga = document.getElementById("hargaInput").value;
+const nama = document.getElementById("namaInput").value.trim();
+const harga = document.getElementById("hargaInput").value.trim();
 const file = document.getElementById("file").files[0];
 
 if(!nama || !harga || !file){
@@ -225,11 +224,15 @@ const ref = storage.ref("produk/"+Date.now());
 await ref.put(file);
 const url = await ref.getDownloadURL();
 
-await db.collection("produk").add({nama,harga,gambar:url});
+await db.collection("produk").add({
+nama,
+harga: parseInt(harga),
+gambar: url
+});
 
 alert("Berhasil upload!");
 
-// reset form
+// reset
 document.getElementById("namaInput").value="";
 document.getElementById("hargaInput").value="";
 document.getElementById("file").value="";
@@ -250,10 +253,10 @@ html+=`
 <h4>${p.nama}</h4>
 <p class="price">Rp ${p.harga}</p>
 
-<button onclick="addCart('${p.nama}','${p.harga}')">Tambah</button>
+<button onclick="addCart('${p.nama}',${p.harga})">Tambah</button>
 
 ${auth.currentUser?.email===ADMIN_EMAIL ? `
-<button class="edit" onclick="editProduk('${doc.id}','${p.nama}','${p.harga}')">Edit</button>
+<button class="edit" onclick="editProduk('${doc.id}','${p.nama}',${p.harga})">Edit</button>
 <button class="delete" onclick="hapus('${doc.id}')">Hapus</button>
 `: ""}
 
@@ -273,7 +276,7 @@ const hargaBaru = prompt("Harga:",hargaLama);
 if(namaBaru && hargaBaru){
 db.collection("produk").doc(id).update({
 nama:namaBaru,
-harga:hargaBaru
+harga:parseInt(hargaBaru)
 });
 }
 }
@@ -293,16 +296,22 @@ renderCart();
 
 function renderCart(){
 let total=0;
-cart.forEach(c=>total+=parseInt(c.harga));
+cart.forEach(c=> total += c.harga);
 document.getElementById("total").innerText = total;
 }
 
 // CHECKOUT WA
 function checkout(){
+if(cart.length===0){
+alert("Keranjang kosong!");
+return;
+}
+
 let pesan="Halo, saya pesan:\n";
 cart.forEach(c=>{
 pesan+=`${c.nama} - Rp ${c.harga}\n`;
 });
+
 window.open(`https://wa.me/${WA}?text=`+encodeURIComponent(pesan));
 }
 </script>
