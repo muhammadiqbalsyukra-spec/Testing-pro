@@ -61,12 +61,17 @@ width:100%;height:120px;object-fit:cover;border-radius:8px
 .wa{background:#25D366}
 
 /* ADMIN */
-#formProduk{
+#admin{
 display:none;
-margin-top:10px;
 background:rgba(255,255,255,0.1);
 padding:10px;
 border-radius:10px;
+margin-bottom:10px;
+}
+
+#formProduk{
+display:none;
+margin-top:10px;
 }
 </style>
 </head>
@@ -84,21 +89,25 @@ border-radius:10px;
 
 <!-- APP -->
 <div id="app">
+
 <div class="header">
 <h3>Katalog</h3>
 <button onclick="logout()">Logout</button>
 </div>
 
 <!-- ADMIN -->
-<div id="admin" style="display:none">
+<div id="admin">
 
+<h4>Menu Admin</h4>
 <button onclick="toggleForm()">➕ Tambah Produk</button>
 
 <div id="formProduk">
 <input id="nama" placeholder="Nama Produk">
 <input id="harga" placeholder="Harga">
 <input id="gambar" placeholder="Link Gambar">
-<button onclick="tambah()">Simpan Produk</button>
+
+<button onclick="tambah()">Simpan</button>
+<button onclick="toggleForm()" style="background:#555">Batal</button>
 </div>
 
 </div>
@@ -109,10 +118,11 @@ border-radius:10px;
 <h3>Total: Rp <span id="total">0</span></h3>
 
 <button class="wa" onclick="checkout()">Checkout WhatsApp</button>
+
 </div>
 
 <script>
-// CONFIG
+// CONFIG FIREBASE
 const firebaseConfig = {
   apiKey: "AIzaSyDruQxhQfsmsDAubunSrohBX9ZALlXtp5E",
   authDomain: "toko-pakaian-91050.firebaseapp.com",
@@ -124,8 +134,8 @@ const auth = firebase.auth();
 const db = firebase.firestore();
 
 let cart = [];
-let WA = "6281234567890";
-let ADMIN_EMAIL = "admin@gmail.com"; // ganti email admin
+let WA = "6281234567890"; // ganti nomor kamu
+let ADMIN_EMAIL = "admin@gmail.com"; // ganti email kamu
 
 // LOGIN
 function login(){
@@ -155,14 +165,16 @@ auth.signOut();
 auth.onAuthStateChanged(user=>{
 const loginBox = document.getElementById("login");
 const appBox = document.getElementById("app");
+const adminBox = document.getElementById("admin");
 
 if(user){
   loginBox.style.display="none";
   appBox.style.display="block";
 
-  // ADMIN DETECT
   if(user.email === ADMIN_EMAIL){
-    document.getElementById("admin").style.display="block";
+    adminBox.style.display="block";
+  }else{
+    adminBox.style.display="none";
   }
 
   loadProduk();
@@ -175,7 +187,7 @@ if(user){
 // TOGGLE FORM
 function toggleForm(){
 const form = document.getElementById("formProduk");
-form.style.display = form.style.display === "none" ? "block" : "none";
+form.style.display = form.style.display === "block" ? "none" : "block";
 }
 
 // TAMBAH PRODUK
@@ -189,19 +201,26 @@ if(!nama || !harga || !gambar){
   return;
 }
 
-db.collection("produk").add({nama,harga,gambar})
+db.collection("produk").add({
+  nama,
+  harga,
+  gambar,
+  createdAt: Date.now()
+})
 .then(()=>{
-  alert("Produk ditambahkan!");
+  alert("Produk berhasil ditambahkan!");
 
   document.getElementById("nama").value="";
   document.getElementById("harga").value="";
   document.getElementById("gambar").value="";
+
+  toggleForm();
 });
 }
 
 // LOAD PRODUK
 function loadProduk(){
-db.collection("produk").onSnapshot(snap=>{
+db.collection("produk").orderBy("createdAt","desc").onSnapshot(snap=>{
 let html="";
 snap.forEach(doc=>{
 let p = doc.data();
