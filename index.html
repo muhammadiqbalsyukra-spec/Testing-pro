@@ -36,6 +36,7 @@ background:transparent;color:#fff;
 button{
 width:100%;padding:12px;margin-top:5px;
 background:#0ea5e9;border:none;color:#fff;border-radius:6px;
+cursor:pointer;
 }
 
 /* APP */
@@ -58,11 +59,21 @@ width:100%;height:120px;object-fit:cover;border-radius:8px
 }
 
 .wa{background:#25D366}
+
+/* ADMIN */
+#formProduk{
+display:none;
+margin-top:10px;
+background:rgba(255,255,255,0.1);
+padding:10px;
+border-radius:10px;
+}
 </style>
 </head>
 
 <body>
 
+<!-- LOGIN -->
 <div id="login">
 <h2>Login</h2>
 <input id="email" placeholder="Email">
@@ -71,17 +82,25 @@ width:100%;height:120px;object-fit:cover;border-radius:8px
 <button onclick="register()">Register</button>
 </div>
 
+<!-- APP -->
 <div id="app">
 <div class="header">
 <h3>Katalog</h3>
 <button onclick="logout()">Logout</button>
 </div>
 
+<!-- ADMIN -->
 <div id="admin" style="display:none">
+
+<button onclick="toggleForm()">➕ Tambah Produk</button>
+
+<div id="formProduk">
 <input id="nama" placeholder="Nama Produk">
 <input id="harga" placeholder="Harga">
 <input id="gambar" placeholder="Link Gambar">
-<button onclick="tambah()">Tambah Produk</button>
+<button onclick="tambah()">Simpan Produk</button>
+</div>
+
 </div>
 
 <div class="products" id="list"></div>
@@ -106,22 +125,15 @@ const db = firebase.firestore();
 
 let cart = [];
 let WA = "6281234567890";
+let ADMIN_EMAIL = "admin@gmail.com"; // ganti email admin
 
 // LOGIN
 function login(){
 const email = document.getElementById("email").value.trim();
 const pass = document.getElementById("pass").value.trim();
 
-console.log("klik login");
-
 auth.signInWithEmailAndPassword(email, pass)
-.then(()=>{
-  console.log("LOGIN BERHASIL");
-})
-.catch(e=>{
-  console.error(e);
-  alert(e.message);
-});
+.catch(e=>alert(e.message));
 }
 
 // REGISTER
@@ -130,12 +142,8 @@ const email = document.getElementById("email").value.trim();
 const pass = document.getElementById("pass").value.trim();
 
 auth.createUserWithEmailAndPassword(email, pass)
-.then(()=>{
-  alert("Register berhasil, silakan login");
-})
-.catch(e=>{
-  alert(e.message);
-});
+.then(()=>alert("Register berhasil, silakan login"))
+.catch(e=>alert(e.message));
 }
 
 // LOGOUT
@@ -145,14 +153,18 @@ auth.signOut();
 
 // DETECT USER
 auth.onAuthStateChanged(user=>{
-console.log("USER:", user);
-
 const loginBox = document.getElementById("login");
 const appBox = document.getElementById("app");
 
 if(user){
   loginBox.style.display="none";
   appBox.style.display="block";
+
+  // ADMIN DETECT
+  if(user.email === ADMIN_EMAIL){
+    document.getElementById("admin").style.display="block";
+  }
+
   loadProduk();
 }else{
   loginBox.style.display="block";
@@ -160,13 +172,31 @@ if(user){
 }
 });
 
+// TOGGLE FORM
+function toggleForm(){
+const form = document.getElementById("formProduk");
+form.style.display = form.style.display === "none" ? "block" : "none";
+}
+
 // TAMBAH PRODUK
 function tambah(){
-const nama = document.getElementById("nama").value;
-const harga = document.getElementById("harga").value;
-const gambar = document.getElementById("gambar").value;
+const nama = document.getElementById("nama").value.trim();
+const harga = document.getElementById("harga").value.trim();
+const gambar = document.getElementById("gambar").value.trim();
 
-db.collection("produk").add({nama,harga,gambar});
+if(!nama || !harga || !gambar){
+  alert("Isi semua data!");
+  return;
+}
+
+db.collection("produk").add({nama,harga,gambar})
+.then(()=>{
+  alert("Produk ditambahkan!");
+
+  document.getElementById("nama").value="";
+  document.getElementById("harga").value="";
+  document.getElementById("gambar").value="";
+});
 }
 
 // LOAD PRODUK
@@ -212,7 +242,7 @@ let pesan="Halo, saya pesan:\n";
 cart.forEach(c=>{
 pesan+=`${c.nama} - Rp ${c.harga}\n`;
 });
-window.open(`https://wa.me/${WA}?text=`+encodeURIComponent(pesan));
+window.open(`https://wa.me/${082285712293}?text=`+encodeURIComponent(pesan));
 }
 </script>
 
