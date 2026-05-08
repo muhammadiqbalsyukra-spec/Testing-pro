@@ -14,79 +14,54 @@
 
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif}
-
 body{
 min-height:100vh;
 background:url('https://images.unsplash.com/photo-1501785888041-af3ef285b470') no-repeat center/cover;
 color:#fff;
 }
-
 #login{
 width:320px;margin:100px auto;padding:40px;
 background:rgba(255,255,255,0.15);
 border-radius:16px;
 backdrop-filter:blur(12px);
 }
-
 input,button{
 width:100%;padding:12px;margin-bottom:10px;
 border:none;border-radius:6px;
 }
-
 input{color:#000}
-
-button{
-background:#0ea5e9;color:#fff;
-cursor:pointer;
-}
-
+button{background:#0ea5e9;color:#fff;cursor:pointer}
 #app{display:none;padding:15px}
-
 .header{
 display:flex;justify-content:space-between;
 align-items:center;margin-bottom:15px;
 }
-
 .products{
 display:grid;
 grid-template-columns:repeat(auto-fill,minmax(160px,1fr));
 gap:15px;
 }
-
 .card{
 background:#fff;color:#000;
 border-radius:12px;
 overflow:hidden;
 box-shadow:0 10px 20px rgba(0,0,0,0.2);
 }
-
 .card img{
 width:100%;height:140px;object-fit:cover;
 }
-
 .card-body{padding:10px}
-
 .price{color:green;font-weight:600}
-
-.card button{
-margin-top:5px;font-size:12px;padding:6px;
-}
-
+.card button{margin-top:5px;font-size:12px;padding:6px}
 #admin{
 display:none;
 background:rgba(0,0,0,0.5);
-padding:10px;
-border-radius:10px;
-margin-bottom:10px;
+padding:10px;border-radius:10px;margin-bottom:10px;
 }
-
 #preview{
 width:100%;height:120px;
-object-fit:cover;
-border-radius:8px;
-margin-bottom:10px;
+object-fit:cover;border-radius:8px;margin-bottom:10px;
 }
-
 .wa{background:#25D366}
 .delete{background:red}
 .edit{background:orange}
@@ -149,88 +124,76 @@ let WA = "6282285712293";
 
 // LOGIN
 function login(){
-const email = document.getElementById("email").value.trim();
-const pass = document.getElementById("pass").value.trim();
-
-if(!email || !pass){
-alert("Email & Password wajib diisi!");
-return;
-}
-
-auth.signInWithEmailAndPassword(email, pass)
-.catch(e=>alert(e.message));
+const email = emailEl().value.trim();
+const pass = passEl().value.trim();
+if(!email || !pass) return alert("Isi semua!");
+auth.signInWithEmailAndPassword(email, pass).catch(e=>alert(e.message));
 }
 
 // REGISTER
 function register(){
-const email = document.getElementById("email").value.trim();
-const pass = document.getElementById("pass").value.trim();
-
-if(!email || !pass){
-alert("Email & Password wajib diisi!");
-return;
+const email = emailEl().value.trim();
+const pass = passEl().value.trim();
+if(!email || !pass) return alert("Isi semua!");
+auth.createUserWithEmailAndPassword(email, pass).catch(e=>alert(e.message));
 }
 
-auth.createUserWithEmailAndPassword(email, pass)
-.catch(e=>alert(e.message));
-}
+function logout(){ auth.signOut(); }
 
-// LOGOUT
-function logout(){
-auth.signOut();
-}
+function emailEl(){ return document.getElementById("email"); }
+function passEl(){ return document.getElementById("pass"); }
 
 // AUTH
 auth.onAuthStateChanged(user=>{
 if(user){
-document.getElementById("login").style.display="none";
-document.getElementById("app").style.display="block";
-document.getElementById("admin").style.display =
-(user.email===ADMIN_EMAIL) ? "block" : "none";
+login.style.display="none";
+app.style.display="block";
+admin.style.display = (user.email===ADMIN_EMAIL) ? "block":"none";
 loadProduk();
 }else{
-document.getElementById("login").style.display="block";
-document.getElementById("app").style.display="none";
+login.style.display="block";
+app.style.display="none";
 }
 });
 
 // PREVIEW
 function previewImage(){
-const file = document.getElementById("file").files[0];
+const file = fileEl().files[0];
 if(file){
-document.getElementById("preview").src = URL.createObjectURL(file);
+preview.src = URL.createObjectURL(file);
 }
 }
+function fileEl(){ return document.getElementById("file"); }
 
-// 🔥 TAMBAH PRODUK FINAL FIX
+// 🔥 UPLOAD CEPAT + PREVIEW LANGSUNG
 async function tambah(){
-const nama = document.getElementById("namaInput").value.trim();
-const harga = document.getElementById("hargaInput").value.trim();
-const fileInput = document.getElementById("file");
-const file = fileInput.files[0];
+const nama = namaInput.value.trim();
+const harga = hargaInput.value.trim();
+const file = fileEl().files[0];
 
-if(!nama || !harga || !file){
-alert("Lengkapi semua data!");
-return;
-}
+if(!nama || !harga || !file) return alert("Lengkapi!");
 
 try{
-const user = auth.currentUser;
-if(!user){
-alert("Kamu belum login!");
-return;
-}
 
-const fileName = Date.now() + "_" + file.name.replace(/\s/g,"");
+// tampil langsung (anti delay)
+const tempId = "temp"+Date.now();
+list.innerHTML = `
+<div class="card" id="${tempId}">
+<img src="${URL.createObjectURL(file)}">
+<div class="card-body">
+<h4>${nama}</h4>
+<p class="price">Rp ${harga}</p>
+<p>⏳ Uploading...</p>
+</div>
+</div>
+` + list.innerHTML;
 
-const storageRef = storage.ref().child("produk/" + fileName);
+// upload
+const ref = storage.ref().child("produk/"+Date.now()+file.name);
+const snap = await ref.put(file);
+const url = await snap.ref.getDownloadURL();
 
-const snapshot = await storageRef.put(file,{
-contentType: file.type
-});
-
-const url = await snapshot.ref.getDownloadURL();
-
+// simpan
 await db.collection("produk").add({
 nama,
 harga: parseInt(harga),
@@ -238,30 +201,33 @@ gambar: url,
 createdAt: firebase.firestore.FieldValue.serverTimestamp()
 });
 
-alert("✅ Produk berhasil diupload!");
+// hapus temp
+document.getElementById(tempId)?.remove();
 
 // reset
-document.getElementById("namaInput").value="";
-document.getElementById("hargaInput").value="";
-document.getElementById("file").value="";
-document.getElementById("preview").src="";
+namaInput.value="";
+hargaInput.value="";
+fileEl().value="";
+preview.src="";
 
-}catch(err){
-console.error(err);
-alert("❌ Upload gagal: " + err.message);
+}catch(e){
+console.error(e);
+alert("Error: "+e.message);
 }
 }
 
-// LOAD PRODUK
+// LOAD PRODUK (terbaru di atas)
 function loadProduk(){
-db.collection("produk").onSnapshot(snap=>{
+db.collection("produk")
+.orderBy("createdAt","desc")
+.onSnapshot(snap=>{
 let html="";
 snap.forEach(doc=>{
 let p = doc.data();
 
 html+=`
 <div class="card">
-<img src="${p.gambar}">
+<img src="${p.gambar}" loading="lazy">
 <div class="card-body">
 <h4>${p.nama}</h4>
 <p class="price">Rp ${p.harga}</p>
@@ -276,8 +242,7 @@ ${auth.currentUser?.email===ADMIN_EMAIL ? `
 </div>
 </div>`;
 });
-
-document.getElementById("list").innerHTML = html;
+list.innerHTML = html;
 });
 }
 
@@ -295,7 +260,7 @@ harga:parseInt(h)
 
 // HAPUS
 function hapus(id){
-if(confirm("Hapus produk?")){
+if(confirm("Hapus?")){
 db.collection("produk").doc(id).delete();
 }
 }
@@ -305,25 +270,18 @@ function addCart(nama,harga){
 cart.push({nama,harga});
 renderCart();
 }
-
 function renderCart(){
 let total=0;
 cart.forEach(c=> total+=c.harga);
-document.getElementById("total").innerText = total;
+totalEl().innerText = total;
 }
+function totalEl(){ return document.getElementById("total"); }
 
 // CHECKOUT
 function checkout(){
-if(cart.length===0){
-alert("Keranjang kosong!");
-return;
-}
-
+if(cart.length===0) return alert("Kosong!");
 let pesan="Halo, saya pesan:\n";
-cart.forEach(c=>{
-pesan+=`${c.nama} - Rp ${c.harga}\n`;
-});
-
+cart.forEach(c=> pesan+=`${c.nama} - Rp ${c.harga}\n`);
 window.open(`https://wa.me/${WA}?text=`+encodeURIComponent(pesan));
 }
 </script>
