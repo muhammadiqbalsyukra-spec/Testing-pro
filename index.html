@@ -501,6 +501,71 @@ table th{
 
         </div>
 
+        <!-- DATA SISWA -->
+
+        <div class="card form-section">
+
+            <h3>📚 Data Siswa</h3>
+
+            <div class="form-grid" style="margin-top:20px;">
+
+                <input type="text" id="namaSiswa" placeholder="Nama Siswa">
+
+                <input type="text" id="nisSiswa" placeholder="NIS">
+
+                <select id="kelasSiswa">
+                    <option value="">Pilih Kelas</option>
+                    <option>Kelas 10</option>
+                    <option>Kelas 11</option>
+                    <option>Kelas 12</option>
+                </select>
+
+                <select id="jkSiswa">
+                    <option value="">Jenis Kelamin</option>
+                    <option>Laki-laki</option>
+                    <option>Perempuan</option>
+                </select>
+
+            </div>
+
+            <button class="save-btn" onclick="tambahSiswa()">
+                ➕ Tambah Siswa
+            </button>
+
+            <input 
+                type="text" 
+                id="searchSiswa" 
+                placeholder="🔍 Cari siswa..."
+                onkeyup="renderSiswa()"
+                style="
+                    width:100%;
+                    margin-top:20px;
+                    padding:14px;
+                    border:none;
+                    border-radius:14px;
+                    background:#0f172a;
+                    color:white;
+                "
+            >
+
+            <table id="tableSiswa">
+
+                <thead>
+                    <tr>
+                        <th>Nama</th>
+                        <th>NIS</th>
+                        <th>Kelas</th>
+                        <th>JK</th>
+                        <th>Aksi</th>
+                    </tr>
+                </thead>
+
+                <tbody></tbody>
+
+            </table>
+
+        </div>
+
         <!-- OCR -->
 
         <div class="card form-section">
@@ -580,6 +645,124 @@ new Chart(ctx, {
         }
     }
 });
+
+/* CRUD SISWA */
+
+let dataSiswa = JSON.parse(localStorage.getItem("dataSiswa")) || [];
+
+function tambahSiswa(){
+
+    const nama = document.getElementById("namaSiswa").value;
+    const nis = document.getElementById("nisSiswa").value;
+    const kelas = document.getElementById("kelasSiswa").value;
+    const jk = document.getElementById("jkSiswa").value;
+
+    if(nama === "" || nis === "" || kelas === "" || jk === ""){
+        alert("Lengkapi data siswa!");
+        return;
+    }
+
+    const siswa = {
+        id: Date.now(),
+        nama,
+        nis,
+        kelas,
+        jk
+    };
+
+    dataSiswa.push(siswa);
+
+    simpanData();
+    renderSiswa();
+    resetForm();
+
+    alert("Siswa berhasil ditambahkan!");
+
+}
+
+function renderSiswa(){
+
+    const tbody = document.querySelector("#tableSiswa tbody");
+
+    const search = document
+        .getElementById("searchSiswa")
+        .value
+        .toLowerCase();
+
+    tbody.innerHTML = "";
+
+    const filtered = dataSiswa.filter(item =>
+        item.nama.toLowerCase().includes(search)
+    );
+
+    filtered.forEach((siswa)=>{
+
+        tbody.innerHTML += `
+        
+        <tr>
+            <td>${siswa.nama}</td>
+            <td>${siswa.nis}</td>
+            <td>${siswa.kelas}</td>
+            <td>${siswa.jk}</td>
+
+            <td>
+
+                <button onclick="hapusSiswa(${siswa.id})"
+                    style="
+                        background:#ef4444;
+                        color:white;
+                        border:none;
+                        padding:8px 12px;
+                        border-radius:10px;
+                        cursor:pointer;
+                    "
+                >
+                    Hapus
+                </button>
+
+            </td>
+        </tr>
+
+        `;
+
+    });
+
+}
+
+function hapusSiswa(id){
+
+    if(confirm("Hapus siswa ini?")){
+
+        dataSiswa = dataSiswa.filter(
+            siswa => siswa.id !== id
+        );
+
+        simpanData();
+        renderSiswa();
+
+    }
+
+}
+
+function simpanData(){
+
+    localStorage.setItem(
+        "dataSiswa",
+        JSON.stringify(dataSiswa)
+    );
+
+}
+
+function resetForm(){
+
+    document.getElementById("namaSiswa").value = "";
+    document.getElementById("nisSiswa").value = "";
+    document.getElementById("kelasSiswa").value = "";
+    document.getElementById("jkSiswa").value = "";
+
+}
+
+renderSiswa();
 
 </script>
 
