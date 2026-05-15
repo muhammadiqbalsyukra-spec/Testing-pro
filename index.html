@@ -6,10 +6,10 @@
 <title>Sistem Nilai Sekolah Premium</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <style>
+
 *{
     margin:0;
     padding:0;
@@ -108,11 +108,6 @@ body{
     font-weight:700;
     cursor:pointer;
     margin-top:10px;
-    transition:0.3s;
-}
-
-.login-btn:hover{
-    transform:translateY(-2px);
 }
 
 /* DASHBOARD */
@@ -136,8 +131,6 @@ body{
 .sidebar h2{
     margin-bottom:35px;
     font-size:24px;
-    font-weight:800;
-    color:white;
 }
 
 .menu{
@@ -155,7 +148,6 @@ body{
     text-align:left;
     cursor:pointer;
     transition:0.3s;
-    font-size:15px;
 }
 
 .menu button:hover,
@@ -176,17 +168,11 @@ body{
     margin-bottom:25px;
 }
 
-.topbar h1{
-    font-size:28px;
-}
-
 .user-box{
     background:rgba(255,255,255,0.05);
     padding:12px 18px;
     border-radius:14px;
 }
-
-/* STATS */
 
 .stats{
     display:grid;
@@ -206,7 +192,6 @@ body{
 .card h3{
     color:#cbd5e1;
     margin-bottom:10px;
-    font-size:15px;
 }
 
 .card h2{
@@ -216,8 +201,6 @@ body{
 .green{color:var(--success);}
 .yellow{color:var(--warning);}
 .red{color:var(--danger);}
-
-/* CONTENT */
 
 .content-box{
     display:grid;
@@ -251,12 +234,6 @@ table td{
     border-bottom:1px solid rgba(255,255,255,0.06);
 }
 
-table th{
-    color:#cbd5e1;
-}
-
-/* FORM */
-
 .form-section{
     margin-top:25px;
 }
@@ -287,8 +264,6 @@ table th{
     font-weight:700;
 }
 
-/* OCR */
-
 .upload-box{
     border:2px dashed rgba(255,255,255,0.15);
     padding:40px;
@@ -300,8 +275,6 @@ table th{
 .upload-box input{
     margin-top:15px;
 }
-
-/* MOBILE */
 
 @media(max-width:900px){
 
@@ -320,6 +293,7 @@ table th{
 }
 
 }
+
 </style>
 </head>
 <body>
@@ -371,17 +345,27 @@ table th{
         <h2>🎓 EduSmart</h2>
 
         <div class="menu">
-            <button class="active">📊 Dashboard</button>
-            <button>👨‍🎓 Data Siswa</button>
-            <button>👩‍🏫 Data Guru</button>
-            <button>🏫 Data Kelas</button>
-            <button>📚 Mata Pelajaran</button>
-            <button>📝 Input Nilai</button>
-            <button>📷 OCR Nilai</button>
-            <button>📈 Ranking</button>
-            <button>📄 Rapor</button>
-            <button>⚙️ Pengaturan</button>
-            <button onclick="logout()">🚪 Logout</button>
+
+            <button class="active" onclick="showSection('dashboardSection', this)">
+                📊 Dashboard
+            </button>
+
+            <button onclick="showSection('siswaSection', this)">
+                👨‍🎓 Data Siswa
+            </button>
+
+            <button onclick="showSection('nilaiSection', this)">
+                📝 Input Nilai
+            </button>
+
+            <button onclick="showSection('ocrSection', this)">
+                📷 OCR Nilai
+            </button>
+
+            <button onclick="logout()">
+                🚪 Logout
+            </button>
+
         </div>
 
     </div>
@@ -396,74 +380,140 @@ table th{
             </div>
         </div>
 
-        <!-- STATS -->
+        <!-- DASHBOARD SECTION -->
 
-        <div class="stats">
+        <div id="dashboardSection">
 
-            <div class="card">
-                <h3>Total Siswa</h3>
-                <h2>1,248</h2>
+            <div class="stats">
+
+                <div class="card">
+                    <h3>Total Siswa</h3>
+                    <h2 id="totalSiswa">0</h2>
+                </div>
+
+                <div class="card">
+                    <h3>Total Guru</h3>
+                    <h2 class="green">84</h2>
+                </div>
+
+                <div class="card">
+                    <h3>Rata-rata Nilai</h3>
+                    <h2 class="yellow">88</h2>
+                </div>
+
+                <div class="card">
+                    <h3>Siswa Bermasalah</h3>
+                    <h2 class="red">12</h2>
+                </div>
+
             </div>
 
-            <div class="card">
-                <h3>Total Guru</h3>
-                <h2 class="green">84</h2>
-            </div>
+            <div class="content-box">
 
-            <div class="card">
-                <h3>Rata-rata Nilai</h3>
-                <h2 class="yellow">88</h2>
-            </div>
+                <div class="card chart-card">
+                    <h3>Grafik Nilai Siswa</h3>
+                    <canvas id="nilaiChart"></canvas>
+                </div>
 
-            <div class="card">
-                <h3>Siswa Bermasalah</h3>
-                <h2 class="red">12</h2>
+                <div class="card table-card">
+
+                    <h3>Top Ranking</h3>
+
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Nama</th>
+                                <th>Nilai</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            <tr>
+                                <td>Andi</td>
+                                <td>98</td>
+                            </tr>
+
+                            <tr>
+                                <td>Salsa</td>
+                                <td>96</td>
+                            </tr>
+
+                            <tr>
+                                <td>Raka</td>
+                                <td>94</td>
+                            </tr>
+                        </tbody>
+
+                    </table>
+
+                </div>
+
             </div>
 
         </div>
 
-        <!-- CHART -->
+        <!-- SECTION SISWA -->
 
-        <div class="content-box">
+        <div id="siswaSection" style="display:none;">
 
-            <div class="card chart-card">
-                <h3>Grafik Nilai Siswa</h3>
-                <canvas id="nilaiChart"></canvas>
-            </div>
+            <div class="card form-section">
 
-            <div class="card table-card">
+                <h3>📚 Data Siswa</h3>
 
-                <h3>Top Ranking</h3>
+                <div class="form-grid" style="margin-top:20px;">
 
-                <table>
+                    <input type="text" id="namaSiswa" placeholder="Nama Siswa">
+
+                    <input type="text" id="nisSiswa" placeholder="NIS">
+
+                    <select id="kelasSiswa">
+                        <option value="">Pilih Kelas</option>
+                        <option>Kelas 10</option>
+                        <option>Kelas 11</option>
+                        <option>Kelas 12</option>
+                    </select>
+
+                    <select id="jkSiswa">
+                        <option value="">Jenis Kelamin</option>
+                        <option>Laki-laki</option>
+                        <option>Perempuan</option>
+                    </select>
+
+                </div>
+
+                <button class="save-btn" onclick="tambahSiswa()">
+                    ➕ Tambah Siswa
+                </button>
+
+                <input 
+                    type="text" 
+                    id="searchSiswa" 
+                    placeholder="🔍 Cari siswa..."
+                    onkeyup="renderSiswa()"
+                    style="
+                        width:100%;
+                        margin-top:20px;
+                        padding:14px;
+                        border:none;
+                        border-radius:14px;
+                        background:#0f172a;
+                        color:white;
+                    "
+                >
+
+                <table id="tableSiswa">
+
                     <thead>
                         <tr>
                             <th>Nama</th>
-                            <th>Nilai</th>
+                            <th>NIS</th>
+                            <th>Kelas</th>
+                            <th>JK</th>
+                            <th>Aksi</th>
                         </tr>
                     </thead>
 
-                    <tbody>
-                        <tr>
-                            <td>Andi</td>
-                            <td>98</td>
-                        </tr>
-
-                        <tr>
-                            <td>Salsa</td>
-                            <td>96</td>
-                        </tr>
-
-                        <tr>
-                            <td>Raka</td>
-                            <td>94</td>
-                        </tr>
-
-                        <tr>
-                            <td>Nadya</td>
-                            <td>92</td>
-                        </tr>
-                    </tbody>
+                    <tbody></tbody>
 
                 </table>
 
@@ -471,110 +521,63 @@ table th{
 
         </div>
 
-        <!-- INPUT NILAI -->
+        <!-- SECTION NILAI -->
 
-        <div class="card form-section">
+        <div id="nilaiSection" style="display:none;">
 
-            <h3>Input Nilai Siswa</h3>
+            <div class="card form-section">
 
-            <div class="form-grid">
+                <h3>📝 Input Nilai Siswa</h3>
 
-                <input type="text" placeholder="Nama Siswa">
+                <div class="form-grid">
 
-                <select>
-                    <option>Kelas 10</option>
-                    <option>Kelas 11</option>
-                    <option>Kelas 12</option>
-                </select>
+                    <input type="text" id="namaNilai" placeholder="Nama Siswa">
 
-                <select>
-                    <option>Matematika</option>
-                    <option>Bahasa Indonesia</option>
-                    <option>IPA</option>
-                </select>
+                    <select id="mapelNilai">
+                        <option>Matematika</option>
+                        <option>Bahasa Indonesia</option>
+                        <option>IPA</option>
+                    </select>
 
-                <input type="number" placeholder="Nilai">
+                    <input type="number" id="nilaiSiswa" placeholder="Nilai">
 
-            </div>
+                </div>
 
-            <button class="save-btn">💾 Simpan Nilai</button>
+                <button class="save-btn" onclick="simpanNilai()">
+                    💾 Simpan Nilai
+                </button>
 
-        </div>
+                <table id="tableNilai">
 
-        <!-- DATA SISWA -->
+                    <thead>
+                        <tr>
+                            <th>Nama</th>
+                            <th>Mapel</th>
+                            <th>Nilai</th>
+                        </tr>
+                    </thead>
 
-        <div class="card form-section">
+                    <tbody></tbody>
 
-            <h3>📚 Data Siswa</h3>
-
-            <div class="form-grid" style="margin-top:20px;">
-
-                <input type="text" id="namaSiswa" placeholder="Nama Siswa">
-
-                <input type="text" id="nisSiswa" placeholder="NIS">
-
-                <select id="kelasSiswa">
-                    <option value="">Pilih Kelas</option>
-                    <option>Kelas 10</option>
-                    <option>Kelas 11</option>
-                    <option>Kelas 12</option>
-                </select>
-
-                <select id="jkSiswa">
-                    <option value="">Jenis Kelamin</option>
-                    <option>Laki-laki</option>
-                    <option>Perempuan</option>
-                </select>
+                </table>
 
             </div>
 
-            <button class="save-btn" onclick="tambahSiswa()">
-                ➕ Tambah Siswa
-            </button>
-
-            <input 
-                type="text" 
-                id="searchSiswa" 
-                placeholder="🔍 Cari siswa..."
-                onkeyup="renderSiswa()"
-                style="
-                    width:100%;
-                    margin-top:20px;
-                    padding:14px;
-                    border:none;
-                    border-radius:14px;
-                    background:#0f172a;
-                    color:white;
-                "
-            >
-
-            <table id="tableSiswa">
-
-                <thead>
-                    <tr>
-                        <th>Nama</th>
-                        <th>NIS</th>
-                        <th>Kelas</th>
-                        <th>JK</th>
-                        <th>Aksi</th>
-                    </tr>
-                </thead>
-
-                <tbody></tbody>
-
-            </table>
-
         </div>
 
-        <!-- OCR -->
+        <!-- OCR SECTION -->
 
-        <div class="card form-section">
+        <div id="ocrSection" style="display:none;">
 
-            <h3>OCR Upload Nilai</h3>
+            <div class="card form-section">
 
-            <div class="upload-box">
-                <p>Upload foto lembar nilai untuk dibaca otomatis</p>
-                <input type="file">
+                <h3>📷 OCR Upload Nilai</h3>
+
+                <div class="upload-box">
+                    <p>Upload foto lembar nilai untuk dibaca otomatis</p>
+                    <input type="file">
+                </div>
+
             </div>
 
         </div>
@@ -584,6 +587,8 @@ table th{
 </div>
 
 <script>
+
+/* LOGIN */
 
 function login(){
 
@@ -607,6 +612,25 @@ function logout(){
 
 }
 
+/* MENU */
+
+function showSection(sectionId, btn){
+
+    document.getElementById("dashboardSection").style.display = "none";
+    document.getElementById("siswaSection").style.display = "none";
+    document.getElementById("nilaiSection").style.display = "none";
+    document.getElementById("ocrSection").style.display = "none";
+
+    document.getElementById(sectionId).style.display = "block";
+
+    document.querySelectorAll(".menu button").forEach(button=>{
+        button.classList.remove("active");
+    });
+
+    btn.classList.add("active");
+
+}
+
 /* CHART */
 
 const ctx = document.getElementById('nilaiChart');
@@ -623,30 +647,11 @@ new Chart(ctx, {
         }]
     },
     options: {
-        responsive:true,
-        plugins:{
-            legend:{
-                labels:{
-                    color:'white'
-                }
-            }
-        },
-        scales:{
-            x:{
-                ticks:{
-                    color:'white'
-                }
-            },
-            y:{
-                ticks:{
-                    color:'white'
-                }
-            }
-        }
+        responsive:true
     }
 });
 
-/* CRUD SISWA */
+/* DATA SISWA */
 
 let dataSiswa = JSON.parse(localStorage.getItem("dataSiswa")) || [];
 
@@ -675,6 +680,7 @@ function tambahSiswa(){
     simpanData();
     renderSiswa();
     resetForm();
+    updateStatistik();
 
     alert("Siswa berhasil ditambahkan!");
 
@@ -698,31 +704,25 @@ function renderSiswa(){
     filtered.forEach((siswa)=>{
 
         tbody.innerHTML += `
-        
         <tr>
             <td>${siswa.nama}</td>
             <td>${siswa.nis}</td>
             <td>${siswa.kelas}</td>
             <td>${siswa.jk}</td>
-
             <td>
-
                 <button onclick="hapusSiswa(${siswa.id})"
-                    style="
-                        background:#ef4444;
-                        color:white;
-                        border:none;
-                        padding:8px 12px;
-                        border-radius:10px;
-                        cursor:pointer;
-                    "
-                >
+                style="
+                    background:#ef4444;
+                    color:white;
+                    border:none;
+                    padding:8px 12px;
+                    border-radius:10px;
+                    cursor:pointer;
+                ">
                     Hapus
                 </button>
-
             </td>
         </tr>
-
         `;
 
     });
@@ -739,6 +739,7 @@ function hapusSiswa(id){
 
         simpanData();
         renderSiswa();
+        updateStatistik();
 
     }
 
@@ -762,7 +763,75 @@ function resetForm(){
 
 }
 
+function updateStatistik(){
+
+    document.getElementById("totalSiswa").innerText =
+        dataSiswa.length;
+
+}
+
+/* NILAI */
+
+let dataNilai = JSON.parse(localStorage.getItem("dataNilai")) || [];
+
+function simpanNilai(){
+
+    const nama = document.getElementById("namaNilai").value;
+    const mapel = document.getElementById("mapelNilai").value;
+    const nilai = document.getElementById("nilaiSiswa").value;
+
+    if(nama === "" || nilai === ""){
+        alert("Lengkapi data nilai!");
+        return;
+    }
+
+    const data = {
+        nama,
+        mapel,
+        nilai
+    };
+
+    dataNilai.push(data);
+
+    localStorage.setItem(
+        "dataNilai",
+        JSON.stringify(dataNilai)
+    );
+
+    renderNilai();
+
+    document.getElementById("namaNilai").value = "";
+    document.getElementById("nilaiSiswa").value = "";
+
+    alert("Nilai berhasil disimpan!");
+
+}
+
+function renderNilai(){
+
+    const tbody = document.querySelector("#tableNilai tbody");
+
+    tbody.innerHTML = "";
+
+    dataNilai.forEach((item)=>{
+
+        tbody.innerHTML += `
+        <tr>
+            <td>${item.nama}</td>
+            <td>${item.mapel}</td>
+            <td>${item.nilai}</td>
+        </tr>
+        `;
+
+    });
+
+}
+
+/* INIT */
+
 renderSiswa();
+renderNilai();
+updateStatistik();
 
 </script>
 
