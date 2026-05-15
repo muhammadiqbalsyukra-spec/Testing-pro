@@ -9,344 +9,316 @@
 
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
 <style>
 
 *{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-    font-family:'Inter',sans-serif;
-}
-
-:root{
-    --primary:#38bdf8;
-    --secondary:#6366f1;
-    --bg:#020617;
-    --card:#0f172a;
-    --text:#f8fafc;
-    --muted:#94a3b8;
-    --success:#22c55e;
-    --warning:#f59e0b;
-    --danger:#ef4444;
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Inter',sans-serif;
 }
 
 body{
-    background:linear-gradient(135deg,#020617,#0f172a,#111827);
-    color:white;
-    min-height:100vh;
+background:linear-gradient(135deg,#020617,#0f172a,#111827);
+color:white;
+min-height:100vh;
 }
 
 /* LOGIN */
 
 .login-page{
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    min-height:100vh;
-    padding:20px;
+display:flex;
+justify-content:center;
+align-items:center;
+min-height:100vh;
+padding:20px;
 }
 
 .login-box{
-    width:100%;
-    max-width:420px;
-    background:rgba(255,255,255,0.05);
-    border:1px solid rgba(255,255,255,0.08);
-    border-radius:30px;
-    padding:35px;
-    backdrop-filter:blur(20px);
+width:100%;
+max-width:420px;
+background:rgba(255,255,255,0.05);
+border:1px solid rgba(255,255,255,0.08);
+border-radius:30px;
+padding:35px;
+backdrop-filter:blur(20px);
 }
 
 .logo{
-    text-align:center;
-    margin-bottom:30px;
+text-align:center;
+margin-bottom:30px;
 }
 
 .logo h1{
-    font-size:34px;
-    font-weight:800;
-    background:linear-gradient(to right,#38bdf8,#818cf8);
-    -webkit-background-clip:text;
-    -webkit-text-fill-color:transparent;
+font-size:34px;
+font-weight:800;
+background:linear-gradient(to right,#38bdf8,#818cf8);
+-webkit-background-clip:text;
+-webkit-text-fill-color:transparent;
 }
 
 .logo p{
-    color:#94a3b8;
-    margin-top:10px;
+color:#94a3b8;
+margin-top:10px;
 }
 
 .input-group{
-    margin-bottom:18px;
+margin-bottom:18px;
 }
 
 .input-group label{
-    display:block;
-    margin-bottom:8px;
+display:block;
+margin-bottom:8px;
 }
 
-.input-group input,
-.input-group select,
-textarea{
-    width:100%;
-    padding:14px;
-    border:none;
-    border-radius:14px;
-    background:#0f172a;
-    color:white;
+.input-group input{
+width:100%;
+padding:14px;
+border:none;
+border-radius:14px;
+background:#0f172a;
+color:white;
 }
 
 .login-btn,
 .save-btn,
 .print-btn{
-    width:100%;
-    padding:14px;
-    border:none;
-    border-radius:14px;
-    background:linear-gradient(to right,#0ea5e9,#38bdf8);
-    color:white;
-    font-weight:700;
-    cursor:pointer;
-    margin-top:15px;
+width:100%;
+padding:14px;
+border:none;
+border-radius:14px;
+background:linear-gradient(to right,#0ea5e9,#38bdf8);
+color:white;
+font-weight:700;
+cursor:pointer;
+margin-top:15px;
 }
 
 /* DASHBOARD */
 
 .dashboard{
-    display:none;
+display:none;
 }
 
 .sidebar{
-    position:fixed;
-    top:0;
-    left:0;
-    width:260px;
-    height:100vh;
-    background:rgba(15,23,42,0.96);
-    padding:25px;
-    border-right:1px solid rgba(255,255,255,0.06);
-    overflow:auto;
+position:fixed;
+top:0;
+left:0;
+width:260px;
+height:100vh;
+background:rgba(15,23,42,0.96);
+padding:25px;
+border-right:1px solid rgba(255,255,255,0.06);
+overflow:auto;
 }
 
 .sidebar h2{
-    margin-bottom:30px;
+margin-bottom:30px;
 }
 
 .menu{
-    display:flex;
-    flex-direction:column;
-    gap:10px;
+display:flex;
+flex-direction:column;
+gap:10px;
 }
 
 .menu button{
-    padding:15px;
-    border:none;
-    border-radius:14px;
-    background:transparent;
-    color:#cbd5e1;
-    cursor:pointer;
-    text-align:left;
-    transition:0.3s;
+padding:15px;
+border:none;
+border-radius:14px;
+background:transparent;
+color:#cbd5e1;
+cursor:pointer;
+text-align:left;
+transition:0.3s;
 }
 
 .menu button:hover,
 .menu button.active{
-    background:linear-gradient(to right,#0ea5e9,#38bdf8);
-    color:white;
+background:linear-gradient(to right,#0ea5e9,#38bdf8);
+color:white;
 }
 
 .main{
-    margin-left:260px;
-    padding:25px;
+margin-left:260px;
+padding:25px;
 }
 
 .topbar{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    margin-bottom:25px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:25px;
 }
 
 .user-box{
-    background:rgba(255,255,255,0.05);
-    padding:12px 18px;
-    border-radius:14px;
-}
-
-.stats{
-    display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-    gap:20px;
-    margin-bottom:25px;
+background:rgba(255,255,255,0.05);
+padding:12px 18px;
+border-radius:14px;
 }
 
 .card{
-    background:rgba(255,255,255,0.05);
-    border-radius:24px;
-    padding:24px;
-    border:1px solid rgba(255,255,255,0.06);
-}
-
-.card h3{
-    margin-bottom:12px;
-}
-
-.card h2{
-    font-size:34px;
-}
-
-.green{color:#22c55e;}
-.yellow{color:#f59e0b;}
-.red{color:#ef4444;}
-
-.content-box{
-    display:grid;
-    grid-template-columns:2fr 1fr;
-    gap:20px;
-}
-
-.chart-card{
-    height:420px;
+background:rgba(255,255,255,0.05);
+border-radius:24px;
+padding:24px;
+border:1px solid rgba(255,255,255,0.06);
 }
 
 .form-grid{
-    display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-    gap:16px;
-    margin-top:20px;
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+gap:16px;
+margin-top:20px;
+}
+
+.form-grid input,
+.form-grid select{
+padding:14px;
+border:none;
+border-radius:12px;
+background:#0f172a;
+color:white;
 }
 
 table{
-    width:100%;
-    border-collapse:collapse;
-    margin-top:20px;
+width:100%;
+border-collapse:collapse;
+margin-top:20px;
 }
 
 table th,
 table td{
-    padding:14px;
-    border-bottom:1px solid rgba(255,255,255,0.06);
-    text-align:left;
+padding:14px;
+border-bottom:1px solid rgba(255,255,255,0.06);
+text-align:left;
 }
 
 .action-btn{
-    border:none;
-    padding:8px 12px;
-    border-radius:10px;
-    color:white;
-    cursor:pointer;
-    margin-right:6px;
-}
-
-.edit-btn{
-    background:#f59e0b;
+border:none;
+padding:8px 12px;
+border-radius:10px;
+color:white;
+cursor:pointer;
+margin-right:6px;
 }
 
 .delete-btn{
-    background:#ef4444;
+background:#ef4444;
 }
 
 .print-mini{
-    background:#22c55e;
+background:#22c55e;
 }
 
 /* RAPOR */
 
 .rapor-box{
-    background:white;
-    color:black;
-    border-radius:20px;
-    padding:40px;
-    margin-top:20px;
+background:white;
+color:black;
+border-radius:20px;
+padding:40px;
+margin-top:20px;
 }
 
 .rapor-header{
-    text-align:center;
-    margin-bottom:30px;
+text-align:center;
+margin-bottom:30px;
 }
 
 .rapor-title{
-    font-size:22px;
-    font-weight:700;
-    margin-bottom:10px;
-}
-
-.rapor-grid{
-    display:block;
-}
-
-.foto-box{
-    width:140px;
-    height:180px;
-    border:2px solid #999;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    overflow:hidden;
-    color:#777;
-    font-size:14px;
+font-size:24px;
+font-weight:700;
 }
 
 .biodata-table{
-    width:100%;
+width:100%;
+margin-top:20px;
 }
 
 .biodata-table td{
-    padding:10px 8px;
-    border:none;
-    color:black;
-    vertical-align:top;
+padding:10px 8px;
+border:none;
+vertical-align:top;
 }
 
 .biodata-table td:first-child{
-    width:260px;
-    font-weight:600;
+width:260px;
+font-weight:600;
+}
+
+.foto-ttd{
+display:flex;
+justify-content:space-between;
+align-items:flex-end;
+margin-top:60px;
+}
+
+.foto-box{
+width:140px;
+height:180px;
+border:2px solid #999;
+display:flex;
+justify-content:center;
+align-items:center;
+color:#666;
+font-size:14px;
 }
 
 .ttd{
-    margin-top:50px;
-    text-align:right;
+text-align:right;
 }
 
 @media(max-width:900px){
 
 .sidebar{
-    position:relative;
-    width:100%;
-    height:auto;
+position:relative;
+width:100%;
+height:auto;
 }
 
 .main{
-    margin-left:0;
+margin-left:0;
 }
 
-.content-box{
-    grid-template-columns:1fr;
+.foto-ttd{
+flex-direction:column;
+align-items:flex-start;
+gap:40px;
 }
 
 }
+
+/* PRINT */
 
 @media print{
 
+@page{
+size:A4;
+margin:15mm;
+}
+
 body{
-    background:white;
+background:white !important;
 }
 
 .sidebar,
 .topbar,
 .menu,
-.no-print{
-    display:none !important;
+.no-print,
+.print-btn{
+display:none !important;
 }
 
 .main{
-    margin-left:0;
-    padding:0;
+margin:0;
+padding:0;
 }
 
-.card{
-    background:white;
-    border:none;
+.rapor-box{
+box-shadow:none;
+border:none;
+margin:0;
+padding:0;
 }
 
 }
@@ -360,28 +332,28 @@ body{
 
 <div class="login-page" id="loginPage">
 
-    <div class="login-box">
+<div class="login-box">
 
-        <div class="logo">
-            <h1>EduSmart SD</h1>
-            <p>Sistem Informasi Sekolah Premium</p>
-        </div>
+<div class="logo">
+<h1>EduSmart SD</h1>
+<p>Sistem Informasi Sekolah</p>
+</div>
 
-        <div class="input-group">
-            <label>Username</label>
-            <input type="text" id="username">
-        </div>
+<div class="input-group">
+<label>Username</label>
+<input type="text" id="username">
+</div>
 
-        <div class="input-group">
-            <label>Password</label>
-            <input type="password" id="password">
-        </div>
+<div class="input-group">
+<label>Password</label>
+<input type="password" id="password">
+</div>
 
-        <button class="login-btn" onclick="login()">
-            Masuk Dashboard
-        </button>
+<button class="login-btn" onclick="login()">
+Masuk Dashboard
+</button>
 
-    </div>
+</div>
 
 </div>
 
@@ -389,308 +361,218 @@ body{
 
 <div class="dashboard" id="dashboard">
 
-    <div class="sidebar">
+<div class="sidebar">
 
-        <h2>🎓 EduSmart</h2>
+<h2>🎓 EduSmart</h2>
 
-        <div class="menu">
+<div class="menu">
 
-            <button class="active" onclick="showSection('dashboardSection',this)">
-                📊 Dashboard
-            </button>
+<button class="active" onclick="showSection('siswaSection',this)">
+📚 Data Siswa
+</button>
 
-            <button onclick="showSection('siswaSection',this)">
-                👨‍🎓 Data Siswa
-            </button>
+<button onclick="showSection('raporSection',this)">
+📄 Biodata Rapor
+</button>
 
-            <button onclick="showSection('raporSection',this)">
-                📄 Biodata Rapor
-            </button>
+<button onclick="logout()">
+🚪 Logout
+</button>
 
-            <button onclick="logout()">
-                🚪 Logout
-            </button>
+</div>
 
-        </div>
+</div>
 
-    </div>
+<div class="main">
 
-    <div class="main">
+<div class="topbar">
 
-        <div class="topbar">
+<h1>Dashboard Sekolah Dasar</h1>
 
-            <h1>Dashboard Sekolah Dasar</h1>
+<div class="user-box">
+👤 Administrator
+</div>
 
-            <div class="user-box">
-                👤 Administrator
-            </div>
+</div>
 
-        </div>
+<!-- DATA SISWA -->
 
-        <!-- DASHBOARD -->
+<div id="siswaSection">
 
-        <div id="dashboardSection">
+<div class="card">
 
-            <div class="stats">
+<h3>📚 Data Lengkap Siswa</h3>
 
-                <div class="card">
-                    <h3>Total Siswa</h3>
-                    <h2 id="totalSiswa">0</h2>
-                </div>
+<div class="form-grid">
 
-                <div class="card">
-                    <h3>Total Nilai</h3>
-                    <h2 class="green" id="totalNilai">0</h2>
-                </div>
+<input type="text" id="nama" placeholder="Nama Siswa">
 
-                <div class="card">
-                    <h3>Rata-rata Nilai</h3>
-                    <h2 class="yellow" id="rataNilai">0</h2>
-                </div>
+<input type="text" id="nis" placeholder="NIS">
 
-                <div class="card">
-                    <h3>Data Orang Tua</h3>
-                    <h2 class="red" id="totalOrtu">0</h2>
-                </div>
+<input type="text" id="tempatLahir" placeholder="Tempat Lahir">
 
-            </div>
+<input type="date" id="tanggalLahir">
 
-            <div class="content-box">
+<select id="jk">
+<option>Laki-laki</option>
+<option>Perempuan</option>
+</select>
 
-                <div class="card chart-card">
+<input type="text" id="agama" placeholder="Agama">
 
-                    <h3>Grafik Nilai</h3>
+<input type="text" id="alamat" placeholder="Alamat Siswa">
 
-                    <canvas id="nilaiChart"></canvas>
+<input type="text" id="ayah" placeholder="Nama Ayah">
 
-                </div>
+<input type="text" id="ibu" placeholder="Nama Ibu">
 
-                <div class="card">
+<input type="text" id="pekerjaanAyah" placeholder="Pekerjaan Ayah">
 
-                    <h3>Top Ranking</h3>
+<input type="text" id="pekerjaanIbu" placeholder="Pekerjaan Ibu">
 
-                    <table>
+<input type="text" id="alamatOrtu" placeholder="Alamat Orang Tua">
 
-                        <thead>
-                            <tr>
-                                <th>Nama</th>
-                                <th>Nilai</th>
-                            </tr>
-                        </thead>
+</div>
 
-                        <tbody id="rankingBody"></tbody>
+<button class="save-btn" onclick="tambahSiswa()">
+💾 Simpan Data
+</button>
 
-                    </table>
+<table>
 
-                </div>
+<thead>
 
-            </div>
+<tr>
+<th>Nama</th>
+<th>NIS</th>
+<th>JK</th>
+<th>Aksi</th>
+</tr>
 
-        </div>
+</thead>
 
-        <!-- DATA SISWA -->
+<tbody id="tableSiswa"></tbody>
 
-        <div id="siswaSection" style="display:none;">
+</table>
 
-            <div class="card">
+</div>
 
-                <h3>📚 Data Lengkap Siswa</h3>
+</div>
 
-                <div class="form-grid">
+<!-- RAPOR -->
 
-                    <input type="text" id="nama" placeholder="Nama Siswa">
+<div id="raporSection" style="display:none;">
 
-                    <input type="text" id="nis" placeholder="NIS">
+<div class="card no-print">
 
-                    <input type="text" id="tempatLahir" placeholder="Tempat Lahir">
+<h3>📄 Cetak Biodata Rapor</h3>
 
-                    <input type="date" id="tanggalLahir">
+<select id="pilihSiswa" onchange="tampilkanRapor()">
 
-                    <select id="jk">
-                        <option>Laki-laki</option>
-                        <option>Perempuan</option>
-                    </select>
+<option value="">Pilih Siswa</option>
 
-                    <input type="text" id="agama" placeholder="Agama">
+</select>
 
-                    <input type="text" id="alamat" placeholder="Alamat Siswa">
+<button class="print-btn" onclick="window.print()">
+🖨 Print Biodata
+</button>
 
-                    <input type="text" id="ayah" placeholder="Nama Ayah">
+</div>
 
-                    <input type="text" id="ibu" placeholder="Nama Ibu">
+<div class="rapor-box">
 
-                    <input type="text" id="pekerjaanAyah" placeholder="Pekerjaan Ayah">
+<div class="rapor-header">
 
-                    <input type="text" id="pekerjaanIbu" placeholder="Pekerjaan Ibu">
+<div class="rapor-title">
+KETERANGAN TENTANG PESERTA DIDIK
+</div>
 
-                    <input type="text" id="alamatOrtu" placeholder="Alamat Orang Tua">
+</div>
 
-                    <input type="number" id="nilai" placeholder="Nilai Rata-rata">
+<table class="biodata-table">
 
-                </div>
+<tr>
+<td>Nama Siswa</td>
+<td id="rNama"></td>
+</tr>
 
-                <button class="save-btn" onclick="tambahSiswa()">
-                    💾 Simpan Data
-                </button>
+<tr>
+<td>NIS</td>
+<td id="rNis"></td>
+</tr>
 
-                <table>
+<tr>
+<td>Tempat/Tanggal Lahir</td>
+<td id="rTTL"></td>
+</tr>
 
-                    <thead>
+<tr>
+<td>Jenis Kelamin</td>
+<td id="rJK"></td>
+</tr>
 
-                        <tr>
-                            <th>Nama</th>
-                            <th>NIS</th>
-                            <th>JK</th>
-                            <th>Nilai</th>
-                            <th>Aksi</th>
-                        </tr>
+<tr>
+<td>Agama</td>
+<td id="rAgama"></td>
+</tr>
 
-                    </thead>
+<tr>
+<td>Alamat Siswa</td>
+<td id="rAlamat"></td>
+</tr>
 
-                    <tbody id="tableSiswa"></tbody>
+<tr>
+<td>Nama Ayah</td>
+<td id="rAyah"></td>
+</tr>
 
-                </table>
+<tr>
+<td>Nama Ibu</td>
+<td id="rIbu"></td>
+</tr>
 
-            </div>
+<tr>
+<td>Pekerjaan Ayah</td>
+<td id="rPekerjaanAyah"></td>
+</tr>
 
-        </div>
+<tr>
+<td>Pekerjaan Ibu</td>
+<td id="rPekerjaanIbu"></td>
+</tr>
 
-        <!-- RAPOR -->
+<tr>
+<td>Alamat Orang Tua</td>
+<td id="rAlamatOrtu"></td>
+</tr>
 
-        <div id="raporSection" style="display:none;">
+</table>
 
-            <div class="card no-print">
+<!-- FOTO + TTD -->
 
-                <h3>📄 Cetak Biodata Rapor</h3>
+<div class="foto-ttd">
 
-                <select id="pilihSiswa" onchange="tampilkanRapor()">
+<div class="foto-box">
+Tempel Foto
+</div>
 
-                    <option value="">Pilih Siswa</option>
+<div class="ttd">
 
-                </select>
+<p>Kepala Sekolah</p>
 
-                <button class="print-btn" onclick="window.print()">
-                    🖨 Print Biodata
-                </button>
+<br><br><br>
 
-            </div>
+<h3>Suryawati Effa S.Pd</h3>
 
-            <div class="rapor-box" id="raporPrint">
+<p>NIP 19580818 198411 2001</p>
 
-                <div class="rapor-header">
+</div>
 
-                    <div class="rapor-title">
-                        KETERANGAN TENTANG PESERTA DIDIK
-                    </div>
+</div>
 
-                </div>
+</div>
 
-                <div class="rapor-grid">
-
-                    <table class="biodata-table">
-
-                        <tr>
-                            <td>Nama Siswa</td>
-                            <td id="rNama"></td>
-                        </tr>
-
-                        <tr>
-                            <td>NIS</td>
-                            <td id="rNis"></td>
-                        </tr>
-
-                        <tr>
-                            <td>Tempat/Tanggal Lahir</td>
-                            <td id="rTTL"></td>
-                        </tr>
-
-                        <tr>
-                            <td>Jenis Kelamin</td>
-                            <td id="rJK"></td>
-                        </tr>
-
-                        <tr>
-                            <td>Agama</td>
-                            <td id="rAgama"></td>
-                        </tr>
-
-                        <tr>
-                            <td>Alamat Siswa</td>
-                            <td id="rAlamat"></td>
-                        </tr>
-
-                        <tr>
-                            <td>Nama Ayah</td>
-                            <td id="rAyah"></td>
-                        </tr>
-
-                        <tr>
-                            <td>Nama Ibu</td>
-                            <td id="rIbu"></td>
-                        </tr>
-
-                        <tr>
-                            <td>Pekerjaan Ayah</td>
-                            <td id="rPekerjaanAyah"></td>
-                        </tr>
-
-                        <tr>
-                            <td>Pekerjaan Ibu</td>
-                            <td id="rPekerjaanIbu"></td>
-                        </tr>
-
-                        <tr>
-                            <td>Alamat Orang Tua</td>
-                            <td id="rAlamatOrtu"></td>
-                        </tr>
-
-                        <tr>
-                            <td>Nilai Rata-rata</td>
-                            <td id="rNilai"></td>
-                        </tr>
-
-                    </table>
-
-                </div>
-
-                <!-- FOTO + TTD -->
-
-                <div
-                style="
-                display:flex;
-                justify-content:space-between;
-                align-items:flex-end;
-                margin-top:60px;
-                "
-                >
-
-                    <div>
-
-                        <div class="foto-box">
-                            Tempel Foto
-                        </div>
-
-                    </div>
-
-                    <div class="ttd" style="margin-top:0;">
-
-                        <p>Kepala Sekolah</p>
-
-                        <br><br><br>
-
-                        <h3>Suryawati Effa S.Pd</h3>
-
-                        <p>NIP 19580818 198411 2001</p>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-        </div>
-
-    </div>
+</div>
 
 </div>
 
@@ -700,28 +582,35 @@ body{
 
 function login(){
 
-    const username =
-        document.getElementById("username").value;
+const username =
+document.getElementById("username").value;
 
-    const password =
-        document.getElementById("password").value;
+const password =
+document.getElementById("password").value;
 
-    if(username === "" || password === ""){
-        alert("Lengkapi login!");
-        return;
-    }
+if(username === "" || password === ""){
 
-    document.getElementById("loginPage").style.display="none";
+alert("Lengkapi login!");
 
-    document.getElementById("dashboard").style.display="block";
+return;
+
+}
+
+document.getElementById("loginPage")
+.style.display="none";
+
+document.getElementById("dashboard")
+.style.display="block";
 
 }
 
 function logout(){
 
-    document.getElementById("dashboard").style.display="none";
+document.getElementById("dashboard")
+.style.display="none";
 
-    document.getElementById("loginPage").style.display="flex";
+document.getElementById("loginPage")
+.style.display="flex";
 
 }
 
@@ -729,24 +618,29 @@ function logout(){
 
 function showSection(sectionId,btn){
 
-    const sections = [
-        "dashboardSection",
-        "siswaSection",
-        "raporSection"
-    ];
+const sections = [
+"siswaSection",
+"raporSection"
+];
 
-    sections.forEach(id=>{
-        document.getElementById(id).style.display="none";
-    });
+sections.forEach(id=>{
 
-    document.getElementById(sectionId).style.display="block";
+document.getElementById(id)
+.style.display="none";
 
-    document.querySelectorAll(".menu button")
-    .forEach(button=>{
-        button.classList.remove("active");
-    });
+});
 
-    btn.classList.add("active");
+document.getElementById(sectionId)
+.style.display="block";
+
+document.querySelectorAll(".menu button")
+.forEach(button=>{
+
+button.classList.remove("active");
+
+});
+
+btn.classList.add("active");
 
 }
 
@@ -759,63 +653,58 @@ JSON.parse(localStorage.getItem("dataSiswa")) || [];
 
 function tambahSiswa(){
 
-    const siswa = {
+const siswa = {
 
-        id:Date.now(),
+id:Date.now(),
 
-        nama:
-        document.getElementById("nama").value,
+nama:
+document.getElementById("nama").value,
 
-        nis:
-        document.getElementById("nis").value,
+nis:
+document.getElementById("nis").value,
 
-        tempat:
-        document.getElementById("tempatLahir").value,
+tempat:
+document.getElementById("tempatLahir").value,
 
-        tanggal:
-        document.getElementById("tanggalLahir").value,
+tanggal:
+document.getElementById("tanggalLahir").value,
 
-        jk:
-        document.getElementById("jk").value,
+jk:
+document.getElementById("jk").value,
 
-        agama:
-        document.getElementById("agama").value,
+agama:
+document.getElementById("agama").value,
 
-        alamat:
-        document.getElementById("alamat").value,
+alamat:
+document.getElementById("alamat").value,
 
-        ayah:
-        document.getElementById("ayah").value,
+ayah:
+document.getElementById("ayah").value,
 
-        ibu:
-        document.getElementById("ibu").value,
+ibu:
+document.getElementById("ibu").value,
 
-        pekerjaanAyah:
-        document.getElementById("pekerjaanAyah").value,
+pekerjaanAyah:
+document.getElementById("pekerjaanAyah").value,
 
-        pekerjaanIbu:
-        document.getElementById("pekerjaanIbu").value,
+pekerjaanIbu:
+document.getElementById("pekerjaanIbu").value,
 
-        alamatOrtu:
-        document.getElementById("alamatOrtu").value,
+alamatOrtu:
+document.getElementById("alamatOrtu").value
 
-        nilai:
-        document.getElementById("nilai").value
+};
 
-    };
+dataSiswa.push(siswa);
 
-    dataSiswa.push(siswa);
+localStorage.setItem(
+"dataSiswa",
+JSON.stringify(dataSiswa)
+);
 
-    localStorage.setItem(
-        "dataSiswa",
-        JSON.stringify(dataSiswa)
-    );
+renderSiswa();
 
-    renderSiswa();
-
-    updateDashboard();
-
-    alert("Data siswa berhasil disimpan 🔥");
+alert("Data siswa berhasil disimpan");
 
 }
 
@@ -823,56 +712,56 @@ function tambahSiswa(){
 
 function renderSiswa(){
 
-    const tbody =
-        document.getElementById("tableSiswa");
+const tbody =
+document.getElementById("tableSiswa");
 
-    const pilih =
-        document.getElementById("pilihSiswa");
+const pilih =
+document.getElementById("pilihSiswa");
 
-    tbody.innerHTML="";
-    pilih.innerHTML=
-    `<option value="">Pilih Siswa</option>`;
+tbody.innerHTML="";
 
-    dataSiswa.forEach((item,index)=>{
+pilih.innerHTML=
+`<option value="">Pilih Siswa</option>`;
 
-        tbody.innerHTML += `
+dataSiswa.forEach((item,index)=>{
 
-        <tr>
+tbody.innerHTML += `
 
-            <td>${item.nama}</td>
-            <td>${item.nis}</td>
-            <td>${item.jk}</td>
-            <td>${item.nilai}</td>
+<tr>
 
-            <td>
+<td>${item.nama}</td>
+<td>${item.nis}</td>
+<td>${item.jk}</td>
 
-                <button
-                    class="action-btn print-mini"
-                    onclick="previewRapor(${index})"
-                >
-                    Print
-                </button>
+<td>
 
-                <button
-                    class="action-btn delete-btn"
-                    onclick="hapusSiswa(${item.id})"
-                >
-                    Hapus
-                </button>
+<button
+class="action-btn print-mini"
+onclick="previewRapor(${index})"
+>
+Print
+</button>
 
-            </td>
+<button
+class="action-btn delete-btn"
+onclick="hapusSiswa(${item.id})"
+>
+Hapus
+</button>
 
-        </tr>
+</td>
 
-        `;
+</tr>
 
-        pilih.innerHTML += `
-        <option value="${index}">
-            ${item.nama}
-        </option>
-        `;
+`;
 
-    });
+pilih.innerHTML += `
+<option value="${index}">
+${item.nama}
+</option>
+`;
+
+});
 
 }
 
@@ -880,23 +769,21 @@ function renderSiswa(){
 
 function hapusSiswa(id){
 
-    if(confirm("Hapus siswa?")){
+if(confirm("Hapus siswa?")){
 
-        dataSiswa =
-        dataSiswa.filter(
-            siswa => siswa.id !== id
-        );
+dataSiswa =
+dataSiswa.filter(
+siswa => siswa.id !== id
+);
 
-        localStorage.setItem(
-            "dataSiswa",
-            JSON.stringify(dataSiswa)
-        );
+localStorage.setItem(
+"dataSiswa",
+JSON.stringify(dataSiswa)
+);
 
-        renderSiswa();
+renderSiswa();
 
-        updateDashboard();
-
-    }
+}
 
 }
 
@@ -904,141 +791,57 @@ function hapusSiswa(id){
 
 function tampilkanRapor(){
 
-    const index =
-    document.getElementById("pilihSiswa").value;
+const index =
+document.getElementById("pilihSiswa").value;
 
-    if(index==="") return;
+if(index==="") return;
 
-    previewRapor(index);
+previewRapor(index);
 
 }
 
 function previewRapor(index){
 
-    const siswa = dataSiswa[index];
+const siswa = dataSiswa[index];
 
-    document.getElementById("rNama").innerText =
-        siswa.nama;
+document.getElementById("rNama").innerText =
+siswa.nama;
 
-    document.getElementById("rNis").innerText =
-        siswa.nis;
+document.getElementById("rNis").innerText =
+siswa.nis;
 
-    document.getElementById("rTTL").innerText =
-        siswa.tempat + ", " + siswa.tanggal;
+document.getElementById("rTTL").innerText =
+siswa.tempat + ", " + siswa.tanggal;
 
-    document.getElementById("rJK").innerText =
-        siswa.jk;
+document.getElementById("rJK").innerText =
+siswa.jk;
 
-    document.getElementById("rAgama").innerText =
-        siswa.agama;
+document.getElementById("rAgama").innerText =
+siswa.agama;
 
-    document.getElementById("rAlamat").innerText =
-        siswa.alamat;
+document.getElementById("rAlamat").innerText =
+siswa.alamat;
 
-    document.getElementById("rAyah").innerText =
-        siswa.ayah;
+document.getElementById("rAyah").innerText =
+siswa.ayah;
 
-    document.getElementById("rIbu").innerText =
-        siswa.ibu;
+document.getElementById("rIbu").innerText =
+siswa.ibu;
 
-    document.getElementById("rPekerjaanAyah").innerText =
-        siswa.pekerjaanAyah;
+document.getElementById("rPekerjaanAyah").innerText =
+siswa.pekerjaanAyah;
 
-    document.getElementById("rPekerjaanIbu").innerText =
-        siswa.pekerjaanIbu;
+document.getElementById("rPekerjaanIbu").innerText =
+siswa.pekerjaanIbu;
 
-    document.getElementById("rAlamatOrtu").innerText =
-        siswa.alamatOrtu;
-
-    document.getElementById("rNilai").innerText =
-        siswa.nilai;
+document.getElementById("rAlamatOrtu").innerText =
+siswa.alamatOrtu;
 
 }
-
-/* DASHBOARD */
-
-function updateDashboard(){
-
-    document.getElementById("totalSiswa")
-    .innerText = dataSiswa.length;
-
-    document.getElementById("totalOrtu")
-    .innerText = dataSiswa.length;
-
-    document.getElementById("totalNilai")
-    .innerText = dataSiswa.length;
-
-    let total = 0;
-
-    dataSiswa.forEach(item=>{
-        total += Number(item.nilai || 0);
-    });
-
-    const rata =
-    dataSiswa.length > 0
-    ? Math.round(total / dataSiswa.length)
-    : 0;
-
-    document.getElementById("rataNilai")
-    .innerText = rata;
-
-    const ranking =
-    [...dataSiswa]
-    .sort((a,b)=>b.nilai-a.nilai)
-    .slice(0,5);
-
-    const rankingBody =
-    document.getElementById("rankingBody");
-
-    rankingBody.innerHTML="";
-
-    ranking.forEach(item=>{
-
-        rankingBody.innerHTML += `
-        <tr>
-            <td>${item.nama}</td>
-            <td>${item.nilai}</td>
-        </tr>
-        `;
-
-    });
-
-}
-
-/* CHART */
-
-new Chart(
-document.getElementById("nilaiChart"),
-{
-    type:'line',
-
-    data:{
-        labels:['Jan','Feb','Mar','Apr','Mei','Jun'],
-
-        datasets:[{
-
-            label:'Nilai',
-
-            data:[70,75,80,85,90,95],
-
-            borderWidth:3,
-
-            tension:0.4
-
-        }]
-    },
-
-    options:{
-        responsive:true
-    }
-
-});
 
 /* INIT */
 
 renderSiswa();
-
-updateDashboard();
 
 </script>
 
