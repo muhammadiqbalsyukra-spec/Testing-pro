@@ -253,6 +253,10 @@ align-items:flex-end;
 margin-top:60px;
 }
 
+.foto-wrapper{
+margin-left:90px;
+}
+
 .foto-box{
 width:140px;
 height:180px;
@@ -266,6 +270,17 @@ font-size:14px;
 
 .ttd{
 text-align:right;
+}
+
+.edit-kepsek-btn{
+margin-top:14px;
+padding:10px 16px;
+border:none;
+border-radius:12px;
+background:#0ea5e9;
+color:white;
+cursor:pointer;
+font-weight:600;
 }
 
 @media(max-width:900px){
@@ -305,7 +320,8 @@ background:white !important;
 .topbar,
 .menu,
 .no-print,
-.print-btn{
+.print-btn,
+.edit-kepsek-btn{
 display:none !important;
 }
 
@@ -409,6 +425,8 @@ Masuk Dashboard
 
 <input type="text" id="nis" placeholder="NIS">
 
+<input type="text" id="nisn" placeholder="NISN">
+
 <input type="text" id="tempatLahir" placeholder="Tempat Lahir">
 
 <input type="date" id="tanggalLahir">
@@ -445,6 +463,7 @@ Masuk Dashboard
 <tr>
 <th>Nama</th>
 <th>NIS</th>
+<th>NISN</th>
 <th>JK</th>
 <th>Aksi</th>
 </tr>
@@ -502,6 +521,11 @@ KETERANGAN TENTANG PESERTA DIDIK
 </tr>
 
 <tr>
+<td>NISN</td>
+<td id="rNisn"></td>
+</tr>
+
+<tr>
 <td>Tempat/Tanggal Lahir</td>
 <td id="rTTL"></td>
 </tr>
@@ -552,8 +576,12 @@ KETERANGAN TENTANG PESERTA DIDIK
 
 <div class="foto-ttd">
 
+<div class="foto-wrapper">
+
 <div class="foto-box">
 Tempel Foto
+</div>
+
 </div>
 
 <div class="ttd">
@@ -562,9 +590,20 @@ Tempel Foto
 
 <br><br><br>
 
-<h3>Suryawati Effa S.Pd</h3>
+<h3 id="namaKepsek">
+Suryawati Effa S.Pd
+</h3>
 
-<p>NIP 19580818 198411 2001</p>
+<p id="nipKepsek">
+NIP 19580818 198411 2001
+</p>
+
+<button
+class="edit-kepsek-btn no-print"
+onclick="editKepsek()"
+>
+✏️ Edit Kepala Sekolah
+</button>
 
 </div>
 
@@ -663,6 +702,9 @@ document.getElementById("nama").value,
 nis:
 document.getElementById("nis").value,
 
+nisn:
+document.getElementById("nisn").value,
+
 tempat:
 document.getElementById("tempatLahir").value,
 
@@ -731,6 +773,7 @@ tbody.innerHTML += `
 
 <td>${item.nama}</td>
 <td>${item.nis}</td>
+<td>${item.nisn}</td>
 <td>${item.jk}</td>
 
 <td>
@@ -810,6 +853,9 @@ siswa.nama;
 document.getElementById("rNis").innerText =
 siswa.nis;
 
+document.getElementById("rNisn").innerText =
+siswa.nisn;
+
 document.getElementById("rTTL").innerText =
 siswa.tempat + ", " + siswa.tanggal;
 
@@ -839,9 +885,73 @@ siswa.alamatOrtu;
 
 }
 
+/* EDIT KEPSEK */
+
+function editKepsek(){
+
+const namaBaru = prompt(
+"Nama Kepala Sekolah",
+document.getElementById("namaKepsek").innerText
+);
+
+if(namaBaru){
+
+document.getElementById("namaKepsek").innerText =
+namaBaru;
+
+localStorage.setItem(
+"namaKepsek",
+namaBaru
+);
+
+}
+
+const nipBaru = prompt(
+"NIP Kepala Sekolah",
+document.getElementById("nipKepsek").innerText
+);
+
+if(nipBaru){
+
+document.getElementById("nipKepsek").innerText =
+nipBaru;
+
+localStorage.setItem(
+"nipKepsek",
+nipBaru
+);
+
+}
+
+}
+
 /* INIT */
 
+window.onload = function(){
+
 renderSiswa();
+
+const savedNama =
+localStorage.getItem("namaKepsek");
+
+const savedNip =
+localStorage.getItem("nipKepsek");
+
+if(savedNama){
+
+document.getElementById("namaKepsek")
+.innerText = savedNama;
+
+}
+
+if(savedNip){
+
+document.getElementById("nipKepsek")
+.innerText = savedNip;
+
+}
+
+}
 
 </script>
 
