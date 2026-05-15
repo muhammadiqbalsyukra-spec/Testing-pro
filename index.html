@@ -1,10 +1,8 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-
 <title>EduSmart SD Premium Enterprise</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -50,13 +48,12 @@ body{
 
 .login-box{
     width:100%;
-    max-width:430px;
+    max-width:420px;
     background:rgba(255,255,255,0.05);
     border:1px solid rgba(255,255,255,0.08);
     border-radius:28px;
     padding:35px;
     backdrop-filter:blur(14px);
-    box-shadow:0 20px 50px rgba(0,0,0,0.4);
 }
 
 .logo{
@@ -65,7 +62,7 @@ body{
 }
 
 .logo h1{
-    font-size:34px;
+    font-size:32px;
     font-weight:800;
     background:linear-gradient(to right,#818cf8,#c084fc);
     -webkit-background-clip:text;
@@ -84,8 +81,8 @@ body{
 .input-group label{
     display:block;
     margin-bottom:8px;
-    color:#cbd5e1;
     font-size:14px;
+    color:#cbd5e1;
 }
 
 .input-group input,
@@ -96,11 +93,9 @@ body{
     border-radius:14px;
     background:#0f172a;
     color:white;
-    outline:none;
 }
 
-.login-btn,
-.save-btn{
+.login-btn{
     width:100%;
     padding:15px;
     border:none;
@@ -109,12 +104,6 @@ body{
     color:white;
     font-weight:700;
     cursor:pointer;
-    transition:0.3s;
-}
-
-.login-btn:hover,
-.save-btn:hover{
-    transform:translateY(-2px);
 }
 
 /* DASHBOARD */
@@ -130,14 +119,13 @@ body{
     width:260px;
     height:100vh;
     background:rgba(15,23,42,0.95);
-    border-right:1px solid rgba(255,255,255,0.06);
     padding:25px;
     overflow:auto;
+    border-right:1px solid rgba(255,255,255,0.06);
 }
 
 .sidebar h2{
     margin-bottom:30px;
-    font-size:24px;
 }
 
 .menu{
@@ -155,7 +143,6 @@ body{
     cursor:pointer;
     text-align:left;
     transition:0.3s;
-    font-size:15px;
 }
 
 .menu button:hover,
@@ -194,7 +181,6 @@ body{
     border-radius:24px;
     padding:24px;
     border:1px solid rgba(255,255,255,0.06);
-    backdrop-filter:blur(10px);
 }
 
 .card h3{
@@ -242,7 +228,17 @@ body{
     border-radius:14px;
     background:#0f172a;
     color:white;
-    outline:none;
+}
+
+.save-btn{
+    margin-top:20px;
+    padding:14px 24px;
+    border:none;
+    border-radius:14px;
+    background:linear-gradient(to right,var(--primary),var(--secondary));
+    color:white;
+    cursor:pointer;
+    font-weight:700;
 }
 
 table{
@@ -258,10 +254,6 @@ table td{
     border-bottom:1px solid rgba(255,255,255,0.06);
 }
 
-table th{
-    color:#cbd5e1;
-}
-
 .upload-box{
     border:2px dashed rgba(255,255,255,0.15);
     border-radius:24px;
@@ -269,28 +261,6 @@ table th{
     text-align:center;
     margin-top:20px;
 }
-
-.search-input{
-    width:100%;
-    margin-top:20px;
-    padding:14px;
-    border:none;
-    border-radius:14px;
-    background:#0f172a;
-    color:white;
-    outline:none;
-}
-
-.delete-btn{
-    background:#ef4444;
-    color:white;
-    border:none;
-    padding:8px 12px;
-    border-radius:10px;
-    cursor:pointer;
-}
-
-/* MOBILE */
 
 @media(max-width:900px){
 
@@ -308,12 +278,6 @@ table th{
     grid-template-columns:1fr;
 }
 
-.topbar{
-    flex-direction:column;
-    align-items:flex-start;
-    gap:15px;
-}
-
 }
 
 </style>
@@ -329,7 +293,7 @@ table th{
 
         <div class="logo">
             <h1>EduSmart SD</h1>
-            <p>Sistem Informasi Sekolah Dasar</p>
+            <p>Sistem Informasi Nilai Sekolah Dasar</p>
         </div>
 
         <div class="input-group">
@@ -365,8 +329,6 @@ table th{
 
 <div class="dashboard" id="dashboard">
 
-    <!-- SIDEBAR -->
-
     <div class="sidebar">
 
         <h2>🎓 EduSmart</h2>
@@ -397,8 +359,6 @@ table th{
 
     </div>
 
-    <!-- MAIN -->
-
     <div class="main">
 
         <div class="topbar">
@@ -424,17 +384,17 @@ table th{
 
                 <div class="card">
                     <h3>Total Guru</h3>
-                    <h2 class="green">18</h2>
+                    <h2 class="green">0</h2>
                 </div>
 
                 <div class="card">
                     <h3>Rata-rata Nilai</h3>
-                    <h2 class="yellow">88</h2>
+                    <h2 class="yellow">0</h2>
                 </div>
 
                 <div class="card">
                     <h3>Siswa Bermasalah</h3>
-                    <h2 class="red">3</h2>
+                    <h2 class="red">0</h2>
                 </div>
 
             </div>
@@ -462,22 +422,7 @@ table th{
                             </tr>
                         </thead>
 
-                        <tbody>
-
-                            <tr>
-                                <td>Andi</td>
-                                <td>98</td>
-                            </tr>
-
-                            <tr>
-                                <td>Salsa</td>
-                                <td>96</td>
-                            </tr>
-
-                            <tr>
-                                <td>Nadya</td>
-                                <td>94</td>
-                            </tr>
+                        <tbody id="rankingBody">
 
                         </tbody>
 
@@ -504,25 +449,19 @@ table th{
                     <input type="text" id="nisSiswa" placeholder="NIS">
 
                     <select id="kelasSiswa">
-
                         <option value="">Pilih Kelas</option>
-
                         <option>Kelas 1</option>
                         <option>Kelas 2</option>
                         <option>Kelas 3</option>
                         <option>Kelas 4</option>
                         <option>Kelas 5</option>
                         <option>Kelas 6</option>
-
                     </select>
 
                     <select id="jkSiswa">
-
                         <option value="">Jenis Kelamin</option>
-
                         <option>Laki-laki</option>
                         <option>Perempuan</option>
-
                     </select>
 
                 </div>
@@ -531,18 +470,25 @@ table th{
                     ➕ Tambah Siswa
                 </button>
 
-                <input
+                <input 
                     type="text"
                     id="searchSiswa"
-                    class="search-input"
                     placeholder="🔍 Cari siswa..."
                     onkeyup="renderSiswaSearch()"
+                    style="
+                        width:100%;
+                        margin-top:20px;
+                        padding:14px;
+                        border:none;
+                        border-radius:14px;
+                        background:#0f172a;
+                        color:white;
+                    "
                 >
 
                 <table id="tableSiswa">
 
                     <thead>
-
                         <tr>
                             <th>Nama</th>
                             <th>NIS</th>
@@ -550,7 +496,6 @@ table th{
                             <th>JK</th>
                             <th>Aksi</th>
                         </tr>
-
                     </thead>
 
                     <tbody></tbody>
@@ -595,21 +540,19 @@ table th{
 
                 </div>
 
-                <button class="save-btn" onclick="simpanNilai()">
+                <button class="save-btn">
                     💾 Simpan Nilai
                 </button>
 
                 <table id="tableNilai">
 
                     <thead>
-
                         <tr>
                             <th>Nama</th>
                             <th>Kelas</th>
                             <th>Mapel</th>
                             <th>Nilai</th>
                         </tr>
-
                     </thead>
 
                     <tbody></tbody>
@@ -629,11 +572,8 @@ table th{
                 <h3>📷 OCR Upload Nilai</h3>
 
                 <div class="upload-box">
-
                     <p>Upload foto lembar nilai untuk dibaca otomatis</p>
-
                     <input type="file">
-
                 </div>
 
             </div>
@@ -643,8 +583,6 @@ table th{
     </div>
 
 </div>
-
-<!-- SCRIPT -->
 
 <script>
 
@@ -681,28 +619,17 @@ function logout(){
 
 /* MENU */
 
-function showSection(sectionId,btn){
+function showSection(sectionId, btn){
 
-    const sections = [
-        "dashboardSection",
-        "siswaSection",
-        "nilaiSection",
-        "ocrSection"
-    ];
-
-    sections.forEach(section=>{
-
-        document.getElementById(section).style.display = "none";
-
-    });
+    document.getElementById("dashboardSection").style.display = "none";
+    document.getElementById("siswaSection").style.display = "none";
+    document.getElementById("nilaiSection").style.display = "none";
+    document.getElementById("ocrSection").style.display = "none";
 
     document.getElementById(sectionId).style.display = "block";
 
-    document.querySelectorAll(".menu button")
-    .forEach(button=>{
-
+    document.querySelectorAll(".menu button").forEach(button=>{
         button.classList.remove("active");
-
     });
 
     btn.classList.add("active");
@@ -718,101 +645,39 @@ new Chart(ctx, {
     type:'line',
 
     data:{
-
         labels:['Jan','Feb','Mar','Apr','Mei','Jun'],
-
         datasets:[{
-
             label:'Rata-rata Nilai',
-
-            data:[75,80,82,84,88,91],
-
+            data:[0,0,0,0,0,0],
             borderWidth:3,
-
             tension:0.4
-
         }]
-
     },
 
     options:{
-        responsive:true
+        responsive:true,
+        plugins:{
+            legend:{
+                labels:{
+                    color:'white'
+                }
+            }
+        },
+        scales:{
+            x:{
+                ticks:{
+                    color:'white'
+                }
+            },
+            y:{
+                ticks:{
+                    color:'white'
+                }
+            }
+        }
     }
 
 });
-
-/* NILAI */
-
-let dataNilai =
-JSON.parse(localStorage.getItem("dataNilai")) || [];
-
-function simpanNilai(){
-
-    const nama =
-        document.getElementById("namaNilai").value;
-
-    const kelas =
-        document.getElementById("kelasNilai").value;
-
-    const mapel =
-        document.getElementById("mapelNilai").value;
-
-    const nilai =
-        document.getElementById("nilaiSiswa").value;
-
-    if(nama === "" || nilai === ""){
-
-        alert("Lengkapi data nilai!");
-        return;
-
-    }
-
-    dataNilai.push({
-        nama,
-        kelas,
-        mapel,
-        nilai
-    });
-
-    localStorage.setItem(
-        "dataNilai",
-        JSON.stringify(dataNilai)
-    );
-
-    renderNilai();
-
-    document.getElementById("namaNilai").value = "";
-    document.getElementById("nilaiSiswa").value = "";
-
-    alert("Nilai berhasil disimpan!");
-
-}
-
-function renderNilai(){
-
-    const tbody =
-        document.querySelector("#tableNilai tbody");
-
-    tbody.innerHTML = "";
-
-    dataNilai.forEach((item)=>{
-
-        tbody.innerHTML += `
-        
-        <tr>
-            <td>${item.nama}</td>
-            <td>${item.kelas}</td>
-            <td>${item.mapel}</td>
-            <td>${item.nilai}</td>
-        </tr>
-
-        `;
-
-    });
-
-}
-
-renderNilai();
 
 </script>
 
@@ -824,15 +689,14 @@ import { initializeApp }
 from "https://www.gstatic.com/firebasejs/12.13.0/firebase-app.js";
 
 import {
-
     getFirestore,
     collection,
     addDoc,
     getDocs,
     deleteDoc,
     doc
-
-} from "https://www.gstatic.com/firebasejs/12.13.0/firebase-firestore.js";
+}
+from "https://www.gstatic.com/firebasejs/12.13.0/firebase-firestore.js";
 
 /* CONFIG */
 
@@ -841,8 +705,6 @@ const firebaseConfig = {
     apiKey: "AIzaSyDruQxhQfsmsDAubunSrohBX9ZALlXtp5E",
 
     authDomain: "toko-pakaian-91050.firebaseapp.com",
-
-    databaseURL: "https://toko-pakaian-91050-default-rtdb.firebaseio.com",
 
     projectId: "toko-pakaian-91050",
 
@@ -860,7 +722,7 @@ const app = initializeApp(firebaseConfig);
 
 const db = getFirestore(app);
 
-/* DATA SISWA */
+/* DATA */
 
 let firebaseSiswa = [];
 
@@ -892,39 +754,29 @@ window.tambahSiswaFirebase = async function(){
 
     }
 
-    try{
+    await addDoc(
+        collection(db,"siswa"),
+        {
+            nama,
+            nis,
+            kelas,
+            jk,
+            createdAt:new Date()
+        }
+    );
 
-        await addDoc(
-            collection(db,"siswa"),
-            {
-                nama,
-                nis,
-                kelas,
-                jk,
-                createdAt:new Date()
-            }
-        );
+    alert("Siswa berhasil ditambahkan 🔥");
 
-        document.getElementById("namaSiswa").value = "";
-        document.getElementById("nisSiswa").value = "";
-        document.getElementById("kelasSiswa").value = "";
-        document.getElementById("jkSiswa").value = "";
+    document.getElementById("namaSiswa").value = "";
+    document.getElementById("nisSiswa").value = "";
+    document.getElementById("kelasSiswa").value = "";
+    document.getElementById("jkSiswa").value = "";
 
-        alert("Siswa berhasil ditambahkan 🔥");
-
-        loadSiswaFirebase();
-
-    }catch(error){
-
-        console.log(error);
-
-        alert("Gagal tambah siswa");
-
-    }
+    loadSiswaFirebase();
 
 }
 
-/* LOAD SISWA */
+/* LOAD */
 
 window.loadSiswaFirebase = async function(){
 
@@ -983,18 +835,22 @@ window.renderSiswaSearch = function(){
         <tr>
 
             <td>${siswa.nama}</td>
-
             <td>${siswa.nis}</td>
-
             <td>${siswa.kelas}</td>
-
             <td>${siswa.jk}</td>
 
             <td>
 
                 <button
-                    class="delete-btn"
                     onclick="hapusSiswaFirebase('${siswa.id}')"
+                    style="
+                        background:#ef4444;
+                        color:white;
+                        border:none;
+                        padding:8px 12px;
+                        border-radius:10px;
+                        cursor:pointer;
+                    "
                 >
                     Hapus
                 </button>
