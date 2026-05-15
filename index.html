@@ -1,8 +1,10 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>EduSmart SD Premium Enterprise</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -32,7 +34,7 @@
 
 body{
     background:linear-gradient(135deg,#020617,#0f172a,#111827);
-    color:var(--text);
+    color:white;
     min-height:100vh;
 }
 
@@ -70,7 +72,7 @@ body{
 }
 
 .logo p{
-    color:var(--muted);
+    color:#94a3b8;
     margin-top:10px;
 }
 
@@ -81,12 +83,11 @@ body{
 .input-group label{
     display:block;
     margin-bottom:8px;
-    font-size:14px;
-    color:#cbd5e1;
 }
 
 .input-group input,
-.input-group select{
+.input-group select,
+textarea{
     width:100%;
     padding:14px;
     border:none;
@@ -96,7 +97,8 @@ body{
 }
 
 .login-btn,
-.save-btn{
+.save-btn,
+.print-btn{
     width:100%;
     padding:14px;
     border:none;
@@ -105,12 +107,7 @@ body{
     color:white;
     font-weight:700;
     cursor:pointer;
-    transition:0.3s;
-}
-
-.login-btn:hover,
-.save-btn:hover{
-    transform:translateY(-2px);
+    margin-top:15px;
 }
 
 /* DASHBOARD */
@@ -121,13 +118,14 @@ body{
 
 .sidebar{
     position:fixed;
-    left:0;
     top:0;
+    left:0;
     width:260px;
     height:100vh;
     background:rgba(15,23,42,0.96);
     padding:25px;
     border-right:1px solid rgba(255,255,255,0.06);
+    overflow:auto;
 }
 
 .sidebar h2{
@@ -191,7 +189,6 @@ body{
 
 .card h3{
     margin-bottom:12px;
-    color:#cbd5e1;
 }
 
 .card h2{
@@ -217,15 +214,6 @@ body{
     grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
     gap:16px;
     margin-top:20px;
-}
-
-.form-grid input,
-.form-grid select{
-    padding:14px;
-    border:none;
-    border-radius:14px;
-    background:#0f172a;
-    color:white;
 }
 
 table{
@@ -258,12 +246,66 @@ table td{
     background:#ef4444;
 }
 
-.upload-box{
-    border:2px dashed rgba(255,255,255,0.15);
+.print-mini{
+    background:#22c55e;
+}
+
+/* RAPOR */
+
+.rapor-box{
+    background:white;
+    color:black;
+    border-radius:20px;
     padding:40px;
-    border-radius:24px;
-    text-align:center;
     margin-top:20px;
+}
+
+.rapor-header{
+    text-align:center;
+    margin-bottom:30px;
+}
+
+.rapor-title{
+    font-size:22px;
+    font-weight:700;
+    margin-bottom:10px;
+}
+
+.rapor-grid{
+    display:grid;
+    grid-template-columns:180px 1fr;
+    gap:30px;
+}
+
+.foto-box{
+    width:150px;
+    height:200px;
+    border:2px solid #999;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    overflow:hidden;
+}
+
+.foto-box img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+}
+
+.biodata-table{
+    width:100%;
+}
+
+.biodata-table td{
+    padding:8px;
+    border:none;
+    color:black;
+}
+
+.ttd{
+    margin-top:50px;
+    text-align:right;
 }
 
 @media(max-width:900px){
@@ -282,6 +324,35 @@ table td{
     grid-template-columns:1fr;
 }
 
+.rapor-grid{
+    grid-template-columns:1fr;
+}
+
+}
+
+@media print{
+
+body{
+    background:white;
+}
+
+.sidebar,
+.topbar,
+.menu,
+.no-print{
+    display:none !important;
+}
+
+.main{
+    margin-left:0;
+    padding:0;
+}
+
+.card{
+    background:white;
+    border:none;
+}
+
 }
 
 </style>
@@ -297,17 +368,17 @@ table td{
 
         <div class="logo">
             <h1>EduSmart SD</h1>
-            <p>Sistem Informasi Sekolah Modern</p>
+            <p>Sistem Informasi Sekolah Premium</p>
         </div>
 
         <div class="input-group">
             <label>Username</label>
-            <input type="text" id="username" placeholder="Masukkan username">
+            <input type="text" id="username">
         </div>
 
         <div class="input-group">
             <label>Password</label>
-            <input type="password" id="password" placeholder="Masukkan password">
+            <input type="password" id="password">
         </div>
 
         <button class="login-btn" onclick="login()">
@@ -336,16 +407,8 @@ table td{
                 👨‍🎓 Data Siswa
             </button>
 
-            <button onclick="showSection('orangTuaSection',this)">
-                👨‍👩‍👧 Data Orang Tua
-            </button>
-
-            <button onclick="showSection('nilaiSection',this)">
-                📝 Input Nilai
-            </button>
-
-            <button onclick="showSection('ocrSection',this)">
-                📷 OCR Nilai
+            <button onclick="showSection('raporSection',this)">
+                📄 Biodata Rapor
             </button>
 
             <button onclick="logout()">
@@ -380,8 +443,8 @@ table td{
                 </div>
 
                 <div class="card">
-                    <h3>Total Orang Tua</h3>
-                    <h2 class="green" id="totalOrtu">0</h2>
+                    <h3>Total Nilai</h3>
+                    <h2 class="green" id="totalNilai">0</h2>
                 </div>
 
                 <div class="card">
@@ -390,8 +453,8 @@ table td{
                 </div>
 
                 <div class="card">
-                    <h3>Total Nilai</h3>
-                    <h2 class="red" id="totalNilai">0</h2>
+                    <h3>Data Orang Tua</h3>
+                    <h2 class="red" id="totalOrtu">0</h2>
                 </div>
 
             </div>
@@ -400,7 +463,7 @@ table td{
 
                 <div class="card chart-card">
 
-                    <h3>Grafik Nilai Siswa</h3>
+                    <h3>Grafik Nilai</h3>
 
                     <canvas id="nilaiChart"></canvas>
 
@@ -435,44 +498,59 @@ table td{
 
             <div class="card">
 
-                <h3>📚 Data Siswa</h3>
+                <h3>📚 Data Lengkap Siswa</h3>
 
                 <div class="form-grid">
 
-                    <input type="text" id="namaSiswa" placeholder="Nama Siswa">
+                    <input type="text" id="nama" placeholder="Nama Siswa">
 
-                    <input type="text" id="nisSiswa" placeholder="NIS">
+                    <input type="text" id="nis" placeholder="NIS">
 
-                    <select id="kelasSiswa">
-                        <option>Kelas 1</option>
-                        <option>Kelas 2</option>
-                        <option>Kelas 3</option>
-                        <option>Kelas 4</option>
-                        <option>Kelas 5</option>
-                        <option>Kelas 6</option>
-                    </select>
+                    <input type="text" id="tempatLahir" placeholder="Tempat Lahir">
 
-                    <select id="jkSiswa">
+                    <input type="date" id="tanggalLahir">
+
+                    <select id="jk">
                         <option>Laki-laki</option>
                         <option>Perempuan</option>
                     </select>
 
+                    <input type="text" id="agama" placeholder="Agama">
+
+                    <input type="text" id="alamat" placeholder="Alamat Siswa">
+
+                    <input type="text" id="ayah" placeholder="Nama Ayah">
+
+                    <input type="text" id="ibu" placeholder="Nama Ibu">
+
+                    <input type="text" id="pekerjaanAyah" placeholder="Pekerjaan Ayah">
+
+                    <input type="text" id="pekerjaanIbu" placeholder="Pekerjaan Ibu">
+
+                    <input type="text" id="alamatOrtu" placeholder="Alamat Orang Tua">
+
+                    <input type="number" id="nilai" placeholder="Nilai Rata-rata">
+
+                    <input type="file" id="foto">
+
                 </div>
 
                 <button class="save-btn" onclick="tambahSiswa()">
-                    ➕ Tambah Siswa
+                    💾 Simpan Data
                 </button>
 
                 <table>
 
                     <thead>
+
                         <tr>
                             <th>Nama</th>
                             <th>NIS</th>
-                            <th>Kelas</th>
                             <th>JK</th>
+                            <th>Nilai</th>
                             <th>Aksi</th>
                         </tr>
+
                     </thead>
 
                     <tbody id="tableSiswa"></tbody>
@@ -483,121 +561,125 @@ table td{
 
         </div>
 
-        <!-- ORANG TUA -->
+        <!-- RAPOR -->
 
-        <div id="orangTuaSection" style="display:none;">
+        <div id="raporSection" style="display:none;">
 
-            <div class="card">
+            <div class="card no-print">
 
-                <h3>👨‍👩‍👧 Data Orang Tua</h3>
+                <h3>📄 Cetak Biodata Rapor</h3>
 
-                <div class="form-grid">
+                <select id="pilihSiswa" onchange="tampilkanRapor()">
 
-                    <input type="text" id="namaOrtu" placeholder="Nama Orang Tua">
+                    <option value="">Pilih Siswa</option>
 
-                    <input type="text" id="anakOrtu" placeholder="Nama Anak">
+                </select>
 
-                    <input type="text" id="teleponOrtu" placeholder="No HP">
-
-                    <input type="text" id="alamatOrtu" placeholder="Alamat">
-
-                </div>
-
-                <button class="save-btn" onclick="tambahOrtu()">
-                    ➕ Tambah Orang Tua
+                <button class="print-btn" onclick="window.print()">
+                    🖨 Print Biodata
                 </button>
-
-                <table>
-
-                    <thead>
-                        <tr>
-                            <th>Nama</th>
-                            <th>Anak</th>
-                            <th>Telepon</th>
-                            <th>Alamat</th>
-                            <th>Aksi</th>
-                        </tr>
-                    </thead>
-
-                    <tbody id="tableOrtu"></tbody>
-
-                </table>
 
             </div>
 
-        </div>
+            <div class="rapor-box" id="raporPrint">
 
-        <!-- NILAI -->
+                <div class="rapor-header">
 
-        <div id="nilaiSection" style="display:none;">
-
-            <div class="card">
-
-                <h3>📝 Input Nilai Siswa</h3>
-
-                <div class="form-grid">
-
-                    <input type="text" id="namaNilai" placeholder="Nama Siswa">
-
-                    <select id="kelasNilai">
-                        <option>Kelas 1</option>
-                        <option>Kelas 2</option>
-                        <option>Kelas 3</option>
-                        <option>Kelas 4</option>
-                        <option>Kelas 5</option>
-                        <option>Kelas 6</option>
-                    </select>
-
-                    <select id="mapelNilai">
-                        <option>Matematika</option>
-                        <option>Bahasa Indonesia</option>
-                        <option>IPA</option>
-                        <option>IPS</option>
-                    </select>
-
-                    <input type="number" id="nilaiSiswa" placeholder="Nilai">
+                    <div class="rapor-title">
+                        KETERANGAN TENTANG PESERTA DIDIK
+                    </div>
 
                 </div>
 
-                <button class="save-btn" onclick="simpanNilai()">
-                    💾 Simpan Nilai
-                </button>
+                <div class="rapor-grid">
 
-                <table>
+                    <div>
 
-                    <thead>
-                        <tr>
-                            <th>Nama</th>
-                            <th>Kelas</th>
-                            <th>Mapel</th>
-                            <th>Nilai</th>
-                            <th>Aksi</th>
-                        </tr>
-                    </thead>
+                        <div class="foto-box">
+                            <img id="raporFoto">
+                        </div>
 
-                    <tbody id="tableNilai"></tbody>
+                    </div>
 
-                </table>
+                    <div>
 
-            </div>
+                        <table class="biodata-table">
 
-        </div>
+                            <tr>
+                                <td width="220">Nama Siswa</td>
+                                <td id="rNama"></td>
+                            </tr>
 
-        <!-- OCR -->
+                            <tr>
+                                <td>NIS</td>
+                                <td id="rNis"></td>
+                            </tr>
 
-        <div id="ocrSection" style="display:none;">
+                            <tr>
+                                <td>Tempat/Tanggal Lahir</td>
+                                <td id="rTTL"></td>
+                            </tr>
 
-            <div class="card">
+                            <tr>
+                                <td>Jenis Kelamin</td>
+                                <td id="rJK"></td>
+                            </tr>
 
-                <h3>📷 OCR Upload Nilai</h3>
+                            <tr>
+                                <td>Agama</td>
+                                <td id="rAgama"></td>
+                            </tr>
 
-                <div class="upload-box">
+                            <tr>
+                                <td>Alamat Siswa</td>
+                                <td id="rAlamat"></td>
+                            </tr>
 
-                    <p>Upload foto nilai siswa</p>
+                            <tr>
+                                <td>Nama Ayah</td>
+                                <td id="rAyah"></td>
+                            </tr>
 
-                    <br>
+                            <tr>
+                                <td>Nama Ibu</td>
+                                <td id="rIbu"></td>
+                            </tr>
 
-                    <input type="file">
+                            <tr>
+                                <td>Pekerjaan Ayah</td>
+                                <td id="rPekerjaanAyah"></td>
+                            </tr>
+
+                            <tr>
+                                <td>Pekerjaan Ibu</td>
+                                <td id="rPekerjaanIbu"></td>
+                            </tr>
+
+                            <tr>
+                                <td>Alamat Orang Tua</td>
+                                <td id="rAlamatOrtu"></td>
+                            </tr>
+
+                            <tr>
+                                <td>Nilai Rata-rata</td>
+                                <td id="rNilai"></td>
+                            </tr>
+
+                        </table>
+
+                    </div>
+
+                </div>
+
+                <div class="ttd">
+
+                    <p>Kepala Sekolah</p>
+
+                    <br><br><br>
+
+                    <h3>Suryawati Effa S.Pd</h3>
+
+                    <p>NIP 19580818 198411 2001</p>
 
                 </div>
 
@@ -609,38 +691,11 @@ table td{
 
 </div>
 
-<!-- FIREBASE -->
-
-<script type="module">
-
-import { initializeApp } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-app.js";
-
-import {
-    getFirestore,
-    collection,
-    addDoc,
-    getDocs,
-    deleteDoc,
-    updateDoc,
-    doc
-} from "https://www.gstatic.com/firebasejs/12.13.0/firebase-firestore.js";
-
-const firebaseConfig = {
-    apiKey: "AIzaSyDruQxhQfsmsDAubunSrohBX9ZALlXtp5E",
-    authDomain: "toko-pakaian-91050.firebaseapp.com",
-    projectId: "toko-pakaian-91050",
-    storageBucket: "toko-pakaian-91050.firebasestorage.app",
-    messagingSenderId: "418943349139",
-    appId: "1:418943349139:web:23760a579da0dbbc7b7866"
-};
-
-const app = initializeApp(firebaseConfig);
-
-const db = getFirestore(app);
+<script>
 
 /* LOGIN */
 
-window.login = function(){
+function login(){
 
     const username =
         document.getElementById("username").value;
@@ -653,30 +708,28 @@ window.login = function(){
         return;
     }
 
-    document.getElementById("loginPage").style.display = "none";
+    document.getElementById("loginPage").style.display="none";
 
-    document.getElementById("dashboard").style.display = "block";
+    document.getElementById("dashboard").style.display="block";
 
 }
 
-window.logout = function(){
+function logout(){
 
-    document.getElementById("dashboard").style.display = "none";
+    document.getElementById("dashboard").style.display="none";
 
-    document.getElementById("loginPage").style.display = "flex";
+    document.getElementById("loginPage").style.display="flex";
 
 }
 
 /* MENU */
 
-window.showSection = function(sectionId,btn){
+function showSection(sectionId,btn){
 
     const sections = [
         "dashboardSection",
         "siswaSection",
-        "orangTuaSection",
-        "nilaiSection",
-        "ocrSection"
+        "raporSection"
     ];
 
     sections.forEach(id=>{
@@ -685,265 +738,142 @@ window.showSection = function(sectionId,btn){
 
     document.getElementById(sectionId).style.display="block";
 
-    document.querySelectorAll(".menu button").forEach(b=>{
-        b.classList.remove("active");
+    document.querySelectorAll(".menu button")
+    .forEach(button=>{
+        button.classList.remove("active");
     });
 
     btn.classList.add("active");
 
 }
 
-/* SISWA */
+/* DATABASE */
 
-window.tambahSiswa = async function(){
+let dataSiswa =
+JSON.parse(localStorage.getItem("dataSiswa")) || [];
 
-    const nama =
-        document.getElementById("namaSiswa").value;
+/* TAMBAH SISWA */
 
-    const nis =
-        document.getElementById("nisSiswa").value;
+function tambahSiswa(){
 
-    const kelas =
-        document.getElementById("kelasSiswa").value;
+    const fotoInput =
+        document.getElementById("foto");
 
-    const jk =
-        document.getElementById("jkSiswa").value;
+    const foto =
+        fotoInput.files[0];
 
-    if(nama==="" || nis===""){
-        alert("Lengkapi data!");
-        return;
+    const reader =
+        new FileReader();
+
+    reader.onload = function(e){
+
+        const siswa = {
+
+            id:Date.now(),
+
+            nama:
+            document.getElementById("nama").value,
+
+            nis:
+            document.getElementById("nis").value,
+
+            tempat:
+            document.getElementById("tempatLahir").value,
+
+            tanggal:
+            document.getElementById("tanggalLahir").value,
+
+            jk:
+            document.getElementById("jk").value,
+
+            agama:
+            document.getElementById("agama").value,
+
+            alamat:
+            document.getElementById("alamat").value,
+
+            ayah:
+            document.getElementById("ayah").value,
+
+            ibu:
+            document.getElementById("ibu").value,
+
+            pekerjaanAyah:
+            document.getElementById("pekerjaanAyah").value,
+
+            pekerjaanIbu:
+            document.getElementById("pekerjaanIbu").value,
+
+            alamatOrtu:
+            document.getElementById("alamatOrtu").value,
+
+            nilai:
+            document.getElementById("nilai").value,
+
+            foto:e.target.result
+
+        };
+
+        dataSiswa.push(siswa);
+
+        localStorage.setItem(
+            "dataSiswa",
+            JSON.stringify(dataSiswa)
+        );
+
+        renderSiswa();
+
+        updateDashboard();
+
+        alert("Data siswa berhasil disimpan 🔥");
+
+    };
+
+    if(foto){
+        reader.readAsDataURL(foto);
+    }else{
+        alert("Upload foto siswa!");
     }
-
-    await addDoc(collection(db,"siswa"),{
-        nama,
-        nis,
-        kelas,
-        jk
-    });
-
-    alert("Siswa berhasil ditambah");
-
-    loadSiswa();
 
 }
 
-async function loadSiswa(){
+/* RENDER */
+
+function renderSiswa(){
 
     const tbody =
         document.getElementById("tableSiswa");
 
-    tbody.innerHTML="";
-
-    const querySnapshot =
-        await getDocs(collection(db,"siswa"));
-
-    let total=0;
-
-    querySnapshot.forEach((docItem)=>{
-
-        total++;
-
-        const siswa = docItem.data();
-
-        tbody.innerHTML += `
-        <tr>
-            <td>${siswa.nama}</td>
-            <td>${siswa.nis}</td>
-            <td>${siswa.kelas}</td>
-            <td>${siswa.jk}</td>
-
-            <td>
-                <button
-                    class="action-btn delete-btn"
-                    onclick="hapusSiswa('${docItem.id}')"
-                >
-                    Hapus
-                </button>
-            </td>
-        </tr>
-        `;
-
-    });
-
-    document.getElementById("totalSiswa").innerText=total;
-
-}
-
-window.hapusSiswa = async function(id){
-
-    await deleteDoc(doc(db,"siswa",id));
-
-    loadSiswa();
-
-}
-
-/* ORANG TUA */
-
-window.tambahOrtu = async function(){
-
-    const nama =
-        document.getElementById("namaOrtu").value;
-
-    const anak =
-        document.getElementById("anakOrtu").value;
-
-    const telepon =
-        document.getElementById("teleponOrtu").value;
-
-    const alamat =
-        document.getElementById("alamatOrtu").value;
-
-    await addDoc(collection(db,"orangtua"),{
-        nama,
-        anak,
-        telepon,
-        alamat
-    });
-
-    alert("Data orang tua berhasil ditambah");
-
-    loadOrtu();
-
-}
-
-async function loadOrtu(){
-
-    const tbody =
-        document.getElementById("tableOrtu");
+    const pilih =
+        document.getElementById("pilihSiswa");
 
     tbody.innerHTML="";
+    pilih.innerHTML=
+    `<option value="">Pilih Siswa</option>`;
 
-    const querySnapshot =
-        await getDocs(collection(db,"orangtua"));
-
-    let total=0;
-
-    querySnapshot.forEach((docItem)=>{
-
-        total++;
-
-        const item = docItem.data();
+    dataSiswa.forEach((item,index)=>{
 
         tbody.innerHTML += `
-        <tr>
-            <td>${item.nama}</td>
-            <td>${item.anak}</td>
-            <td>${item.telepon}</td>
-            <td>${item.alamat}</td>
 
-            <td>
-                <button
-                    class="action-btn delete-btn"
-                    onclick="hapusOrtu('${docItem.id}')"
-                >
-                    Hapus
-                </button>
-            </td>
-        </tr>
-        `;
-
-    });
-
-    document.getElementById("totalOrtu").innerText=total;
-
-}
-
-window.hapusOrtu = async function(id){
-
-    await deleteDoc(doc(db,"orangtua",id));
-
-    loadOrtu();
-
-}
-
-/* NILAI */
-
-window.simpanNilai = async function(){
-
-    const nama =
-        document.getElementById("namaNilai").value;
-
-    const kelas =
-        document.getElementById("kelasNilai").value;
-
-    const mapel =
-        document.getElementById("mapelNilai").value;
-
-    const nilai =
-        document.getElementById("nilaiSiswa").value;
-
-    if(nama==="" || nilai===""){
-        alert("Lengkapi data nilai");
-        return;
-    }
-
-    await addDoc(collection(db,"nilai"),{
-        nama,
-        kelas,
-        mapel,
-        nilai:Number(nilai)
-    });
-
-    alert("Nilai berhasil disimpan");
-
-    loadNilai();
-
-}
-
-async function loadNilai(){
-
-    const tbody =
-        document.getElementById("tableNilai");
-
-    const rankingBody =
-        document.getElementById("rankingBody");
-
-    tbody.innerHTML="";
-    rankingBody.innerHTML="";
-
-    const querySnapshot =
-        await getDocs(collection(db,"nilai"));
-
-    let total=0;
-    let jumlah=0;
-
-    let ranking=[];
-
-    querySnapshot.forEach((docItem)=>{
-
-        const item = docItem.data();
-
-        total++;
-        jumlah += Number(item.nilai);
-
-        ranking.push(item);
-
-        tbody.innerHTML += `
         <tr>
 
             <td>${item.nama}</td>
-            <td>${item.kelas}</td>
-            <td>${item.mapel}</td>
+            <td>${item.nis}</td>
+            <td>${item.jk}</td>
             <td>${item.nilai}</td>
 
             <td>
 
                 <button
-                    class="action-btn edit-btn"
-                    onclick="editNilai(
-                        '${docItem.id}',
-                        '${item.nama}',
-                        '${item.kelas}',
-                        '${item.mapel}',
-                        '${item.nilai}'
-                    )"
+                    class="action-btn print-mini"
+                    onclick="previewRapor(${index})"
                 >
-                    Edit
+                    Print
                 </button>
 
                 <button
                     class="action-btn delete-btn"
-                    onclick="hapusNilai('${docItem.id}')"
+                    onclick="hapusSiswa(${item.id})"
                 >
                     Hapus
                 </button>
@@ -951,13 +881,141 @@ async function loadNilai(){
             </td>
 
         </tr>
+
+        `;
+
+        pilih.innerHTML += `
+        <option value="${index}">
+            ${item.nama}
+        </option>
         `;
 
     });
 
-    ranking.sort((a,b)=>b.nilai-a.nilai);
+}
 
-    ranking.slice(0,5).forEach(item=>{
+/* HAPUS */
+
+function hapusSiswa(id){
+
+    if(confirm("Hapus siswa?")){
+
+        dataSiswa =
+        dataSiswa.filter(
+            siswa => siswa.id !== id
+        );
+
+        localStorage.setItem(
+            "dataSiswa",
+            JSON.stringify(dataSiswa)
+        );
+
+        renderSiswa();
+
+        updateDashboard();
+
+    }
+
+}
+
+/* RAPOR */
+
+function tampilkanRapor(){
+
+    const index =
+    document.getElementById("pilihSiswa").value;
+
+    if(index==="") return;
+
+    previewRapor(index);
+
+}
+
+function previewRapor(index){
+
+    const siswa = dataSiswa[index];
+
+    document.getElementById("rNama").innerText =
+        siswa.nama;
+
+    document.getElementById("rNis").innerText =
+        siswa.nis;
+
+    document.getElementById("rTTL").innerText =
+        siswa.tempat + ", " + siswa.tanggal;
+
+    document.getElementById("rJK").innerText =
+        siswa.jk;
+
+    document.getElementById("rAgama").innerText =
+        siswa.agama;
+
+    document.getElementById("rAlamat").innerText =
+        siswa.alamat;
+
+    document.getElementById("rAyah").innerText =
+        siswa.ayah;
+
+    document.getElementById("rIbu").innerText =
+        siswa.ibu;
+
+    document.getElementById("rPekerjaanAyah").innerText =
+        siswa.pekerjaanAyah;
+
+    document.getElementById("rPekerjaanIbu").innerText =
+        siswa.pekerjaanIbu;
+
+    document.getElementById("rAlamatOrtu").innerText =
+        siswa.alamatOrtu;
+
+    document.getElementById("rNilai").innerText =
+        siswa.nilai;
+
+    document.getElementById("raporFoto").src =
+        siswa.foto;
+
+}
+
+/* DASHBOARD */
+
+function updateDashboard(){
+
+    document.getElementById("totalSiswa")
+    .innerText = dataSiswa.length;
+
+    document.getElementById("totalOrtu")
+    .innerText = dataSiswa.length;
+
+    document.getElementById("totalNilai")
+    .innerText = dataSiswa.length;
+
+    let total = 0;
+
+    dataSiswa.forEach(item=>{
+        total += Number(item.nilai || 0);
+    });
+
+    const rata =
+    dataSiswa.length > 0
+    ? Math.round(total / dataSiswa.length)
+    : 0;
+
+    document.getElementById("rataNilai")
+    .innerText = rata;
+
+    /* RANKING */
+
+    const ranking =
+    [...dataSiswa]
+    .sort((a,b)=>b.nilai-a.nilai)
+    .slice(0,5);
+
+    const rankingBody =
+    document.getElementById("rankingBody");
+
+    rankingBody.innerHTML="";
+
+    ranking.forEach(item=>{
 
         rankingBody.innerHTML += `
         <tr>
@@ -968,82 +1026,42 @@ async function loadNilai(){
 
     });
 
-    document.getElementById("totalNilai").innerText=total;
-
-    document.getElementById("rataNilai").innerText =
-        total > 0
-        ? Math.round(jumlah/total)
-        : 0;
-
-}
-
-window.hapusNilai = async function(id){
-
-    await deleteDoc(doc(db,"nilai",id));
-
-    loadNilai();
-
-}
-
-window.editNilai = async function(
-    id,
-    nama,
-    kelas,
-    mapel,
-    nilai
-){
-
-    const namaBaru = prompt("Nama",nama);
-    if(namaBaru===null) return;
-
-    const kelasBaru = prompt("Kelas",kelas);
-    if(kelasBaru===null) return;
-
-    const mapelBaru = prompt("Mapel",mapel);
-    if(mapelBaru===null) return;
-
-    const nilaiBaru = prompt("Nilai",nilai);
-    if(nilaiBaru===null) return;
-
-    await updateDoc(doc(db,"nilai",id),{
-        nama:namaBaru,
-        kelas:kelasBaru,
-        mapel:mapelBaru,
-        nilai:Number(nilaiBaru)
-    });
-
-    alert("Nilai berhasil diupdate");
-
-    loadNilai();
-
 }
 
 /* CHART */
 
 new Chart(
-    document.getElementById("nilaiChart"),
-    {
-        type:'line',
-        data:{
-            labels:['Jan','Feb','Mar','Apr','Mei','Jun'],
-            datasets:[{
-                label:'Rata-rata Nilai',
-                data:[70,75,80,85,90,95],
-                borderWidth:3,
-                tension:0.4
-            }]
-        },
-        options:{
-            responsive:true
-        }
+document.getElementById("nilaiChart"),
+{
+    type:'line',
+
+    data:{
+        labels:['Jan','Feb','Mar','Apr','Mei','Jun'],
+
+        datasets:[{
+
+            label:'Nilai',
+
+            data:[70,75,80,85,90,95],
+
+            borderWidth:3,
+
+            tension:0.4
+
+        }]
+    },
+
+    options:{
+        responsive:true
     }
-);
+
+});
 
 /* INIT */
 
-loadSiswa();
-loadNilai();
-loadOrtu();
+renderSiswa();
+
+updateDashboard();
 
 </script>
 
