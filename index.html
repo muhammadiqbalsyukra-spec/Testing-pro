@@ -19,10 +19,10 @@
 }
 
 :root{
-    --primary:#6366f1;
-    --secondary:#8b5cf6;
+    --primary:#38bdf8;
+    --secondary:#6366f1;
     --bg:#020617;
-    --card:#111827;
+    --card:#0f172a;
     --text:#f8fafc;
     --muted:#94a3b8;
     --success:#22c55e;
@@ -31,7 +31,7 @@
 }
 
 body{
-    background:linear-gradient(135deg,#020617,#0f172a);
+    background:linear-gradient(135deg,#020617,#0f172a,#111827);
     color:var(--text);
     min-height:100vh;
 }
@@ -51,9 +51,9 @@ body{
     max-width:420px;
     background:rgba(255,255,255,0.05);
     border:1px solid rgba(255,255,255,0.08);
-    border-radius:28px;
+    border-radius:30px;
     padding:35px;
-    backdrop-filter:blur(14px);
+    backdrop-filter:blur(20px);
 }
 
 .logo{
@@ -64,14 +64,14 @@ body{
 .logo h1{
     font-size:34px;
     font-weight:800;
-    background:linear-gradient(to right,#818cf8,#c084fc);
+    background:linear-gradient(to right,#38bdf8,#818cf8);
     -webkit-background-clip:text;
     -webkit-text-fill-color:transparent;
 }
 
 .logo p{
     color:var(--muted);
-    margin-top:8px;
+    margin-top:10px;
 }
 
 .input-group{
@@ -98,13 +98,19 @@ body{
 .login-btn,
 .save-btn{
     width:100%;
-    padding:15px;
+    padding:14px;
     border:none;
-    border-radius:16px;
-    background:linear-gradient(to right,var(--primary),var(--secondary));
+    border-radius:14px;
+    background:linear-gradient(to right,#0ea5e9,#38bdf8);
     color:white;
     font-weight:700;
     cursor:pointer;
+    transition:0.3s;
+}
+
+.login-btn:hover,
+.save-btn:hover{
+    transform:translateY(-2px);
 }
 
 /* DASHBOARD */
@@ -115,8 +121,8 @@ body{
 
 .sidebar{
     position:fixed;
-    top:0;
     left:0;
+    top:0;
     width:260px;
     height:100vh;
     background:rgba(15,23,42,0.96);
@@ -135,7 +141,7 @@ body{
 }
 
 .menu button{
-    padding:14px;
+    padding:15px;
     border:none;
     border-radius:14px;
     background:transparent;
@@ -147,7 +153,7 @@ body{
 
 .menu button:hover,
 .menu button.active{
-    background:linear-gradient(to right,var(--primary),var(--secondary));
+    background:linear-gradient(to right,#0ea5e9,#38bdf8);
     color:white;
 }
 
@@ -184,25 +190,17 @@ body{
 }
 
 .card h3{
+    margin-bottom:12px;
     color:#cbd5e1;
-    margin-bottom:10px;
 }
 
 .card h2{
     font-size:34px;
 }
 
-.green{
-    color:var(--success);
-}
-
-.yellow{
-    color:var(--warning);
-}
-
-.red{
-    color:var(--danger);
-}
+.green{color:#22c55e;}
+.yellow{color:#f59e0b;}
+.red{color:#ef4444;}
 
 .content-box{
     display:grid;
@@ -214,18 +212,10 @@ body{
     height:420px;
 }
 
-.chart-card canvas{
-    margin-top:20px;
-}
-
-.form-section{
-    margin-top:25px;
-}
-
 .form-grid{
     display:grid;
     grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-    gap:18px;
+    gap:16px;
     margin-top:20px;
 }
 
@@ -247,34 +237,41 @@ table{
 table th,
 table td{
     padding:14px;
-    text-align:left;
     border-bottom:1px solid rgba(255,255,255,0.06);
+    text-align:left;
+}
+
+.action-btn{
+    border:none;
+    padding:8px 12px;
+    border-radius:10px;
+    color:white;
+    cursor:pointer;
+    margin-right:6px;
+}
+
+.edit-btn{
+    background:#f59e0b;
+}
+
+.delete-btn{
+    background:#ef4444;
 }
 
 .upload-box{
     border:2px dashed rgba(255,255,255,0.15);
-    border-radius:24px;
     padding:40px;
+    border-radius:24px;
     text-align:center;
     margin-top:20px;
-}
-
-.search-input{
-    width:100%;
-    margin-top:20px;
-    padding:14px;
-    border:none;
-    border-radius:14px;
-    background:#0f172a;
-    color:white;
 }
 
 @media(max-width:900px){
 
 .sidebar{
+    position:relative;
     width:100%;
     height:auto;
-    position:relative;
 }
 
 .main{
@@ -300,7 +297,7 @@ table td{
 
         <div class="logo">
             <h1>EduSmart SD</h1>
-            <p>Sistem Informasi Sekolah Dasar</p>
+            <p>Sistem Informasi Sekolah Modern</p>
         </div>
 
         <div class="input-group">
@@ -311,17 +308,6 @@ table td{
         <div class="input-group">
             <label>Password</label>
             <input type="password" id="password" placeholder="Masukkan password">
-        </div>
-
-        <div class="input-group">
-            <label>Role</label>
-
-            <select id="role">
-                <option>Admin</option>
-                <option>Guru</option>
-                <option>Wali Kelas</option>
-                <option>Orang Tua</option>
-            </select>
         </div>
 
         <button class="login-btn" onclick="login()">
@@ -348,6 +334,10 @@ table td{
 
             <button onclick="showSection('siswaSection',this)">
                 👨‍🎓 Data Siswa
+            </button>
+
+            <button onclick="showSection('orangTuaSection',this)">
+                👨‍👩‍👧 Data Orang Tua
             </button>
 
             <button onclick="showSection('nilaiSection',this)">
@@ -390,18 +380,18 @@ table td{
                 </div>
 
                 <div class="card">
-                    <h3>Total Guru</h3>
-                    <h2 class="green">0</h2>
+                    <h3>Total Orang Tua</h3>
+                    <h2 class="green" id="totalOrtu">0</h2>
                 </div>
 
                 <div class="card">
                     <h3>Rata-rata Nilai</h3>
-                    <h2 class="yellow">0</h2>
+                    <h2 class="yellow" id="rataNilai">0</h2>
                 </div>
 
                 <div class="card">
-                    <h3>Siswa Bermasalah</h3>
-                    <h2 class="red">0</h2>
+                    <h3>Total Nilai</h3>
+                    <h2 class="red" id="totalNilai">0</h2>
                 </div>
 
             </div>
@@ -443,7 +433,7 @@ table td{
 
         <div id="siswaSection" style="display:none;">
 
-            <div class="card form-section">
+            <div class="card">
 
                 <h3>📚 Data Siswa</h3>
 
@@ -454,7 +444,6 @@ table td{
                     <input type="text" id="nisSiswa" placeholder="NIS">
 
                     <select id="kelasSiswa">
-                        <option value="">Pilih Kelas</option>
                         <option>Kelas 1</option>
                         <option>Kelas 2</option>
                         <option>Kelas 3</option>
@@ -464,26 +453,17 @@ table td{
                     </select>
 
                     <select id="jkSiswa">
-                        <option value="">Jenis Kelamin</option>
                         <option>Laki-laki</option>
                         <option>Perempuan</option>
                     </select>
 
                 </div>
 
-                <button class="save-btn" onclick="tambahSiswaFirebase()">
+                <button class="save-btn" onclick="tambahSiswa()">
                     ➕ Tambah Siswa
                 </button>
 
-                <input
-                    type="text"
-                    id="searchSiswa"
-                    class="search-input"
-                    placeholder="🔍 Cari siswa..."
-                    onkeyup="renderSiswaSearch()"
-                >
-
-                <table id="tableSiswa">
+                <table>
 
                     <thead>
                         <tr>
@@ -495,7 +475,51 @@ table td{
                         </tr>
                     </thead>
 
-                    <tbody></tbody>
+                    <tbody id="tableSiswa"></tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+        <!-- ORANG TUA -->
+
+        <div id="orangTuaSection" style="display:none;">
+
+            <div class="card">
+
+                <h3>👨‍👩‍👧 Data Orang Tua</h3>
+
+                <div class="form-grid">
+
+                    <input type="text" id="namaOrtu" placeholder="Nama Orang Tua">
+
+                    <input type="text" id="anakOrtu" placeholder="Nama Anak">
+
+                    <input type="text" id="teleponOrtu" placeholder="No HP">
+
+                    <input type="text" id="alamatOrtu" placeholder="Alamat">
+
+                </div>
+
+                <button class="save-btn" onclick="tambahOrtu()">
+                    ➕ Tambah Orang Tua
+                </button>
+
+                <table>
+
+                    <thead>
+                        <tr>
+                            <th>Nama</th>
+                            <th>Anak</th>
+                            <th>Telepon</th>
+                            <th>Alamat</th>
+                            <th>Aksi</th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="tableOrtu"></tbody>
 
                 </table>
 
@@ -507,7 +531,7 @@ table td{
 
         <div id="nilaiSection" style="display:none;">
 
-            <div class="card form-section">
+            <div class="card">
 
                 <h3>📝 Input Nilai Siswa</h3>
 
@@ -529,19 +553,17 @@ table td{
                         <option>Bahasa Indonesia</option>
                         <option>IPA</option>
                         <option>IPS</option>
-                        <option>PPKN</option>
-                        <option>PJOK</option>
                     </select>
 
                     <input type="number" id="nilaiSiswa" placeholder="Nilai">
 
                 </div>
 
-                <button class="save-btn" onclick="simpanNilaiFirebase()">
+                <button class="save-btn" onclick="simpanNilai()">
                     💾 Simpan Nilai
                 </button>
 
-                <table id="tableNilai">
+                <table>
 
                     <thead>
                         <tr>
@@ -549,10 +571,11 @@ table td{
                             <th>Kelas</th>
                             <th>Mapel</th>
                             <th>Nilai</th>
+                            <th>Aksi</th>
                         </tr>
                     </thead>
 
-                    <tbody></tbody>
+                    <tbody id="tableNilai"></tbody>
 
                 </table>
 
@@ -564,13 +587,18 @@ table td{
 
         <div id="ocrSection" style="display:none;">
 
-            <div class="card form-section">
+            <div class="card">
 
                 <h3>📷 OCR Upload Nilai</h3>
 
                 <div class="upload-box">
-                    <p>Upload foto lembar nilai untuk dibaca otomatis</p>
+
+                    <p>Upload foto nilai siswa</p>
+
+                    <br>
+
                     <input type="file">
+
                 </div>
 
             </div>
@@ -581,11 +609,38 @@ table td{
 
 </div>
 
-<!-- SCRIPT -->
+<!-- FIREBASE -->
 
-<script>
+<script type="module">
 
-function login(){
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-app.js";
+
+import {
+    getFirestore,
+    collection,
+    addDoc,
+    getDocs,
+    deleteDoc,
+    updateDoc,
+    doc
+} from "https://www.gstatic.com/firebasejs/12.13.0/firebase-firestore.js";
+
+const firebaseConfig = {
+    apiKey: "AIzaSyDruQxhQfsmsDAubunSrohBX9ZALlXtp5E",
+    authDomain: "toko-pakaian-91050.firebaseapp.com",
+    projectId: "toko-pakaian-91050",
+    storageBucket: "toko-pakaian-91050.firebasestorage.app",
+    messagingSenderId: "418943349139",
+    appId: "1:418943349139:web:23760a579da0dbbc7b7866"
+};
+
+const app = initializeApp(firebaseConfig);
+
+const db = getFirestore(app);
+
+/* LOGIN */
+
+window.login = function(){
 
     const username =
         document.getElementById("username").value;
@@ -594,126 +649,53 @@ function login(){
         document.getElementById("password").value;
 
     if(username === "" || password === ""){
-
-        alert("Lengkapi login terlebih dahulu!");
+        alert("Lengkapi login!");
         return;
-
     }
 
     document.getElementById("loginPage").style.display = "none";
+
     document.getElementById("dashboard").style.display = "block";
 
 }
 
-function logout(){
+window.logout = function(){
 
     document.getElementById("dashboard").style.display = "none";
+
     document.getElementById("loginPage").style.display = "flex";
 
 }
 
-function showSection(sectionId, btn){
+/* MENU */
 
-    document.getElementById("dashboardSection").style.display = "none";
-    document.getElementById("siswaSection").style.display = "none";
-    document.getElementById("nilaiSection").style.display = "none";
-    document.getElementById("ocrSection").style.display = "none";
+window.showSection = function(sectionId,btn){
 
-    document.getElementById(sectionId).style.display = "block";
+    const sections = [
+        "dashboardSection",
+        "siswaSection",
+        "orangTuaSection",
+        "nilaiSection",
+        "ocrSection"
+    ];
 
-    document.querySelectorAll(".menu button").forEach(button=>{
-        button.classList.remove("active");
+    sections.forEach(id=>{
+        document.getElementById(id).style.display="none";
+    });
+
+    document.getElementById(sectionId).style.display="block";
+
+    document.querySelectorAll(".menu button").forEach(b=>{
+        b.classList.remove("active");
     });
 
     btn.classList.add("active");
 
 }
 
-const ctx = document.getElementById('nilaiChart');
-
-new Chart(ctx,{
-    type:'line',
-    data:{
-        labels:['Jan','Feb','Mar','Apr','Mei','Jun'],
-        datasets:[{
-            label:'Rata-rata Nilai',
-            data:[0,0,0,0,0,0],
-            borderWidth:3,
-            tension:0.4
-        }]
-    },
-    options:{
-        responsive:true,
-        plugins:{
-            legend:{
-                labels:{
-                    color:'white'
-                }
-            }
-        },
-        scales:{
-            x:{
-                ticks:{
-                    color:'white'
-                }
-            },
-            y:{
-                ticks:{
-                    color:'white'
-                }
-            }
-        }
-    }
-});
-
-</script>
-
-<!-- FIREBASE -->
-
-<script type="module">
-
-import { initializeApp }
-from "https://www.gstatic.com/firebasejs/12.13.0/firebase-app.js";
-
-import {
-    getFirestore,
-    collection,
-    addDoc,
-    getDocs,
-    deleteDoc,
-    doc
-}
-from "https://www.gstatic.com/firebasejs/12.13.0/firebase-firestore.js";
-
-/* CONFIG */
-
-const firebaseConfig = {
-
-    apiKey: "AIzaSyDruQxhQfsmsDAubunSrohBX9ZALlXtp5E",
-
-    authDomain: "toko-pakaian-91050.firebaseapp.com",
-
-    projectId: "toko-pakaian-91050",
-
-    storageBucket: "toko-pakaian-91050.firebasestorage.app",
-
-    messagingSenderId: "418943349139",
-
-    appId: "1:418943349139:web:23760a579da0dbbc7b7866"
-
-};
-
-/* INIT */
-
-const app = initializeApp(firebaseConfig);
-
-const db = getFirestore(app);
-
-let firebaseSiswa = [];
-
 /* SISWA */
 
-window.tambahSiswaFirebase = async function(){
+window.tambahSiswa = async function(){
 
     const nama =
         document.getElementById("namaSiswa").value;
@@ -727,140 +709,156 @@ window.tambahSiswaFirebase = async function(){
     const jk =
         document.getElementById("jkSiswa").value;
 
-    if(
-        nama === "" ||
-        nis === "" ||
-        kelas === "" ||
-        jk === ""
-    ){
-
-        alert("Lengkapi data siswa!");
+    if(nama==="" || nis===""){
+        alert("Lengkapi data!");
         return;
-
     }
 
-    await addDoc(
-        collection(db,"siswa"),
-        {
-            nama,
-            nis,
-            kelas,
-            jk,
-            createdAt:new Date()
-        }
-    );
+    await addDoc(collection(db,"siswa"),{
+        nama,
+        nis,
+        kelas,
+        jk
+    });
 
-    alert("Siswa berhasil ditambahkan 🔥");
+    alert("Siswa berhasil ditambah");
 
-    document.getElementById("namaSiswa").value = "";
-    document.getElementById("nisSiswa").value = "";
-    document.getElementById("kelasSiswa").value = "";
-    document.getElementById("jkSiswa").value = "";
-
-    loadSiswaFirebase();
+    loadSiswa();
 
 }
 
-window.loadSiswaFirebase = async function(){
+async function loadSiswa(){
 
     const tbody =
-        document.querySelector("#tableSiswa tbody");
+        document.getElementById("tableSiswa");
 
-    tbody.innerHTML = "";
-
-    firebaseSiswa = [];
+    tbody.innerHTML="";
 
     const querySnapshot =
         await getDocs(collection(db,"siswa"));
 
+    let total=0;
+
     querySnapshot.forEach((docItem)=>{
 
-        firebaseSiswa.push({
-            id:docItem.id,
-            ...docItem.data()
-        });
+        total++;
 
-    });
-
-    renderSiswaSearch();
-
-    document.getElementById("totalSiswa").innerText =
-        firebaseSiswa.length;
-
-}
-
-window.renderSiswaSearch = function(){
-
-    const tbody =
-        document.querySelector("#tableSiswa tbody");
-
-    const search =
-        document.getElementById("searchSiswa")
-        .value
-        .toLowerCase();
-
-    tbody.innerHTML = "";
-
-    const filtered =
-        firebaseSiswa.filter(item=>
-
-            item.nama.toLowerCase()
-            .includes(search)
-
-        );
-
-    filtered.forEach((siswa)=>{
+        const siswa = docItem.data();
 
         tbody.innerHTML += `
-        
         <tr>
-
             <td>${siswa.nama}</td>
             <td>${siswa.nis}</td>
             <td>${siswa.kelas}</td>
             <td>${siswa.jk}</td>
 
             <td>
-
                 <button
-                    onclick="hapusSiswaFirebase('${siswa.id}')"
-                    style="
-                        background:#ef4444;
-                        color:white;
-                        border:none;
-                        padding:8px 12px;
-                        border-radius:10px;
-                        cursor:pointer;
-                    "
+                    class="action-btn delete-btn"
+                    onclick="hapusSiswa('${docItem.id}')"
                 >
                     Hapus
                 </button>
-
             </td>
-
         </tr>
-
         `;
 
     });
 
+    document.getElementById("totalSiswa").innerText=total;
+
 }
 
-window.hapusSiswaFirebase = async function(id){
+window.hapusSiswa = async function(id){
 
-    if(confirm("Hapus siswa ini?")){
+    await deleteDoc(doc(db,"siswa",id));
 
-        await deleteDoc(doc(db,"siswa",id));
+    loadSiswa();
 
-        loadSiswaFirebase();
+}
 
-    }
+/* ORANG TUA */
+
+window.tambahOrtu = async function(){
+
+    const nama =
+        document.getElementById("namaOrtu").value;
+
+    const anak =
+        document.getElementById("anakOrtu").value;
+
+    const telepon =
+        document.getElementById("teleponOrtu").value;
+
+    const alamat =
+        document.getElementById("alamatOrtu").value;
+
+    await addDoc(collection(db,"orangtua"),{
+        nama,
+        anak,
+        telepon,
+        alamat
+    });
+
+    alert("Data orang tua berhasil ditambah");
+
+    loadOrtu();
+
+}
+
+async function loadOrtu(){
+
+    const tbody =
+        document.getElementById("tableOrtu");
+
+    tbody.innerHTML="";
+
+    const querySnapshot =
+        await getDocs(collection(db,"orangtua"));
+
+    let total=0;
+
+    querySnapshot.forEach((docItem)=>{
+
+        total++;
+
+        const item = docItem.data();
+
+        tbody.innerHTML += `
+        <tr>
+            <td>${item.nama}</td>
+            <td>${item.anak}</td>
+            <td>${item.telepon}</td>
+            <td>${item.alamat}</td>
+
+            <td>
+                <button
+                    class="action-btn delete-btn"
+                    onclick="hapusOrtu('${docItem.id}')"
+                >
+                    Hapus
+                </button>
+            </td>
+        </tr>
+        `;
+
+    });
+
+    document.getElementById("totalOrtu").innerText=total;
+
+}
+
+window.hapusOrtu = async function(id){
+
+    await deleteDoc(doc(db,"orangtua",id));
+
+    loadOrtu();
 
 }
 
 /* NILAI */
 
-window.simpanNilaiFirebase = async function(){
+window.simpanNilai = async function(){
 
     const nama =
         document.getElementById("namaNilai").value;
@@ -874,91 +872,92 @@ window.simpanNilaiFirebase = async function(){
     const nilai =
         document.getElementById("nilaiSiswa").value;
 
-    if(nama === "" || nilai === ""){
-
-        alert("Lengkapi data nilai!");
+    if(nama==="" || nilai===""){
+        alert("Lengkapi data nilai");
         return;
-
     }
 
-    await addDoc(
-        collection(db,"nilai"),
-        {
-            nama,
-            kelas,
-            mapel,
-            nilai:Number(nilai),
-            createdAt:new Date()
-        }
-    );
+    await addDoc(collection(db,"nilai"),{
+        nama,
+        kelas,
+        mapel,
+        nilai:Number(nilai)
+    });
 
-    alert("Nilai berhasil disimpan 🔥");
+    alert("Nilai berhasil disimpan");
 
-    document.getElementById("namaNilai").value = "";
-    document.getElementById("nilaiSiswa").value = "";
-
-    loadNilaiFirebase();
+    loadNilai();
 
 }
 
-window.loadNilaiFirebase = async function(){
+async function loadNilai(){
 
     const tbody =
-        document.querySelector("#tableNilai tbody");
+        document.getElementById("tableNilai");
 
-    tbody.innerHTML = "";
+    const rankingBody =
+        document.getElementById("rankingBody");
 
-    let totalNilai = 0;
-    let jumlahData = 0;
-
-    const ranking = [];
+    tbody.innerHTML="";
+    rankingBody.innerHTML="";
 
     const querySnapshot =
         await getDocs(collection(db,"nilai"));
+
+    let total=0;
+    let jumlah=0;
+
+    let ranking=[];
 
     querySnapshot.forEach((docItem)=>{
 
         const item = docItem.data();
 
+        total++;
+        jumlah += Number(item.nilai);
+
+        ranking.push(item);
+
         tbody.innerHTML += `
         <tr>
+
             <td>${item.nama}</td>
             <td>${item.kelas}</td>
             <td>${item.mapel}</td>
             <td>${item.nilai}</td>
+
+            <td>
+
+                <button
+                    class="action-btn edit-btn"
+                    onclick="editNilai(
+                        '${docItem.id}',
+                        '${item.nama}',
+                        '${item.kelas}',
+                        '${item.mapel}',
+                        '${item.nilai}'
+                    )"
+                >
+                    Edit
+                </button>
+
+                <button
+                    class="action-btn delete-btn"
+                    onclick="hapusNilai('${docItem.id}')"
+                >
+                    Hapus
+                </button>
+
+            </td>
+
         </tr>
         `;
 
-        totalNilai += Number(item.nilai);
-
-        jumlahData++;
-
-        ranking.push(item);
-
     });
 
-    const rata =
-        jumlahData > 0
-        ? Math.round(totalNilai / jumlahData)
-        : 0;
+    ranking.sort((a,b)=>b.nilai-a.nilai);
 
-    document.querySelector(".yellow").innerText =
-        rata;
-
-    const bermasalah =
-        ranking.filter(item => item.nilai < 70).length;
-
-    document.querySelector(".red").innerText =
-        bermasalah;
-
-    ranking.sort((a,b)=> b.nilai - a.nilai);
-
-    const rankingBody =
-        document.getElementById("rankingBody");
-
-    rankingBody.innerHTML = "";
-
-    ranking.slice(0,5).forEach((item)=>{
+    ranking.slice(0,5).forEach(item=>{
 
         rankingBody.innerHTML += `
         <tr>
@@ -969,12 +968,82 @@ window.loadNilaiFirebase = async function(){
 
     });
 
+    document.getElementById("totalNilai").innerText=total;
+
+    document.getElementById("rataNilai").innerText =
+        total > 0
+        ? Math.round(jumlah/total)
+        : 0;
+
 }
+
+window.hapusNilai = async function(id){
+
+    await deleteDoc(doc(db,"nilai",id));
+
+    loadNilai();
+
+}
+
+window.editNilai = async function(
+    id,
+    nama,
+    kelas,
+    mapel,
+    nilai
+){
+
+    const namaBaru = prompt("Nama",nama);
+    if(namaBaru===null) return;
+
+    const kelasBaru = prompt("Kelas",kelas);
+    if(kelasBaru===null) return;
+
+    const mapelBaru = prompt("Mapel",mapel);
+    if(mapelBaru===null) return;
+
+    const nilaiBaru = prompt("Nilai",nilai);
+    if(nilaiBaru===null) return;
+
+    await updateDoc(doc(db,"nilai",id),{
+        nama:namaBaru,
+        kelas:kelasBaru,
+        mapel:mapelBaru,
+        nilai:Number(nilaiBaru)
+    });
+
+    alert("Nilai berhasil diupdate");
+
+    loadNilai();
+
+}
+
+/* CHART */
+
+new Chart(
+    document.getElementById("nilaiChart"),
+    {
+        type:'line',
+        data:{
+            labels:['Jan','Feb','Mar','Apr','Mei','Jun'],
+            datasets:[{
+                label:'Rata-rata Nilai',
+                data:[70,75,80,85,90,95],
+                borderWidth:3,
+                tension:0.4
+            }]
+        },
+        options:{
+            responsive:true
+        }
+    }
+);
 
 /* INIT */
 
-loadSiswaFirebase();
-loadNilaiFirebase();
+loadSiswa();
+loadNilai();
+loadOrtu();
 
 </script>
 
