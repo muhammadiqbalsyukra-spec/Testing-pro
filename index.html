@@ -1,11 +1,10 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>EduSmart SD Premium Enterprise</title>
+<title>EduSmart E-Rapor SD</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
@@ -50,7 +49,7 @@ margin-bottom:30px;
 }
 
 .logo h1{
-font-size:34px;
+font-size:36px;
 font-weight:800;
 background:linear-gradient(to right,#38bdf8,#818cf8);
 -webkit-background-clip:text;
@@ -69,6 +68,7 @@ margin-bottom:18px;
 .input-group label{
 display:block;
 margin-bottom:8px;
+font-weight:600;
 }
 
 .input-group input{
@@ -94,8 +94,6 @@ cursor:pointer;
 margin-top:15px;
 }
 
-/* DASHBOARD */
-
 .dashboard{
 display:none;
 }
@@ -104,12 +102,11 @@ display:none;
 position:fixed;
 top:0;
 left:0;
-width:260px;
+width:250px;
 height:100vh;
 background:rgba(15,23,42,0.96);
 padding:25px;
 border-right:1px solid rgba(255,255,255,0.06);
-overflow:auto;
 }
 
 .sidebar h2{
@@ -123,13 +120,14 @@ gap:10px;
 }
 
 .menu button{
-padding:15px;
+padding:14px;
 border:none;
 border-radius:14px;
 background:transparent;
 color:#cbd5e1;
 cursor:pointer;
 text-align:left;
+font-weight:600;
 transition:0.3s;
 }
 
@@ -140,7 +138,7 @@ color:white;
 }
 
 .main{
-margin-left:260px;
+margin-left:250px;
 padding:25px;
 }
 
@@ -200,6 +198,11 @@ border-radius:10px;
 color:white;
 cursor:pointer;
 margin-right:6px;
+font-weight:600;
+}
+
+.edit-btn{
+background:#f59e0b;
 }
 
 .delete-btn{
@@ -251,10 +254,11 @@ display:flex;
 justify-content:space-between;
 align-items:flex-end;
 margin-top:60px;
+gap:120px;
 }
 
 .foto-wrapper{
-margin-left:90px;
+margin-left:60px;
 }
 
 .foto-box{
@@ -270,8 +274,8 @@ font-size:14px;
 
 .ttd{
 text-align:center;
+margin-right:100px;
 min-width:250px;
-  margin-right:120px;
 }
 
 .edit-kepsek-btn{
@@ -300,7 +304,6 @@ margin-left:0;
 .foto-ttd{
 flex-direction:column;
 align-items:flex-start;
-gap:40px;
 }
 
 }
@@ -337,6 +340,24 @@ box-shadow:none;
 border:none;
 margin:0;
 padding:0;
+}
+
+.foto-ttd{
+display:flex !important;
+flex-direction:row !important;
+justify-content:space-between !important;
+align-items:flex-end !important;
+gap:120px !important;
+width:100% !important;
+}
+
+.ttd{
+text-align:center !important;
+margin-right:100px !important;
+}
+
+.foto-wrapper{
+margin-left:60px !important;
 }
 
 }
@@ -454,7 +475,7 @@ Masuk Dashboard
 
 </div>
 
-<button class="save-btn" onclick="tambahSiswa()">
+<button class="save-btn" onclick="simpanSiswa()">
 💾 Simpan Data
 </button>
 
@@ -690,9 +711,11 @@ btn.classList.add("active");
 let dataSiswa =
 JSON.parse(localStorage.getItem("dataSiswa")) || [];
 
-/* TAMBAH SISWA */
+let editIndex = -1;
 
-function tambahSiswa(){
+/* SIMPAN SISWA */
+
+function simpanSiswa(){
 
 const siswa = {
 
@@ -739,7 +762,17 @@ document.getElementById("alamatOrtu").value
 
 };
 
+if(editIndex === -1){
+
 dataSiswa.push(siswa);
+
+}else{
+
+dataSiswa[editIndex] = siswa;
+
+editIndex = -1;
+
+}
 
 localStorage.setItem(
 "dataSiswa",
@@ -748,7 +781,28 @@ JSON.stringify(dataSiswa)
 
 renderSiswa();
 
+resetForm();
+
 alert("Data siswa berhasil disimpan");
+
+}
+
+/* RESET FORM */
+
+function resetForm(){
+
+document.getElementById("nama").value="";
+document.getElementById("nis").value="";
+document.getElementById("nisn").value="";
+document.getElementById("tempatLahir").value="";
+document.getElementById("tanggalLahir").value="";
+document.getElementById("agama").value="";
+document.getElementById("alamat").value="";
+document.getElementById("ayah").value="";
+document.getElementById("ibu").value="";
+document.getElementById("pekerjaanAyah").value="";
+document.getElementById("pekerjaanIbu").value="";
+document.getElementById("alamatOrtu").value="";
 
 }
 
@@ -788,6 +842,13 @@ Print
 </button>
 
 <button
+class="action-btn edit-btn"
+onclick="editSiswa(${index})"
+>
+Edit
+</button>
+
+<button
 class="action-btn delete-btn"
 onclick="hapusSiswa(${item.id})"
 >
@@ -806,6 +867,60 @@ ${item.nama}
 </option>
 `;
 
+});
+
+}
+
+/* EDIT */
+
+function editSiswa(index){
+
+const siswa = dataSiswa[index];
+
+document.getElementById("nama").value =
+siswa.nama;
+
+document.getElementById("nis").value =
+siswa.nis;
+
+document.getElementById("nisn").value =
+siswa.nisn;
+
+document.getElementById("tempatLahir").value =
+siswa.tempat;
+
+document.getElementById("tanggalLahir").value =
+siswa.tanggal;
+
+document.getElementById("jk").value =
+siswa.jk;
+
+document.getElementById("agama").value =
+siswa.agama;
+
+document.getElementById("alamat").value =
+siswa.alamat;
+
+document.getElementById("ayah").value =
+siswa.ayah;
+
+document.getElementById("ibu").value =
+siswa.ibu;
+
+document.getElementById("pekerjaanAyah").value =
+siswa.pekerjaanAyah;
+
+document.getElementById("pekerjaanIbu").value =
+siswa.pekerjaanIbu;
+
+document.getElementById("alamatOrtu").value =
+siswa.alamatOrtu;
+
+editIndex = index;
+
+window.scrollTo({
+top:0,
+behavior:'smooth'
 });
 
 }
@@ -884,6 +999,11 @@ siswa.pekerjaanIbu;
 
 document.getElementById("rAlamatOrtu").innerText =
 siswa.alamatOrtu;
+
+showSection(
+'raporSection',
+document.querySelectorAll('.menu button')[1]
+);
 
 }
 
