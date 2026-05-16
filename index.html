@@ -3,7 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>EduSmart E-Rapor SD Premium</title>
+
+<title>EduSmart E-Rapor SD Ultimate</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
@@ -102,7 +103,7 @@ display:none;
 position:fixed;
 top:0;
 left:0;
-width:250px;
+width:260px;
 height:100vh;
 background:rgba(15,23,42,0.96);
 padding:25px;
@@ -137,7 +138,7 @@ color:white;
 }
 
 .main{
-margin-left:250px;
+margin-left:260px;
 padding:25px;
 }
 
@@ -280,6 +281,14 @@ color:black;
 color:black;
 }
 
+.catatan-box{
+border:1px solid #ccc;
+padding:16px;
+border-radius:12px;
+min-height:80px;
+margin-top:10px;
+}
+
 .foto-ttd{
 display:flex;
 justify-content:space-between;
@@ -287,32 +296,13 @@ align-items:flex-end;
 margin-top:60px;
 }
 
-.foto-box{
-width:140px;
-height:180px;
-border:2px solid #999;
-display:flex;
-justify-content:center;
-align-items:center;
-margin-left:60px;
-}
-
 .ttd-group{
 display:flex;
-gap:100px;
-margin-right:40px;
+gap:80px;
 }
 
 .ttd{
 text-align:center;
-}
-
-.catatan-box{
-border:1px solid #ccc;
-padding:16px;
-border-radius:12px;
-min-height:80px;
-margin-top:10px;
 }
 
 .edit-kepsek-btn{
@@ -393,7 +383,7 @@ box-shadow:none;
 
 <div class="logo">
 <h1>EduSmart SD</h1>
-<p>Sistem E-Rapor Sekolah Dasar</p>
+<p>Sistem E-Rapor Ultimate</p>
 </div>
 
 <div class="input-group">
@@ -424,12 +414,16 @@ Masuk Dashboard
 
 <div class="menu">
 
-<button class="active" onclick="showSection('siswaSection',this)">
+<button class="active" onclick="showSection('identitasSection',this)">
+🏫 Identitas Sekolah
+</button>
+
+<button onclick="showSection('siswaSection',this)">
 👨‍🎓 Data Siswa
 </button>
 
 <button onclick="showSection('nilaiSection',this)">
-📚 Nilai & Sikap
+📚 Nilai & Semester
 </button>
 
 <button onclick="showSection('raporSection',this)">
@@ -448,7 +442,7 @@ Masuk Dashboard
 
 <div class="topbar">
 
-<h1>EduSmart E-Rapor SD</h1>
+<h1>EduSmart E-Rapor SD Ultimate</h1>
 
 <div class="user-box">
 👤 Administrator
@@ -456,13 +450,41 @@ Masuk Dashboard
 
 </div>
 
-<!-- DATA SISWA -->
+<!-- IDENTITAS SEKOLAH -->
 
-<div id="siswaSection">
+<div id="identitasSection">
 
 <div class="card">
 
-<h3>📚 Data Siswa</h3>
+<h3>🏫 Identitas Sekolah</h3>
+
+<div class="form-grid">
+
+<input type="text" id="namaSekolah" placeholder="Nama Sekolah">
+<input type="text" id="npsn" placeholder="NPSN">
+<input type="text" id="nss" placeholder="NSS">
+<input type="text" id="alamatSekolah" placeholder="Alamat Sekolah">
+<input type="text" id="kecamatan" placeholder="Kecamatan">
+<input type="text" id="kabupaten" placeholder="Kabupaten">
+<input type="text" id="provinsi" placeholder="Provinsi">
+
+</div>
+
+<button class="save-btn" onclick="simpanSekolah()">
+💾 Simpan Identitas Sekolah
+</button>
+
+</div>
+
+</div>
+
+<!-- SISWA -->
+
+<div id="siswaSection" style="display:none;">
+
+<div class="card">
+
+<h3>👨‍🎓 Data Siswa</h3>
 
 <div class="form-grid">
 
@@ -470,7 +492,12 @@ Masuk Dashboard
 <input type="text" id="nis" placeholder="NIS">
 <input type="text" id="nisn" placeholder="NISN">
 <input type="text" id="kelas" placeholder="Kelas">
-<input type="text" id="semester" placeholder="Semester">
+
+<select id="semester">
+<option>Ganjil</option>
+<option>Genap</option>
+</select>
+
 <input type="text" id="tahunAjaran" placeholder="Tahun Ajaran">
 <input type="text" id="waliKelas" placeholder="Wali Kelas">
 
@@ -486,7 +513,7 @@ Masuk Dashboard
 <tr>
 <th>Nama</th>
 <th>Kelas</th>
-<th>NISN</th>
+<th>Semester</th>
 <th>Aksi</th>
 </tr>
 </thead>
@@ -505,7 +532,7 @@ Masuk Dashboard
 
 <div class="card">
 
-<h3>📚 Nilai & Sikap</h3>
+<h3>📚 Nilai Semester</h3>
 
 <select id="pilihNilaiSiswa">
 
@@ -523,17 +550,6 @@ Masuk Dashboard
 <input type="number" id="agamaNilai" placeholder="Agama">
 <input type="number" id="seni" placeholder="Seni Budaya">
 <input type="number" id="pjok" placeholder="PJOK">
-
-<input type="number" id="sakit" placeholder="Sakit">
-<input type="number" id="izin" placeholder="Izin">
-<input type="number" id="alfa" placeholder="Alfa">
-
-<input type="text" id="spiritual" placeholder="Sikap Spiritual">
-<input type="text" id="sosial" placeholder="Sikap Sosial">
-
-<input type="text" id="ekskul" placeholder="Ekstrakurikuler">
-
-<textarea id="catatan" placeholder="Catatan Wali Kelas"></textarea>
 
 </div>
 
@@ -575,7 +591,9 @@ Masuk Dashboard
 
 <div class="cover-page">
 
-<h2>PEMERINTAH KABUPATEN</h2>
+<h2 id="rNamaSekolah">
+NAMA SEKOLAH
+</h2>
 
 <div class="cover-logo">
 LOGO
@@ -594,11 +612,57 @@ PESERTA DIDIK SEKOLAH DASAR
 <div>Nama : <span id="cNama"></span></div>
 <div>Kelas : <span id="cKelas"></span></div>
 <div>NISN : <span id="cNisn"></span></div>
+<div>Semester : <span id="cSemester"></span></div>
 <div>Tahun : <span id="cTahun"></span></div>
 
 </div>
 
 </div>
+
+<!-- IDENTITAS SEKOLAH -->
+
+<div class="section-title">
+Identitas Sekolah
+</div>
+
+<table class="biodata-table">
+
+<tr>
+<td>Nama Sekolah</td>
+<td id="rrNamaSekolah"></td>
+</tr>
+
+<tr>
+<td>NPSN</td>
+<td id="rrNpsn"></td>
+</tr>
+
+<tr>
+<td>NSS</td>
+<td id="rrNss"></td>
+</tr>
+
+<tr>
+<td>Alamat</td>
+<td id="rrAlamat"></td>
+</tr>
+
+<tr>
+<td>Kecamatan</td>
+<td id="rrKecamatan"></td>
+</tr>
+
+<tr>
+<td>Kabupaten</td>
+<td id="rrKabupaten"></td>
+</tr>
+
+<tr>
+<td>Provinsi</td>
+<td id="rrProvinsi"></td>
+</tr>
+
+</table>
 
 <!-- BIODATA -->
 
@@ -609,7 +673,7 @@ Identitas Peserta Didik
 <table class="biodata-table">
 
 <tr>
-<td>Nama Siswa</td>
+<td>Nama</td>
 <td id="rNama"></td>
 </tr>
 
@@ -659,6 +723,8 @@ Nilai Akademik
 <th>Mata Pelajaran</th>
 <th>Nilai</th>
 <th>Predikat</th>
+<th>KKM</th>
+<th>Status</th>
 </tr>
 
 </thead>
@@ -678,108 +744,15 @@ Ranking :
 </div>
 
 <div style="margin-top:10px;font-weight:700;">
-Predikat :
-<span id="rPredikat"></span>
+Juara :
+<span id="rJuara"></span>
 </div>
 
-<!-- ABSENSI -->
-
-<div class="section-title">
-Absensi
-</div>
-
-<table class="nilai-table">
-
-<tr>
-<td>Sakit</td>
-<td id="rSakit"></td>
-</tr>
-
-<tr>
-<td>Izin</td>
-<td id="rIzin"></td>
-</tr>
-
-<tr>
-<td>Tanpa Keterangan</td>
-<td id="rAlfa"></td>
-</tr>
-
-</table>
-
-<!-- SIKAP -->
-
-<div class="section-title">
-Sikap
-</div>
-
-<table class="nilai-table">
-
-<tr>
-<td>Spiritual</td>
-<td id="rSpiritual"></td>
-</tr>
-
-<tr>
-<td>Sosial</td>
-<td id="rSosial"></td>
-</tr>
-
-</table>
-
-<!-- EKSKUL -->
-
-<div class="section-title">
-Ekstrakurikuler
-</div>
-
-<div class="catatan-box" id="rEkskul"></div>
-
-<!-- CATATAN -->
-
-<div class="section-title">
-Catatan Wali Kelas
-</div>
-
-<div class="catatan-box" id="rCatatan"></div>
-
-<!-- KENAIKAN -->
-
-<div class="section-title">
-Keputusan
-</div>
-
-<div class="catatan-box" id="rKeputusan"></div>
-
-<!-- TANGGAL -->
-
-<div style="margin-top:40px;text-align:right;">
-<div>Ditetapkan di : Manokwari</div>
-<div>
-Tanggal :
-<span id="tanggalRapor"></span>
-</div>
-</div>
-
-<!-- FOTO + TTD -->
+<!-- TTD -->
 
 <div class="foto-ttd">
 
-<div class="foto-box">
-Tempel Foto
-</div>
-
 <div class="ttd-group">
-
-<div class="ttd">
-
-<p>Orang Tua/Wali</p>
-
-<br><br><br>
-
-(............................)
-
-</div>
 
 <div class="ttd">
 
@@ -788,7 +761,7 @@ Tempel Foto
 <br><br><br>
 
 <h3 id="ttdWaliKelas">
-................................
+........................
 </h3>
 
 </div>
@@ -802,10 +775,6 @@ Tempel Foto
 <h3 id="namaKepsek">
 Suryawati Effa S.Pd
 </h3>
-
-<p id="nipKepsek">
-NIP 19580818 198411 2001
-</p>
 
 <button
 class="edit-kepsek-btn no-print"
@@ -828,6 +797,8 @@ onclick="editKepsek()"
 
 <script>
 
+/* LOGIN */
+
 function login(){
 
 if(username.value==="" || password.value===""){
@@ -849,16 +820,21 @@ loginPage.style.display="flex";
 
 }
 
+/* MENU */
+
 function showSection(sectionId,btn){
 
 const sections=[
+"identitasSection",
 "siswaSection",
 "nilaiSection",
 "raporSection"
 ];
 
 sections.forEach(id=>{
+
 document.getElementById(id).style.display="none";
+
 });
 
 document.getElementById(sectionId)
@@ -866,7 +842,9 @@ document.getElementById(sectionId)
 
 document.querySelectorAll(".menu button")
 .forEach(button=>{
+
 button.classList.remove("active");
+
 });
 
 btn.classList.add("active");
@@ -875,19 +853,47 @@ btn.classList.add("active");
 
 /* DATABASE */
 
+let sekolah =
+JSON.parse(localStorage.getItem("sekolah")) || {};
+
 let dataSiswa =
 JSON.parse(localStorage.getItem("dataSiswa")) || [];
 
 let nilaiSiswa =
 JSON.parse(localStorage.getItem("nilaiSiswa")) || [];
 
-let editIndex = -1;
+let editIndex=-1;
 
-/* SIMPAN SISWA */
+/* SEKOLAH */
+
+function simpanSekolah(){
+
+sekolah={
+
+namaSekolah:namaSekolah.value,
+npsn:npsn.value,
+nss:nss.value,
+alamatSekolah:alamatSekolah.value,
+kecamatan:kecamatan.value,
+kabupaten:kabupaten.value,
+provinsi:provinsi.value
+
+};
+
+localStorage.setItem(
+"sekolah",
+JSON.stringify(sekolah)
+);
+
+alert("Identitas sekolah tersimpan");
+
+}
+
+/* SISWA */
 
 function simpanSiswa(){
 
-const siswa = {
+const siswa={
 
 id:Date.now(),
 
@@ -919,11 +925,9 @@ JSON.stringify(dataSiswa)
 
 renderSiswa();
 
-alert("Data siswa berhasil disimpan");
+alert("Data siswa tersimpan");
 
 }
-
-/* RENDER */
 
 function renderSiswa(){
 
@@ -935,15 +939,15 @@ pilihSiswa.innerHTML=
 pilihNilaiSiswa.innerHTML=
 `<option value="">Pilih Siswa</option>`;
 
-dataSiswa.forEach((item,index)=>{
+dataSiswa.forEach((s,index)=>{
 
 tableSiswa.innerHTML += `
 
 <tr>
 
-<td>${item.nama}</td>
-<td>${item.kelas}</td>
-<td>${item.nisn}</td>
+<td>${s.nama}</td>
+<td>${s.kelas}</td>
+<td>${s.semester}</td>
 
 <td>
 
@@ -963,7 +967,7 @@ Edit
 
 <button
 class="action-btn delete-btn"
-onclick="hapusSiswa(${item.id})"
+onclick="hapusSiswa(${s.id})"
 >
 Hapus
 </button>
@@ -976,21 +980,19 @@ Hapus
 
 pilihSiswa.innerHTML += `
 <option value="${index}">
-${item.nama}
+${s.nama}
 </option>
 `;
 
 pilihNilaiSiswa.innerHTML += `
 <option value="${index}">
-${item.nama}
+${s.nama}
 </option>
 `;
 
 });
 
 }
-
-/* EDIT */
 
 function editSiswa(index){
 
@@ -1008,14 +1010,14 @@ editIndex=index;
 
 }
 
-/* HAPUS */
-
 function hapusSiswa(id){
 
 if(confirm("Hapus siswa?")){
 
-dataSiswa =
-dataSiswa.filter(s=>s.id!==id);
+dataSiswa=
+dataSiswa.filter(
+s=>s.id!==id
+);
 
 localStorage.setItem(
 "dataSiswa",
@@ -1051,18 +1053,7 @@ ips:Number(ips.value||0),
 ppkn:Number(ppkn.value||0),
 agama:Number(agamaNilai.value||0),
 seni:Number(seni.value||0),
-pjok:Number(pjok.value||0),
-
-sakit:Number(sakit.value||0),
-izin:Number(izin.value||0),
-alfa:Number(alfa.value||0),
-
-spiritual:spiritual.value,
-sosial:sosial.value,
-
-ekskul:ekskul.value,
-
-catatan:catatan.value
+pjok:Number(pjok.value||0)
 
 };
 
@@ -1071,7 +1062,7 @@ localStorage.setItem(
 JSON.stringify(nilaiSiswa)
 );
 
-alert("Nilai berhasil disimpan");
+alert("Nilai tersimpan");
 
 }
 
@@ -1082,6 +1073,18 @@ if(nilai>=80) return "B";
 if(nilai>=70) return "C";
 
 return "D";
+
+}
+
+function statusTuntas(nilai){
+
+if(nilai>=75){
+
+return "Tuntas";
+
+}
+
+return "Belum Tuntas";
 
 }
 
@@ -1142,12 +1145,42 @@ rSemester.innerText=s.semester;
 rTahun.innerText=s.tahunAjaran;
 rWali.innerText=s.waliKelas;
 
-ttdWaliKelas.innerText=s.waliKelas;
+ttdWaliKelas.innerText=
+s.waliKelas;
 
 cNama.innerText=s.nama;
 cKelas.innerText=s.kelas;
 cNisn.innerText=s.nisn;
+cSemester.innerText=s.semester;
 cTahun.innerText=s.tahunAjaran;
+
+/* SEKOLAH */
+
+rNamaSekolah.innerText=
+sekolah.namaSekolah || "Nama Sekolah";
+
+rrNamaSekolah.innerText=
+sekolah.namaSekolah || "-";
+
+rrNpsn.innerText=
+sekolah.npsn || "-";
+
+rrNss.innerText=
+sekolah.nss || "-";
+
+rrAlamat.innerText=
+sekolah.alamatSekolah || "-";
+
+rrKecamatan.innerText=
+sekolah.kecamatan || "-";
+
+rrKabupaten.innerText=
+sekolah.kabupaten || "-";
+
+rrProvinsi.innerText=
+sekolah.provinsi || "-";
+
+/* NILAI */
 
 const nilai=
 nilaiSiswa[index] || {};
@@ -1176,9 +1209,13 @@ total+=p[1];
 nilaiBody.innerHTML += `
 
 <tr>
+
 <td>${p[0]}</td>
 <td>${p[1]}</td>
 <td>${predikat(p[1])}</td>
+<td>75</td>
+<td>${statusTuntas(p[1])}</td>
+
 </tr>
 
 `;
@@ -1190,69 +1227,33 @@ Math.round(total/pelajaran.length);
 
 rRata.innerText=rata;
 
+const ranking=
+hitungRanking(index);
+
 rRanking.innerText=
-hitungRanking(index)+" dari "+dataSiswa.length;
+ranking+" dari "+dataSiswa.length;
 
-if(rata>=90){
+if(ranking===1){
 
-rPredikat.innerText="Sangat Baik";
+rJuara.innerText="Juara 1";
 
-}else if(rata>=80){
+}else if(ranking===2){
 
-rPredikat.innerText="Baik";
+rJuara.innerText="Juara 2";
 
-}else if(rata>=70){
+}else if(ranking===3){
 
-rPredikat.innerText="Cukup";
-
-}else{
-
-rPredikat.innerText="Kurang";
-
-}
-
-rSakit.innerText=
-(nilai.sakit||0)+" Hari";
-
-rIzin.innerText=
-(nilai.izin||0)+" Hari";
-
-rAlfa.innerText=
-(nilai.alfa||0)+" Hari";
-
-rSpiritual.innerText=
-nilai.spiritual || "-";
-
-rSosial.innerText=
-nilai.sosial || "-";
-
-rEkskul.innerText=
-nilai.ekskul || "-";
-
-rCatatan.innerText=
-nilai.catatan || "-";
-
-if(rata>=75){
-
-rKeputusan.innerText=
-"Naik ke kelas berikutnya";
+rJuara.innerText="Juara 3";
 
 }else{
 
-rKeputusan.innerText=
-"Tidak Naik Kelas";
+rJuara.innerText="-";
 
 }
-
-const today =
-new Date();
-
-tanggalRapor.innerText =
-today.toLocaleDateString("id-ID");
 
 showSection(
 'raporSection',
-document.querySelectorAll('.menu button')[2]
+document.querySelectorAll('.menu button')[3]
 );
 
 }
@@ -1261,10 +1262,10 @@ document.querySelectorAll('.menu button')[2]
 
 function downloadPDF(){
 
-const element =
+const element=
 document.getElementById("raporArea");
 
-const opt = {
+const opt={
 
 margin:0.5,
 filename:'E-Rapor.pdf',
@@ -1286,7 +1287,7 @@ html2pdf().set(opt).from(element).save();
 
 function editKepsek(){
 
-const namaBaru = prompt(
+const namaBaru=prompt(
 "Nama Kepala Sekolah",
 namaKepsek.innerText
 );
@@ -1302,33 +1303,16 @@ namaBaru
 
 }
 
-const nipBaru = prompt(
-"NIP Kepala Sekolah",
-nipKepsek.innerText
-);
-
-if(nipBaru){
-
-nipKepsek.innerText=nipBaru;
-
-localStorage.setItem(
-"nipKepsek",
-nipBaru
-);
-
 }
 
-}
+/* INIT */
 
 window.onload=function(){
 
 renderSiswa();
 
-const savedNama =
+const savedNama=
 localStorage.getItem("namaKepsek");
-
-const savedNip =
-localStorage.getItem("nipKepsek");
 
 if(savedNama){
 
@@ -1336,9 +1320,28 @@ namaKepsek.innerText=savedNama;
 
 }
 
-if(savedNip){
+if(sekolah.namaSekolah){
 
-nipKepsek.innerText=savedNip;
+namaSekolah.value=
+sekolah.namaSekolah;
+
+npsn.value=
+sekolah.npsn;
+
+nss.value=
+sekolah.nss;
+
+alamatSekolah.value=
+sekolah.alamatSekolah;
+
+kecamatan.value=
+sekolah.kecamatan;
+
+kabupaten.value=
+sekolah.kabupaten;
+
+provinsi.value=
+sekolah.provinsi;
 
 }
 
