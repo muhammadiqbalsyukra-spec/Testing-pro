@@ -8,6 +8,8 @@
 
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
 <style>
 
 *{
@@ -22,6 +24,8 @@ background:linear-gradient(135deg,#020617,#0f172a,#111827);
 color:white;
 min-height:100vh;
 }
+
+/* LOGIN */
 
 .login-page{
 display:flex;
@@ -80,7 +84,8 @@ color:white;
 
 .login-btn,
 .save-btn,
-.print-btn{
+.print-btn,
+.pdf-btn{
 width:100%;
 padding:14px;
 border:none;
@@ -220,6 +225,42 @@ padding:40px;
 margin-top:20px;
 }
 
+.cover-page{
+text-align:center;
+padding:100px 20px;
+border-bottom:4px solid #000;
+margin-bottom:40px;
+}
+
+.cover-logo{
+width:120px;
+height:120px;
+border-radius:50%;
+background:#e2e8f0;
+margin:20px auto;
+display:flex;
+justify-content:center;
+align-items:center;
+font-weight:700;
+}
+
+.cover-title{
+font-size:34px;
+font-weight:800;
+margin-top:30px;
+}
+
+.cover-sub{
+font-size:20px;
+margin-top:10px;
+}
+
+.cover-student{
+margin-top:80px;
+font-size:20px;
+line-height:2;
+}
+
 .rapor-header{
 text-align:center;
 margin-bottom:30px;
@@ -318,6 +359,7 @@ margin:15mm;
 .topbar,
 .no-print,
 .print-btn,
+.pdf-btn,
 .edit-kepsek-btn{
 display:none !important;
 }
@@ -431,21 +473,6 @@ Masuk Dashboard
 <input type="text" id="semester" placeholder="Semester">
 <input type="text" id="tahunAjaran" placeholder="Tahun Ajaran">
 <input type="text" id="waliKelas" placeholder="Wali Kelas">
-<input type="text" id="tempatLahir" placeholder="Tempat Lahir">
-<input type="date" id="tanggalLahir">
-
-<select id="jk">
-<option>Laki-laki</option>
-<option>Perempuan</option>
-</select>
-
-<input type="text" id="agama" placeholder="Agama">
-<input type="text" id="alamat" placeholder="Alamat Siswa">
-<input type="text" id="ayah" placeholder="Nama Ayah">
-<input type="text" id="ibu" placeholder="Nama Ibu">
-<input type="text" id="pekerjaanAyah" placeholder="Pekerjaan Ayah">
-<input type="text" id="pekerjaanIbu" placeholder="Pekerjaan Ibu">
-<input type="text" id="alamatOrtu" placeholder="Alamat Orang Tua">
 
 </div>
 
@@ -533,9 +560,59 @@ Masuk Dashboard
 🖨 Print E-Rapor
 </button>
 
+<button class="pdf-btn" onclick="downloadPDF()">
+⬇ Download PDF
+</button>
+
 </div>
 
-<div class="rapor-box">
+<div class="rapor-box" id="raporArea">
+
+<!-- COVER -->
+
+<div class="cover-page">
+
+<h2>PEMERINTAH KABUPATEN</h2>
+
+<div class="cover-logo">
+LOGO
+</div>
+
+<div class="cover-title">
+LAPORAN HASIL BELAJAR
+</div>
+
+<div class="cover-sub">
+PESERTA DIDIK SEKOLAH DASAR
+</div>
+
+<div class="cover-student">
+
+<div>
+Nama :
+<span id="cNama"></span>
+</div>
+
+<div>
+Kelas :
+<span id="cKelas"></span>
+</div>
+
+<div>
+NISN :
+<span id="cNisn"></span>
+</div>
+
+<div>
+Tahun :
+<span id="cTahun"></span>
+</div>
+
+</div>
+
+</div>
+
+<!-- RAPOR -->
 
 <div class="rapor-header">
 
@@ -695,15 +772,9 @@ onclick="editKepsek()"
 
 function login(){
 
-const username =
-document.getElementById("username").value;
+if(username.value==="" || password.value===""){
 
-const password =
-document.getElementById("password").value;
-
-if(username === "" || password === ""){
-
-alert("Lengkapi login!");
+alert("Lengkapi login");
 return;
 
 }
@@ -722,17 +793,14 @@ loginPage.style.display="flex";
 
 function showSection(sectionId,btn){
 
-const sections = [
+const sections=[
 "siswaSection",
 "nilaiSection",
 "raporSection"
 ];
 
 sections.forEach(id=>{
-
-document.getElementById(id)
-.style.display="none";
-
+document.getElementById(id).style.display="none";
 });
 
 document.getElementById(sectionId)
@@ -740,9 +808,7 @@ document.getElementById(sectionId)
 
 document.querySelectorAll(".menu button")
 .forEach(button=>{
-
 button.classList.remove("active");
-
 });
 
 btn.classList.add("active");
@@ -773,28 +839,18 @@ nisn:nisn.value,
 kelas:kelas.value,
 semester:semester.value,
 tahunAjaran:tahunAjaran.value,
-waliKelas:waliKelas.value,
-tempat:tempatLahir.value,
-tanggal:tanggalLahir.value,
-jk:jk.value,
-agama:agama.value,
-alamat:alamat.value,
-ayah:ayah.value,
-ibu:ibu.value,
-pekerjaanAyah:pekerjaanAyah.value,
-pekerjaanIbu:pekerjaanIbu.value,
-alamatOrtu:alamatOrtu.value
+waliKelas:waliKelas.value
 
 };
 
-if(editIndex === -1){
+if(editIndex===-1){
 
 dataSiswa.push(siswa);
 
 }else{
 
-dataSiswa[editIndex] = siswa;
-editIndex = -1;
+dataSiswa[editIndex]=siswa;
+editIndex=-1;
 
 }
 
@@ -804,18 +860,12 @@ JSON.stringify(dataSiswa)
 );
 
 renderSiswa();
-resetForm();
 
 alert("Data siswa berhasil disimpan");
 
 }
 
-function resetForm(){
-
-document.querySelectorAll(".form-grid input")
-.forEach(input=>input.value="");
-
-}
+/* RENDER */
 
 function renderSiswa(){
 
@@ -882,40 +932,32 @@ ${item.nama}
 
 }
 
+/* EDIT */
+
 function editSiswa(index){
 
-const s = dataSiswa[index];
+const s=dataSiswa[index];
 
-nama.value = s.nama;
-nis.value = s.nis;
-nisn.value = s.nisn;
-kelas.value = s.kelas;
-semester.value = s.semester;
-tahunAjaran.value = s.tahunAjaran;
-waliKelas.value = s.waliKelas;
-tempatLahir.value = s.tempat;
-tanggalLahir.value = s.tanggal;
-jk.value = s.jk;
-agama.value = s.agama;
-alamat.value = s.alamat;
-ayah.value = s.ayah;
-ibu.value = s.ibu;
-pekerjaanAyah.value = s.pekerjaanAyah;
-pekerjaanIbu.value = s.pekerjaanIbu;
-alamatOrtu.value = s.alamatOrtu;
+nama.value=s.nama;
+nis.value=s.nis;
+nisn.value=s.nisn;
+kelas.value=s.kelas;
+semester.value=s.semester;
+tahunAjaran.value=s.tahunAjaran;
+waliKelas.value=s.waliKelas;
 
-editIndex = index;
+editIndex=index;
 
 }
+
+/* HAPUS */
 
 function hapusSiswa(id){
 
 if(confirm("Hapus siswa?")){
 
 dataSiswa =
-dataSiswa.filter(
-s => s.id !== id
-);
+dataSiswa.filter(s=>s.id!==id);
 
 localStorage.setItem(
 "dataSiswa",
@@ -928,7 +970,7 @@ renderSiswa();
 
 }
 
-/* NILAI */
+/* SIMPAN NILAI */
 
 function simpanNilai(){
 
@@ -942,20 +984,20 @@ return;
 
 }
 
-nilaiSiswa[index] = {
+nilaiSiswa[index]={
 
-indo:Number(indo.value || 0),
-mtk:Number(mtk.value || 0),
-ipa:Number(ipa.value || 0),
-ips:Number(ips.value || 0),
-ppkn:Number(ppkn.value || 0),
-agama:Number(agamaNilai.value || 0),
-seni:Number(seni.value || 0),
-pjok:Number(pjok.value || 0),
+indo:Number(indo.value||0),
+mtk:Number(mtk.value||0),
+ipa:Number(ipa.value||0),
+ips:Number(ips.value||0),
+ppkn:Number(ppkn.value||0),
+agama:Number(agamaNilai.value||0),
+seni:Number(seni.value||0),
+pjok:Number(pjok.value||0),
 
-sakit:Number(sakit.value || 0),
-izin:Number(izin.value || 0),
-alfa:Number(alfa.value || 0),
+sakit:Number(sakit.value||0),
+izin:Number(izin.value||0),
+alfa:Number(alfa.value||0),
 
 catatan:catatan.value || ""
 
@@ -970,42 +1012,38 @@ alert("Nilai berhasil disimpan");
 
 }
 
+/* PREDIKAT */
+
 function predikat(nilai){
 
-if(nilai >= 90) return "A";
-if(nilai >= 80) return "B";
-if(nilai >= 70) return "C";
+if(nilai>=90) return "A";
+if(nilai>=80) return "B";
+if(nilai>=70) return "C";
 
 return "D";
 
 }
 
+/* RANKING */
+
 function hitungRanking(index){
 
-const rankingData = [];
+const rankingData=[];
 
 dataSiswa.forEach((siswa,i)=>{
 
-const n = nilaiSiswa[i];
+const n=nilaiSiswa[i];
 
 if(n){
 
-const total =
-n.indo +
-n.mtk +
-n.ipa +
-n.ips +
-n.ppkn +
-n.agama +
-n.seni +
-n.pjok;
-
-const rata = total / 8;
+const total=
+n.indo+n.mtk+n.ipa+n.ips+
+n.ppkn+n.agama+n.seni+n.pjok;
 
 rankingData.push({
 
 index:i,
-rata:rata
+rata:total/8
 
 });
 
@@ -1015,12 +1053,9 @@ rata:rata
 
 rankingData.sort((a,b)=>b.rata-a.rata);
 
-const posisi =
-rankingData.findIndex(
-r => r.index == index
-);
-
-return posisi + 1;
+return rankingData.findIndex(
+r=>r.index==index
+)+1;
 
 }
 
@@ -1028,7 +1063,7 @@ return posisi + 1;
 
 function tampilkanRapor(){
 
-const index = pilihSiswa.value;
+const index=pilihSiswa.value;
 
 if(index==="") return;
 
@@ -1038,39 +1073,44 @@ previewRapor(index);
 
 function previewRapor(index){
 
-const s = dataSiswa[index];
+const s=dataSiswa[index];
 
-rNama.innerText = s.nama;
-rNis.innerText = s.nis;
-rNisn.innerText = s.nisn;
-rKelas.innerText = s.kelas;
-rSemester.innerText = s.semester;
-rTahun.innerText = s.tahunAjaran;
-rWali.innerText = s.waliKelas;
+rNama.innerText=s.nama;
+rNis.innerText=s.nis;
+rNisn.innerText=s.nisn;
+rKelas.innerText=s.kelas;
+rSemester.innerText=s.semester;
+rTahun.innerText=s.tahunAjaran;
+rWali.innerText=s.waliKelas;
 
-const nilai =
+cNama.innerText=s.nama;
+cKelas.innerText=s.kelas;
+cNisn.innerText=s.nisn;
+cTahun.innerText=s.tahunAjaran;
+
+const nilai=
 nilaiSiswa[index] || {};
 
-const pelajaran = [
+const pelajaran=[
 
-["Bahasa Indonesia",nilai.indo || 0],
-["Matematika",nilai.mtk || 0],
-["IPA",nilai.ipa || 0],
-["IPS",nilai.ips || 0],
-["PPKN",nilai.ppkn || 0],
-["Agama",nilai.agama || 0],
-["Seni Budaya",nilai.seni || 0],
-["PJOK",nilai.pjok || 0]
+["Bahasa Indonesia",nilai.indo||0],
+["Matematika",nilai.mtk||0],
+["IPA",nilai.ipa||0],
+["IPS",nilai.ips||0],
+["PPKN",nilai.ppkn||0],
+["Agama",nilai.agama||0],
+["Seni Budaya",nilai.seni||0],
+["PJOK",nilai.pjok||0]
 
 ];
 
 nilaiBody.innerHTML="";
 
-let total = 0;
+let total=0;
 
 pelajaran.forEach(p=>{
 
-total += p[1];
+total+=p[1];
 
 nilaiBody.innerHTML += `
 
@@ -1084,46 +1124,42 @@ nilaiBody.innerHTML += `
 
 });
 
-const rata =
-Math.round(total / pelajaran.length);
+const rata=
+Math.round(total/pelajaran.length);
 
-rRata.innerText = rata;
+rRata.innerText=rata;
 
-const ranking =
-hitungRanking(index);
+rRanking.innerText=
+hitungRanking(index)+" dari "+dataSiswa.length;
 
-rRanking.innerText =
-ranking + " dari " + dataSiswa.length;
+if(rata>=90){
 
-let predikatAkhir = "Kurang";
+rPredikat.innerText="Sangat Baik";
 
-if(rata >= 90){
+}else if(rata>=80){
 
-predikatAkhir = "Sangat Baik";
+rPredikat.innerText="Baik";
 
-}else if(rata >= 80){
+}else if(rata>=70){
 
-predikatAkhir = "Baik";
+rPredikat.innerText="Cukup";
 
-}else if(rata >= 70){
+}else{
 
-predikatAkhir = "Cukup";
+rPredikat.innerText="Kurang";
 
 }
 
-rPredikat.innerText =
-predikatAkhir;
-
-rSakit.innerText =
+rSakit.innerText=
 nilai.sakit || 0;
 
-rIzin.innerText =
+rIzin.innerText=
 nilai.izin || 0;
 
-rAlfa.innerText =
+rAlfa.innerText=
 nilai.alfa || 0;
 
-rCatatan.innerText =
+rCatatan.innerText=
 nilai.catatan || "-";
 
 showSection(
@@ -1132,6 +1168,33 @@ document.querySelectorAll('.menu button')[2]
 );
 
 }
+
+/* PDF */
+
+function downloadPDF(){
+
+const element =
+document.getElementById("raporArea");
+
+const opt = {
+
+margin:0.5,
+filename:'E-Rapor.pdf',
+image:{ type:'jpeg', quality:1 },
+html2canvas:{ scale:2 },
+jsPDF:{
+unit:'in',
+format:'a4',
+orientation:'portrait'
+}
+
+};
+
+html2pdf().set(opt).from(element).save();
+
+}
+
+/* KEPSEK */
 
 function editKepsek(){
 
@@ -1142,7 +1205,7 @@ namaKepsek.innerText
 
 if(namaBaru){
 
-namaKepsek.innerText = namaBaru;
+namaKepsek.innerText=namaBaru;
 
 localStorage.setItem(
 "namaKepsek",
@@ -1158,7 +1221,7 @@ nipKepsek.innerText
 
 if(nipBaru){
 
-nipKepsek.innerText = nipBaru;
+nipKepsek.innerText=nipBaru;
 
 localStorage.setItem(
 "nipKepsek",
@@ -1169,7 +1232,9 @@ nipBaru
 
 }
 
-window.onload = function(){
+/* INIT */
+
+window.onload=function(){
 
 renderSiswa();
 
@@ -1181,13 +1246,13 @@ localStorage.getItem("nipKepsek");
 
 if(savedNama){
 
-namaKepsek.innerText = savedNama;
+namaKepsek.innerText=savedNama;
 
 }
 
 if(savedNip){
 
-nipKepsek.innerText = savedNip;
+nipKepsek.innerText=savedNip;
 
 }
 
