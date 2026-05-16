@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>EduSmart E-Rapor SD</title>
+<title>EduSmart E-Rapor SD Premium</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
@@ -94,6 +94,8 @@ cursor:pointer;
 margin-top:15px;
 }
 
+/* DASHBOARD */
+
 .dashboard{
 display:none;
 }
@@ -107,6 +109,7 @@ height:100vh;
 background:rgba(15,23,42,0.96);
 padding:25px;
 border-right:1px solid rgba(255,255,255,0.06);
+overflow:auto;
 }
 
 .sidebar h2{
@@ -160,6 +163,7 @@ background:rgba(255,255,255,0.05);
 border-radius:24px;
 padding:24px;
 border:1px solid rgba(255,255,255,0.06);
+margin-bottom:20px;
 }
 
 .form-grid{
@@ -247,6 +251,19 @@ vertical-align:top;
 .biodata-table td:first-child{
 width:260px;
 font-weight:600;
+}
+
+.nilai-table{
+margin-top:30px;
+}
+
+.nilai-table th{
+background:#f1f5f9;
+color:black;
+}
+
+.nilai-table td{
+color:black;
 }
 
 .foto-ttd{
@@ -347,17 +364,11 @@ display:flex !important;
 flex-direction:row !important;
 justify-content:space-between !important;
 align-items:flex-end !important;
-gap:120px !important;
-width:100% !important;
 }
 
 .ttd{
 text-align:center !important;
 margin-right:100px !important;
-}
-
-.foto-wrapper{
-margin-left:60px !important;
 }
 
 }
@@ -375,7 +386,7 @@ margin-left:60px !important;
 
 <div class="logo">
 <h1>EduSmart SD</h1>
-<p>Sistem Informasi Sekolah</p>
+<p>Sistem E-Rapor Sekolah Dasar</p>
 </div>
 
 <div class="input-group">
@@ -407,11 +418,15 @@ Masuk Dashboard
 <div class="menu">
 
 <button class="active" onclick="showSection('siswaSection',this)">
-📚 Data Siswa
+👨‍🎓 Data Siswa
+</button>
+
+<button onclick="showSection('nilaiSection',this)">
+📚 Nilai Pelajaran
 </button>
 
 <button onclick="showSection('raporSection',this)">
-📄 Biodata Rapor
+🖨 E-Rapor
 </button>
 
 <button onclick="logout()">
@@ -426,7 +441,7 @@ Masuk Dashboard
 
 <div class="topbar">
 
-<h1>Dashboard Sekolah Dasar</h1>
+<h1>EduSmart E-Rapor SD</h1>
 
 <div class="user-box">
 👤 Administrator
@@ -449,6 +464,14 @@ Masuk Dashboard
 <input type="text" id="nis" placeholder="NIS">
 
 <input type="text" id="nisn" placeholder="NISN">
+
+<input type="text" id="kelas" placeholder="Kelas">
+
+<input type="text" id="semester" placeholder="Semester">
+
+<input type="text" id="tahunAjaran" placeholder="Tahun Ajaran">
+
+<input type="text" id="waliKelas" placeholder="Wali Kelas">
 
 <input type="text" id="tempatLahir" placeholder="Tempat Lahir">
 
@@ -485,9 +508,8 @@ Masuk Dashboard
 
 <tr>
 <th>Nama</th>
-<th>NIS</th>
+<th>Kelas</th>
 <th>NISN</th>
-<th>JK</th>
 <th>Aksi</th>
 </tr>
 
@@ -501,13 +523,55 @@ Masuk Dashboard
 
 </div>
 
+<!-- NILAI -->
+
+<div id="nilaiSection" style="display:none;">
+
+<div class="card">
+
+<h3>📚 Input Nilai Pelajaran</h3>
+
+<select id="pilihNilaiSiswa">
+
+<option value="">Pilih Siswa</option>
+
+</select>
+
+<div class="form-grid">
+
+<input type="number" id="indo" placeholder="Bahasa Indonesia">
+
+<input type="number" id="mtk" placeholder="Matematika">
+
+<input type="number" id="ipa" placeholder="IPA">
+
+<input type="number" id="ips" placeholder="IPS">
+
+<input type="number" id="ppkn" placeholder="PPKN">
+
+<input type="number" id="agamaNilai" placeholder="Agama">
+
+<input type="number" id="seni" placeholder="Seni Budaya">
+
+<input type="number" id="pjok" placeholder="PJOK">
+
+</div>
+
+<button class="save-btn" onclick="simpanNilai()">
+💾 Simpan Nilai
+</button>
+
+</div>
+
+</div>
+
 <!-- RAPOR -->
 
 <div id="raporSection" style="display:none;">
 
 <div class="card no-print">
 
-<h3>📄 Cetak Biodata Rapor</h3>
+<h3>🖨 Cetak E-Rapor</h3>
 
 <select id="pilihSiswa" onchange="tampilkanRapor()">
 
@@ -516,7 +580,7 @@ Masuk Dashboard
 </select>
 
 <button class="print-btn" onclick="window.print()">
-🖨 Print Biodata
+🖨 Print E-Rapor
 </button>
 
 </div>
@@ -526,7 +590,7 @@ Masuk Dashboard
 <div class="rapor-header">
 
 <div class="rapor-title">
-KETERANGAN TENTANG PESERTA DIDIK
+LAPORAN HASIL BELAJAR PESERTA DIDIK
 </div>
 
 </div>
@@ -549,51 +613,49 @@ KETERANGAN TENTANG PESERTA DIDIK
 </tr>
 
 <tr>
-<td>Tempat/Tanggal Lahir</td>
-<td id="rTTL"></td>
+<td>Kelas</td>
+<td id="rKelas"></td>
 </tr>
 
 <tr>
-<td>Jenis Kelamin</td>
-<td id="rJK"></td>
+<td>Semester</td>
+<td id="rSemester"></td>
 </tr>
 
 <tr>
-<td>Agama</td>
-<td id="rAgama"></td>
+<td>Tahun Ajaran</td>
+<td id="rTahun"></td>
 </tr>
 
 <tr>
-<td>Alamat Siswa</td>
-<td id="rAlamat"></td>
-</tr>
-
-<tr>
-<td>Nama Ayah</td>
-<td id="rAyah"></td>
-</tr>
-
-<tr>
-<td>Nama Ibu</td>
-<td id="rIbu"></td>
-</tr>
-
-<tr>
-<td>Pekerjaan Ayah</td>
-<td id="rPekerjaanAyah"></td>
-</tr>
-
-<tr>
-<td>Pekerjaan Ibu</td>
-<td id="rPekerjaanIbu"></td>
-</tr>
-
-<tr>
-<td>Alamat Orang Tua</td>
-<td id="rAlamatOrtu"></td>
+<td>Wali Kelas</td>
+<td id="rWali"></td>
 </tr>
 
 </table>
+
+<!-- NILAI -->
+
+<table class="nilai-table">
+
+<thead>
+
+<tr>
+<th>Mata Pelajaran</th>
+<th>Nilai</th>
+<th>Predikat</th>
+</tr>
+
+</thead>
+
+<tbody id="nilaiBody"></tbody>
+
+</table>
+
+<div style="margin-top:20px;font-weight:700;">
+Rata-rata :
+<span id="rRata"></span>
+</div>
 
 <!-- FOTO + TTD -->
 
@@ -682,6 +744,7 @@ function showSection(sectionId,btn){
 
 const sections = [
 "siswaSection",
+"nilaiSection",
 "raporSection"
 ];
 
@@ -711,6 +774,9 @@ btn.classList.add("active");
 let dataSiswa =
 JSON.parse(localStorage.getItem("dataSiswa")) || [];
 
+let nilaiSiswa =
+JSON.parse(localStorage.getItem("nilaiSiswa")) || [];
+
 let editIndex = -1;
 
 /* SIMPAN SISWA */
@@ -721,44 +787,23 @@ const siswa = {
 
 id:Date.now(),
 
-nama:
-document.getElementById("nama").value,
-
-nis:
-document.getElementById("nis").value,
-
-nisn:
-document.getElementById("nisn").value,
-
-tempat:
-document.getElementById("tempatLahir").value,
-
-tanggal:
-document.getElementById("tanggalLahir").value,
-
-jk:
-document.getElementById("jk").value,
-
-agama:
-document.getElementById("agama").value,
-
-alamat:
-document.getElementById("alamat").value,
-
-ayah:
-document.getElementById("ayah").value,
-
-ibu:
-document.getElementById("ibu").value,
-
-pekerjaanAyah:
-document.getElementById("pekerjaanAyah").value,
-
-pekerjaanIbu:
-document.getElementById("pekerjaanIbu").value,
-
-alamatOrtu:
-document.getElementById("alamatOrtu").value
+nama:nama.value,
+nis:nis.value,
+nisn:nisn.value,
+kelas:kelas.value,
+semester:semester.value,
+tahunAjaran:tahunAjaran.value,
+waliKelas:waliKelas.value,
+tempat:tempatLahir.value,
+tanggal:tanggalLahir.value,
+jk:jk.value,
+agama:agama.value,
+alamat:alamat.value,
+ayah:ayah.value,
+ibu:ibu.value,
+pekerjaanAyah:pekerjaanAyah.value,
+pekerjaanIbu:pekerjaanIbu.value,
+alamatOrtu:alamatOrtu.value
 
 };
 
@@ -769,7 +814,6 @@ dataSiswa.push(siswa);
 }else{
 
 dataSiswa[editIndex] = siswa;
-
 editIndex = -1;
 
 }
@@ -787,22 +831,12 @@ alert("Data siswa berhasil disimpan");
 
 }
 
-/* RESET FORM */
+/* RESET */
 
 function resetForm(){
 
-document.getElementById("nama").value="";
-document.getElementById("nis").value="";
-document.getElementById("nisn").value="";
-document.getElementById("tempatLahir").value="";
-document.getElementById("tanggalLahir").value="";
-document.getElementById("agama").value="";
-document.getElementById("alamat").value="";
-document.getElementById("ayah").value="";
-document.getElementById("ibu").value="";
-document.getElementById("pekerjaanAyah").value="";
-document.getElementById("pekerjaanIbu").value="";
-document.getElementById("alamatOrtu").value="";
+document.querySelectorAll(".form-grid input")
+.forEach(input=>input.value="");
 
 }
 
@@ -810,27 +844,22 @@ document.getElementById("alamatOrtu").value="";
 
 function renderSiswa(){
 
-const tbody =
-document.getElementById("tableSiswa");
+tableSiswa.innerHTML="";
+pilihSiswa.innerHTML=
+`<option value="">Pilih Siswa</option>`;
 
-const pilih =
-document.getElementById("pilihSiswa");
-
-tbody.innerHTML="";
-
-pilih.innerHTML=
+pilihNilaiSiswa.innerHTML=
 `<option value="">Pilih Siswa</option>`;
 
 dataSiswa.forEach((item,index)=>{
 
-tbody.innerHTML += `
+tableSiswa.innerHTML += `
 
 <tr>
 
 <td>${item.nama}</td>
-<td>${item.nis}</td>
+<td>${item.kelas}</td>
 <td>${item.nisn}</td>
-<td>${item.jk}</td>
 
 <td>
 
@@ -861,7 +890,13 @@ Hapus
 
 `;
 
-pilih.innerHTML += `
+pilihSiswa.innerHTML += `
+<option value="${index}">
+${item.nama}
+</option>
+`;
+
+pilihNilaiSiswa.innerHTML += `
 <option value="${index}">
 ${item.nama}
 </option>
@@ -875,46 +910,25 @@ ${item.nama}
 
 function editSiswa(index){
 
-const siswa = dataSiswa[index];
+const s = dataSiswa[index];
 
-document.getElementById("nama").value =
-siswa.nama;
-
-document.getElementById("nis").value =
-siswa.nis;
-
-document.getElementById("nisn").value =
-siswa.nisn;
-
-document.getElementById("tempatLahir").value =
-siswa.tempat;
-
-document.getElementById("tanggalLahir").value =
-siswa.tanggal;
-
-document.getElementById("jk").value =
-siswa.jk;
-
-document.getElementById("agama").value =
-siswa.agama;
-
-document.getElementById("alamat").value =
-siswa.alamat;
-
-document.getElementById("ayah").value =
-siswa.ayah;
-
-document.getElementById("ibu").value =
-siswa.ibu;
-
-document.getElementById("pekerjaanAyah").value =
-siswa.pekerjaanAyah;
-
-document.getElementById("pekerjaanIbu").value =
-siswa.pekerjaanIbu;
-
-document.getElementById("alamatOrtu").value =
-siswa.alamatOrtu;
+nama.value = s.nama;
+nis.value = s.nis;
+nisn.value = s.nisn;
+kelas.value = s.kelas;
+semester.value = s.semester;
+tahunAjaran.value = s.tahunAjaran;
+waliKelas.value = s.waliKelas;
+tempatLahir.value = s.tempat;
+tanggalLahir.value = s.tanggal;
+jk.value = s.jk;
+agama.value = s.agama;
+alamat.value = s.alamat;
+ayah.value = s.ayah;
+ibu.value = s.ibu;
+pekerjaanAyah.value = s.pekerjaanAyah;
+pekerjaanIbu.value = s.pekerjaanIbu;
+alamatOrtu.value = s.alamatOrtu;
 
 editIndex = index;
 
@@ -933,7 +947,7 @@ if(confirm("Hapus siswa?")){
 
 dataSiswa =
 dataSiswa.filter(
-siswa => siswa.id !== id
+s => s.id !== id
 );
 
 localStorage.setItem(
@@ -947,12 +961,59 @@ renderSiswa();
 
 }
 
+/* SIMPAN NILAI */
+
+function simpanNilai(){
+
+const index =
+pilihNilaiSiswa.value;
+
+if(index===""){
+
+alert("Pilih siswa");
+return;
+
+}
+
+nilaiSiswa[index] = {
+
+indo:Number(indo.value || 0),
+mtk:Number(mtk.value || 0),
+ipa:Number(ipa.value || 0),
+ips:Number(ips.value || 0),
+ppkn:Number(ppkn.value || 0),
+agama:Number(agamaNilai.value || 0),
+seni:Number(seni.value || 0),
+pjok:Number(pjok.value || 0)
+
+};
+
+localStorage.setItem(
+"nilaiSiswa",
+JSON.stringify(nilaiSiswa)
+);
+
+alert("Nilai berhasil disimpan");
+
+}
+
+/* PREDIKAT */
+
+function predikat(nilai){
+
+if(nilai >= 90) return "A";
+if(nilai >= 80) return "B";
+if(nilai >= 70) return "C";
+
+return "D";
+
+}
+
 /* RAPOR */
 
 function tampilkanRapor(){
 
-const index =
-document.getElementById("pilihSiswa").value;
+const index = pilihSiswa.value;
 
 if(index==="") return;
 
@@ -962,47 +1023,60 @@ previewRapor(index);
 
 function previewRapor(index){
 
-const siswa = dataSiswa[index];
+const s = dataSiswa[index];
 
-document.getElementById("rNama").innerText =
-siswa.nama;
+rNama.innerText = s.nama;
+rNis.innerText = s.nis;
+rNisn.innerText = s.nisn;
+rKelas.innerText = s.kelas;
+rSemester.innerText = s.semester;
+rTahun.innerText = s.tahunAjaran;
+rWali.innerText = s.waliKelas;
 
-document.getElementById("rNis").innerText =
-siswa.nis;
+const nilai =
+nilaiSiswa[index] || {};
 
-document.getElementById("rNisn").innerText =
-siswa.nisn;
+const pelajaran = [
 
-document.getElementById("rTTL").innerText =
-siswa.tempat + ", " + siswa.tanggal;
+["Bahasa Indonesia",nilai.indo || 0],
+["Matematika",nilai.mtk || 0],
+["IPA",nilai.ipa || 0],
+["IPS",nilai.ips || 0],
+["PPKN",nilai.ppkn || 0],
+["Agama",nilai.agama || 0],
+["Seni Budaya",nilai.seni || 0],
+["PJOK",nilai.pjok || 0]
 
-document.getElementById("rJK").innerText =
-siswa.jk;
+];
 
-document.getElementById("rAgama").innerText =
-siswa.agama;
+nilaiBody.innerHTML="";
 
-document.getElementById("rAlamat").innerText =
-siswa.alamat;
+let total = 0;
 
-document.getElementById("rAyah").innerText =
-siswa.ayah;
+pelajaran.forEach(p=>{
 
-document.getElementById("rIbu").innerText =
-siswa.ibu;
+total += p[1];
 
-document.getElementById("rPekerjaanAyah").innerText =
-siswa.pekerjaanAyah;
+nilaiBody.innerHTML += `
 
-document.getElementById("rPekerjaanIbu").innerText =
-siswa.pekerjaanIbu;
+<tr>
+<td>${p[0]}</td>
+<td>${p[1]}</td>
+<td>${predikat(p[1])}</td>
+</tr>
 
-document.getElementById("rAlamatOrtu").innerText =
-siswa.alamatOrtu;
+`;
+
+});
+
+const rata =
+Math.round(total / pelajaran.length);
+
+rRata.innerText = rata;
 
 showSection(
 'raporSection',
-document.querySelectorAll('.menu button')[1]
+document.querySelectorAll('.menu button')[2]
 );
 
 }
@@ -1013,13 +1087,12 @@ function editKepsek(){
 
 const namaBaru = prompt(
 "Nama Kepala Sekolah",
-document.getElementById("namaKepsek").innerText
+namaKepsek.innerText
 );
 
 if(namaBaru){
 
-document.getElementById("namaKepsek").innerText =
-namaBaru;
+namaKepsek.innerText = namaBaru;
 
 localStorage.setItem(
 "namaKepsek",
@@ -1030,13 +1103,12 @@ namaBaru
 
 const nipBaru = prompt(
 "NIP Kepala Sekolah",
-document.getElementById("nipKepsek").innerText
+nipKepsek.innerText
 );
 
 if(nipBaru){
 
-document.getElementById("nipKepsek").innerText =
-nipBaru;
+nipKepsek.innerText = nipBaru;
 
 localStorage.setItem(
 "nipKepsek",
@@ -1061,15 +1133,13 @@ localStorage.getItem("nipKepsek");
 
 if(savedNama){
 
-document.getElementById("namaKepsek")
-.innerText = savedNama;
+namaKepsek.innerText = savedNama;
 
 }
 
 if(savedNip){
 
-document.getElementById("nipKepsek")
-.innerText = savedNip;
+nipKepsek.innerText = savedNip;
 
 }
 
