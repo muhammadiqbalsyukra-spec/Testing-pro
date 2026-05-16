@@ -23,8 +23,6 @@ color:white;
 min-height:100vh;
 }
 
-/* LOGIN */
-
 .login-page{
 display:flex;
 justify-content:center;
@@ -94,8 +92,6 @@ cursor:pointer;
 margin-top:15px;
 }
 
-/* DASHBOARD */
-
 .dashboard{
 display:none;
 }
@@ -108,7 +104,6 @@ width:250px;
 height:100vh;
 background:rgba(15,23,42,0.96);
 padding:25px;
-border-right:1px solid rgba(255,255,255,0.06);
 overflow:auto;
 }
 
@@ -131,7 +126,6 @@ color:#cbd5e1;
 cursor:pointer;
 text-align:left;
 font-weight:600;
-transition:0.3s;
 }
 
 .menu button:hover,
@@ -162,7 +156,6 @@ border-radius:14px;
 background:rgba(255,255,255,0.05);
 border-radius:24px;
 padding:24px;
-border:1px solid rgba(255,255,255,0.06);
 margin-bottom:20px;
 }
 
@@ -191,7 +184,7 @@ margin-top:20px;
 table th,
 table td{
 padding:14px;
-border-bottom:1px solid rgba(255,255,255,0.06);
+border-bottom:1px solid rgba(255,255,255,0.08);
 text-align:left;
 }
 
@@ -233,7 +226,7 @@ margin-bottom:30px;
 }
 
 .rapor-title{
-font-size:24px;
+font-size:26px;
 font-weight:700;
 }
 
@@ -245,7 +238,6 @@ margin-top:20px;
 .biodata-table td{
 padding:10px 8px;
 border:none;
-vertical-align:top;
 }
 
 .biodata-table td:first-child{
@@ -253,12 +245,8 @@ width:260px;
 font-weight:600;
 }
 
-.nilai-table{
-margin-top:30px;
-}
-
 .nilai-table th{
-background:#f1f5f9;
+background:#e2e8f0;
 color:black;
 }
 
@@ -271,11 +259,6 @@ display:flex;
 justify-content:space-between;
 align-items:flex-end;
 margin-top:60px;
-gap:120px;
-}
-
-.foto-wrapper{
-margin-left:60px;
 }
 
 .foto-box{
@@ -286,13 +269,12 @@ display:flex;
 justify-content:center;
 align-items:center;
 color:#666;
-font-size:14px;
+margin-left:60px;
 }
 
 .ttd{
 text-align:center;
 margin-right:100px;
-min-width:250px;
 }
 
 .edit-kepsek-btn{
@@ -320,12 +302,10 @@ margin-left:0;
 
 .foto-ttd{
 flex-direction:column;
-align-items:flex-start;
+gap:40px;
 }
 
 }
-
-/* PRINT */
 
 @media print{
 
@@ -334,17 +314,16 @@ size:A4;
 margin:15mm;
 }
 
-body{
-background:white !important;
-}
-
 .sidebar,
 .topbar,
-.menu,
 .no-print,
 .print-btn,
 .edit-kepsek-btn{
 display:none !important;
+}
+
+body{
+background:white;
 }
 
 .main{
@@ -355,20 +334,6 @@ padding:0;
 .rapor-box{
 box-shadow:none;
 border:none;
-margin:0;
-padding:0;
-}
-
-.foto-ttd{
-display:flex !important;
-flex-direction:row !important;
-justify-content:space-between !important;
-align-items:flex-end !important;
-}
-
-.ttd{
-text-align:center !important;
-margin-right:100px !important;
 }
 
 }
@@ -460,21 +425,13 @@ Masuk Dashboard
 <div class="form-grid">
 
 <input type="text" id="nama" placeholder="Nama Siswa">
-
 <input type="text" id="nis" placeholder="NIS">
-
 <input type="text" id="nisn" placeholder="NISN">
-
 <input type="text" id="kelas" placeholder="Kelas">
-
 <input type="text" id="semester" placeholder="Semester">
-
 <input type="text" id="tahunAjaran" placeholder="Tahun Ajaran">
-
 <input type="text" id="waliKelas" placeholder="Wali Kelas">
-
 <input type="text" id="tempatLahir" placeholder="Tempat Lahir">
-
 <input type="date" id="tanggalLahir">
 
 <select id="jk">
@@ -483,17 +440,11 @@ Masuk Dashboard
 </select>
 
 <input type="text" id="agama" placeholder="Agama">
-
 <input type="text" id="alamat" placeholder="Alamat Siswa">
-
 <input type="text" id="ayah" placeholder="Nama Ayah">
-
 <input type="text" id="ibu" placeholder="Nama Ibu">
-
 <input type="text" id="pekerjaanAyah" placeholder="Pekerjaan Ayah">
-
 <input type="text" id="pekerjaanIbu" placeholder="Pekerjaan Ibu">
-
 <input type="text" id="alamatOrtu" placeholder="Alamat Orang Tua">
 
 </div>
@@ -540,20 +491,19 @@ Masuk Dashboard
 <div class="form-grid">
 
 <input type="number" id="indo" placeholder="Bahasa Indonesia">
-
 <input type="number" id="mtk" placeholder="Matematika">
-
 <input type="number" id="ipa" placeholder="IPA">
-
 <input type="number" id="ips" placeholder="IPS">
-
 <input type="number" id="ppkn" placeholder="PPKN">
-
 <input type="number" id="agamaNilai" placeholder="Agama">
-
 <input type="number" id="seni" placeholder="Seni Budaya">
-
 <input type="number" id="pjok" placeholder="PJOK">
+
+<input type="number" id="sakit" placeholder="Jumlah Sakit">
+<input type="number" id="izin" placeholder="Jumlah Izin">
+<input type="number" id="alfa" placeholder="Jumlah Alfa">
+
+<input type="text" id="catatan" placeholder="Catatan Wali Kelas">
 
 </div>
 
@@ -634,8 +584,6 @@ LAPORAN HASIL BELAJAR PESERTA DIDIK
 
 </table>
 
-<!-- NILAI -->
-
 <table class="nilai-table">
 
 <thead>
@@ -657,16 +605,59 @@ Rata-rata :
 <span id="rRata"></span>
 </div>
 
-<!-- FOTO + TTD -->
+<div style="margin-top:10px;font-weight:700;">
+Ranking :
+<span id="rRanking"></span>
+</div>
+
+<div style="margin-top:10px;font-weight:700;">
+Predikat :
+<span id="rPredikat"></span>
+</div>
+
+<br><br>
+
+<h3>Absensi</h3>
+
+<table class="nilai-table">
+
+<tr>
+<td>Sakit</td>
+<td id="rSakit"></td>
+</tr>
+
+<tr>
+<td>Izin</td>
+<td id="rIzin"></td>
+</tr>
+
+<tr>
+<td>Alfa</td>
+<td id="rAlfa"></td>
+</tr>
+
+</table>
+
+<br>
+
+<h3>Catatan Wali Kelas</h3>
+
+<div
+style="
+margin-top:10px;
+padding:16px;
+border:1px solid #ccc;
+border-radius:12px;
+min-height:80px;
+"
+id="rCatatan"
+>
+</div>
 
 <div class="foto-ttd">
 
-<div class="foto-wrapper">
-
 <div class="foto-box">
 Tempel Foto
-</div>
-
 </div>
 
 <div class="ttd">
@@ -702,8 +693,6 @@ onclick="editKepsek()"
 
 <script>
 
-/* LOGIN */
-
 function login(){
 
 const username =
@@ -715,30 +704,21 @@ document.getElementById("password").value;
 if(username === "" || password === ""){
 
 alert("Lengkapi login!");
-
 return;
 
 }
 
-document.getElementById("loginPage")
-.style.display="none";
-
-document.getElementById("dashboard")
-.style.display="block";
+loginPage.style.display="none";
+dashboard.style.display="block";
 
 }
 
 function logout(){
 
-document.getElementById("dashboard")
-.style.display="none";
-
-document.getElementById("loginPage")
-.style.display="flex";
+dashboard.style.display="none";
+loginPage.style.display="flex";
 
 }
-
-/* MENU */
 
 function showSection(sectionId,btn){
 
@@ -824,14 +804,11 @@ JSON.stringify(dataSiswa)
 );
 
 renderSiswa();
-
 resetForm();
 
 alert("Data siswa berhasil disimpan");
 
 }
-
-/* RESET */
 
 function resetForm(){
 
@@ -840,11 +817,10 @@ document.querySelectorAll(".form-grid input")
 
 }
 
-/* RENDER */
-
 function renderSiswa(){
 
 tableSiswa.innerHTML="";
+
 pilihSiswa.innerHTML=
 `<option value="">Pilih Siswa</option>`;
 
@@ -906,8 +882,6 @@ ${item.nama}
 
 }
 
-/* EDIT */
-
 function editSiswa(index){
 
 const s = dataSiswa[index];
@@ -932,14 +906,7 @@ alamatOrtu.value = s.alamatOrtu;
 
 editIndex = index;
 
-window.scrollTo({
-top:0,
-behavior:'smooth'
-});
-
 }
-
-/* HAPUS */
 
 function hapusSiswa(id){
 
@@ -961,7 +928,7 @@ renderSiswa();
 
 }
 
-/* SIMPAN NILAI */
+/* NILAI */
 
 function simpanNilai(){
 
@@ -984,7 +951,13 @@ ips:Number(ips.value || 0),
 ppkn:Number(ppkn.value || 0),
 agama:Number(agamaNilai.value || 0),
 seni:Number(seni.value || 0),
-pjok:Number(pjok.value || 0)
+pjok:Number(pjok.value || 0),
+
+sakit:Number(sakit.value || 0),
+izin:Number(izin.value || 0),
+alfa:Number(alfa.value || 0),
+
+catatan:catatan.value || ""
 
 };
 
@@ -997,8 +970,6 @@ alert("Nilai berhasil disimpan");
 
 }
 
-/* PREDIKAT */
-
 function predikat(nilai){
 
 if(nilai >= 90) return "A";
@@ -1006,6 +977,50 @@ if(nilai >= 80) return "B";
 if(nilai >= 70) return "C";
 
 return "D";
+
+}
+
+function hitungRanking(index){
+
+const rankingData = [];
+
+dataSiswa.forEach((siswa,i)=>{
+
+const n = nilaiSiswa[i];
+
+if(n){
+
+const total =
+n.indo +
+n.mtk +
+n.ipa +
+n.ips +
+n.ppkn +
+n.agama +
+n.seni +
+n.pjok;
+
+const rata = total / 8;
+
+rankingData.push({
+
+index:i,
+rata:rata
+
+});
+
+}
+
+});
+
+rankingData.sort((a,b)=>b.rata-a.rata);
+
+const posisi =
+rankingData.findIndex(
+r => r.index == index
+);
+
+return posisi + 1;
 
 }
 
@@ -1074,14 +1089,49 @@ Math.round(total / pelajaran.length);
 
 rRata.innerText = rata;
 
+const ranking =
+hitungRanking(index);
+
+rRanking.innerText =
+ranking + " dari " + dataSiswa.length;
+
+let predikatAkhir = "Kurang";
+
+if(rata >= 90){
+
+predikatAkhir = "Sangat Baik";
+
+}else if(rata >= 80){
+
+predikatAkhir = "Baik";
+
+}else if(rata >= 70){
+
+predikatAkhir = "Cukup";
+
+}
+
+rPredikat.innerText =
+predikatAkhir;
+
+rSakit.innerText =
+nilai.sakit || 0;
+
+rIzin.innerText =
+nilai.izin || 0;
+
+rAlfa.innerText =
+nilai.alfa || 0;
+
+rCatatan.innerText =
+nilai.catatan || "-";
+
 showSection(
 'raporSection',
 document.querySelectorAll('.menu button')[2]
 );
 
 }
-
-/* EDIT KEPSEK */
 
 function editKepsek(){
 
@@ -1118,8 +1168,6 @@ nipBaru
 }
 
 }
-
-/* INIT */
 
 window.onload = function(){
 
