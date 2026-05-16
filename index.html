@@ -3,7 +3,6 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>EduSmart E-Rapor SD Premium</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -24,8 +23,6 @@ background:linear-gradient(135deg,#020617,#0f172a,#111827);
 color:white;
 min-height:100vh;
 }
-
-/* LOGIN */
 
 .login-page{
 display:flex;
@@ -172,7 +169,8 @@ margin-top:20px;
 }
 
 .form-grid input,
-.form-grid select{
+.form-grid select,
+.form-grid textarea{
 padding:14px;
 border:none;
 border-radius:12px;
@@ -227,8 +225,8 @@ margin-top:20px;
 
 .cover-page{
 text-align:center;
-padding:100px 20px;
-border-bottom:4px solid #000;
+padding:80px 20px;
+border-bottom:4px solid black;
 margin-bottom:40px;
 }
 
@@ -237,10 +235,10 @@ width:120px;
 height:120px;
 border-radius:50%;
 background:#e2e8f0;
-margin:20px auto;
 display:flex;
 justify-content:center;
 align-items:center;
+margin:20px auto;
 font-weight:700;
 }
 
@@ -261,24 +259,11 @@ font-size:20px;
 line-height:2;
 }
 
-.rapor-header{
-text-align:center;
-margin-bottom:30px;
-}
-
-.rapor-title{
-font-size:26px;
+.section-title{
+margin-top:30px;
+margin-bottom:10px;
+font-size:20px;
 font-weight:700;
-}
-
-.biodata-table{
-width:100%;
-margin-top:20px;
-}
-
-.biodata-table td{
-padding:10px 8px;
-border:none;
 }
 
 .biodata-table td:first-child{
@@ -309,24 +294,35 @@ border:2px solid #999;
 display:flex;
 justify-content:center;
 align-items:center;
-color:#666;
 margin-left:60px;
+}
+
+.ttd-group{
+display:flex;
+gap:100px;
+margin-right:40px;
 }
 
 .ttd{
 text-align:center;
-margin-right:100px;
+}
+
+.catatan-box{
+border:1px solid #ccc;
+padding:16px;
+border-radius:12px;
+min-height:80px;
+margin-top:10px;
 }
 
 .edit-kepsek-btn{
-margin-top:14px;
-padding:10px 16px;
+margin-top:10px;
+padding:10px 14px;
 border:none;
-border-radius:12px;
+border-radius:10px;
 background:#0ea5e9;
 color:white;
 cursor:pointer;
-font-weight:600;
 }
 
 @media(max-width:900px){
@@ -344,6 +340,10 @@ margin-left:0;
 .foto-ttd{
 flex-direction:column;
 gap:40px;
+}
+
+.ttd-group{
+flex-direction:column;
 }
 
 }
@@ -374,8 +374,8 @@ padding:0;
 }
 
 .rapor-box{
-box-shadow:none;
 border:none;
+box-shadow:none;
 }
 
 }
@@ -429,7 +429,7 @@ Masuk Dashboard
 </button>
 
 <button onclick="showSection('nilaiSection',this)">
-📚 Nilai Pelajaran
+📚 Nilai & Sikap
 </button>
 
 <button onclick="showSection('raporSection',this)">
@@ -462,7 +462,7 @@ Masuk Dashboard
 
 <div class="card">
 
-<h3>📚 Data Lengkap Siswa</h3>
+<h3>📚 Data Siswa</h3>
 
 <div class="form-grid">
 
@@ -483,14 +483,12 @@ Masuk Dashboard
 <table>
 
 <thead>
-
 <tr>
 <th>Nama</th>
 <th>Kelas</th>
 <th>NISN</th>
 <th>Aksi</th>
 </tr>
-
 </thead>
 
 <tbody id="tableSiswa"></tbody>
@@ -507,7 +505,7 @@ Masuk Dashboard
 
 <div class="card">
 
-<h3>📚 Input Nilai Pelajaran</h3>
+<h3>📚 Nilai & Sikap</h3>
 
 <select id="pilihNilaiSiswa">
 
@@ -526,11 +524,16 @@ Masuk Dashboard
 <input type="number" id="seni" placeholder="Seni Budaya">
 <input type="number" id="pjok" placeholder="PJOK">
 
-<input type="number" id="sakit" placeholder="Jumlah Sakit">
-<input type="number" id="izin" placeholder="Jumlah Izin">
-<input type="number" id="alfa" placeholder="Jumlah Alfa">
+<input type="number" id="sakit" placeholder="Sakit">
+<input type="number" id="izin" placeholder="Izin">
+<input type="number" id="alfa" placeholder="Alfa">
 
-<input type="text" id="catatan" placeholder="Catatan Wali Kelas">
+<input type="text" id="spiritual" placeholder="Sikap Spiritual">
+<input type="text" id="sosial" placeholder="Sikap Sosial">
+
+<input type="text" id="ekskul" placeholder="Ekstrakurikuler">
+
+<textarea id="catatan" placeholder="Catatan Wali Kelas"></textarea>
 
 </div>
 
@@ -557,7 +560,7 @@ Masuk Dashboard
 </select>
 
 <button class="print-btn" onclick="window.print()">
-🖨 Print E-Rapor
+🖨 Print
 </button>
 
 <button class="pdf-btn" onclick="downloadPDF()">
@@ -588,38 +591,19 @@ PESERTA DIDIK SEKOLAH DASAR
 
 <div class="cover-student">
 
-<div>
-Nama :
-<span id="cNama"></span>
-</div>
-
-<div>
-Kelas :
-<span id="cKelas"></span>
-</div>
-
-<div>
-NISN :
-<span id="cNisn"></span>
-</div>
-
-<div>
-Tahun :
-<span id="cTahun"></span>
-</div>
+<div>Nama : <span id="cNama"></span></div>
+<div>Kelas : <span id="cKelas"></span></div>
+<div>NISN : <span id="cNisn"></span></div>
+<div>Tahun : <span id="cTahun"></span></div>
 
 </div>
 
 </div>
 
-<!-- RAPOR -->
+<!-- BIODATA -->
 
-<div class="rapor-header">
-
-<div class="rapor-title">
-LAPORAN HASIL BELAJAR PESERTA DIDIK
-</div>
-
+<div class="section-title">
+Identitas Peserta Didik
 </div>
 
 <table class="biodata-table">
@@ -661,6 +645,12 @@ LAPORAN HASIL BELAJAR PESERTA DIDIK
 
 </table>
 
+<!-- NILAI -->
+
+<div class="section-title">
+Nilai Akademik
+</div>
+
 <table class="nilai-table">
 
 <thead>
@@ -692,9 +682,11 @@ Predikat :
 <span id="rPredikat"></span>
 </div>
 
-<br><br>
+<!-- ABSENSI -->
 
-<h3>Absensi</h3>
+<div class="section-title">
+Absensi
+</div>
 
 <table class="nilai-table">
 
@@ -709,32 +701,96 @@ Predikat :
 </tr>
 
 <tr>
-<td>Alfa</td>
+<td>Tanpa Keterangan</td>
 <td id="rAlfa"></td>
 </tr>
 
 </table>
 
-<br>
+<!-- SIKAP -->
 
-<h3>Catatan Wali Kelas</h3>
-
-<div
-style="
-margin-top:10px;
-padding:16px;
-border:1px solid #ccc;
-border-radius:12px;
-min-height:80px;
-"
-id="rCatatan"
->
+<div class="section-title">
+Sikap
 </div>
+
+<table class="nilai-table">
+
+<tr>
+<td>Spiritual</td>
+<td id="rSpiritual"></td>
+</tr>
+
+<tr>
+<td>Sosial</td>
+<td id="rSosial"></td>
+</tr>
+
+</table>
+
+<!-- EKSKUL -->
+
+<div class="section-title">
+Ekstrakurikuler
+</div>
+
+<div class="catatan-box" id="rEkskul"></div>
+
+<!-- CATATAN -->
+
+<div class="section-title">
+Catatan Wali Kelas
+</div>
+
+<div class="catatan-box" id="rCatatan"></div>
+
+<!-- KENAIKAN -->
+
+<div class="section-title">
+Keputusan
+</div>
+
+<div class="catatan-box" id="rKeputusan"></div>
+
+<!-- TANGGAL -->
+
+<div style="margin-top:40px;text-align:right;">
+<div>Ditetapkan di : Manokwari</div>
+<div>
+Tanggal :
+<span id="tanggalRapor"></span>
+</div>
+</div>
+
+<!-- FOTO + TTD -->
 
 <div class="foto-ttd">
 
 <div class="foto-box">
 Tempel Foto
+</div>
+
+<div class="ttd-group">
+
+<div class="ttd">
+
+<p>Orang Tua/Wali</p>
+
+<br><br><br>
+
+(............................)
+
+</div>
+
+<div class="ttd">
+
+<p>Wali Kelas</p>
+
+<br><br><br>
+
+<h3 id="ttdWaliKelas">
+................................
+</h3>
+
 </div>
 
 <div class="ttd">
@@ -757,6 +813,8 @@ onclick="editKepsek()"
 >
 ✏️ Edit Kepala Sekolah
 </button>
+
+</div>
 
 </div>
 
@@ -970,11 +1028,11 @@ renderSiswa();
 
 }
 
-/* SIMPAN NILAI */
+/* NILAI */
 
 function simpanNilai(){
 
-const index =
+const index=
 pilihNilaiSiswa.value;
 
 if(index===""){
@@ -999,7 +1057,12 @@ sakit:Number(sakit.value||0),
 izin:Number(izin.value||0),
 alfa:Number(alfa.value||0),
 
-catatan:catatan.value || ""
+spiritual:spiritual.value,
+sosial:sosial.value,
+
+ekskul:ekskul.value,
+
+catatan:catatan.value
 
 };
 
@@ -1012,8 +1075,6 @@ alert("Nilai berhasil disimpan");
 
 }
 
-/* PREDIKAT */
-
 function predikat(nilai){
 
 if(nilai>=90) return "A";
@@ -1023,8 +1084,6 @@ if(nilai>=70) return "C";
 return "D";
 
 }
-
-/* RANKING */
 
 function hitungRanking(index){
 
@@ -1082,6 +1141,8 @@ rKelas.innerText=s.kelas;
 rSemester.innerText=s.semester;
 rTahun.innerText=s.tahunAjaran;
 rWali.innerText=s.waliKelas;
+
+ttdWaliKelas.innerText=s.waliKelas;
 
 cNama.innerText=s.nama;
 cKelas.innerText=s.kelas;
@@ -1151,16 +1212,43 @@ rPredikat.innerText="Kurang";
 }
 
 rSakit.innerText=
-nilai.sakit || 0;
+(nilai.sakit||0)+" Hari";
 
 rIzin.innerText=
-nilai.izin || 0;
+(nilai.izin||0)+" Hari";
 
 rAlfa.innerText=
-nilai.alfa || 0;
+(nilai.alfa||0)+" Hari";
+
+rSpiritual.innerText=
+nilai.spiritual || "-";
+
+rSosial.innerText=
+nilai.sosial || "-";
+
+rEkskul.innerText=
+nilai.ekskul || "-";
 
 rCatatan.innerText=
 nilai.catatan || "-";
+
+if(rata>=75){
+
+rKeputusan.innerText=
+"Naik ke kelas berikutnya";
+
+}else{
+
+rKeputusan.innerText=
+"Tidak Naik Kelas";
+
+}
+
+const today =
+new Date();
+
+tanggalRapor.innerText =
+today.toLocaleDateString("id-ID");
 
 showSection(
 'raporSection',
@@ -1231,8 +1319,6 @@ nipBaru
 }
 
 }
-
-/* INIT */
 
 window.onload=function(){
 
