@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>EduSmart E-Rapor SD Ultimate</title>
+<title>EduSmart E-Rapor SD</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
@@ -25,6 +25,8 @@ background:linear-gradient(135deg,#020617,#0f172a,#111827);
 color:white;
 min-height:100vh;
 }
+
+/* LOGIN */
 
 .login-page{
 display:flex;
@@ -81,6 +83,8 @@ background:#0f172a;
 color:white;
 }
 
+/* BUTTON */
+
 .login-btn,
 .save-btn,
 .print-btn,
@@ -96,6 +100,8 @@ cursor:pointer;
 margin-top:15px;
 }
 
+/* LAYOUT */
+
 .dashboard{
 display:none;
 }
@@ -106,7 +112,7 @@ top:0;
 left:0;
 width:260px;
 height:100vh;
-background:rgba(15,23,42,0.96);
+background:rgba(15,23,42,0.97);
 padding:25px;
 overflow:auto;
 }
@@ -156,6 +162,8 @@ padding:12px 18px;
 border-radius:14px;
 }
 
+/* CARD */
+
 .card{
 background:rgba(255,255,255,0.05);
 border-radius:24px;
@@ -163,12 +171,16 @@ padding:24px;
 margin-bottom:20px;
 }
 
+/* GRID */
+
 .form-grid{
 display:grid;
 grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
 gap:16px;
 margin-top:20px;
 }
+
+/* INPUT */
 
 .form-grid input,
 .form-grid select{
@@ -178,6 +190,8 @@ border-radius:12px;
 background:#0f172a;
 color:white;
 }
+
+/* TABLE */
 
 table{
 width:100%;
@@ -191,6 +205,8 @@ padding:14px;
 border-bottom:1px solid rgba(255,255,255,0.08);
 text-align:left;
 }
+
+/* ACTION */
 
 .action-btn{
 border:none;
@@ -214,6 +230,20 @@ background:#ef4444;
 background:#22c55e;
 }
 
+/* SEARCH */
+
+.search-box{
+width:100%;
+padding:14px;
+border:none;
+border-radius:14px;
+margin-top:20px;
+background:#0f172a;
+color:white;
+}
+
+/* STAT */
+
 .stat-box{
 background:rgba(255,255,255,0.05);
 padding:20px;
@@ -225,6 +255,8 @@ text-align:center;
 font-size:32px;
 margin-bottom:10px;
 }
+
+/* RAPOR */
 
 .rapor-box{
 background:white;
@@ -303,7 +335,9 @@ border-radius:20px;
 padding:20px;
 }
 
-@media(max-width:900px){
+/* MOBILE */
+
+@media(max-width:700px){
 
 .sidebar{
 position:relative;
@@ -313,13 +347,30 @@ height:auto;
 
 .main{
 margin-left:0;
+padding:15px;
+}
+
+.form-grid{
+grid-template-columns:1fr;
+}
+
+table{
+display:block;
+overflow-x:auto;
+white-space:nowrap;
 }
 
 .ttd-group{
 flex-direction:column;
 }
 
+canvas{
+height:300px !important;
 }
+
+}
+
+/* PRINT */
 
 @media print{
 
@@ -340,6 +391,18 @@ margin:0;
 padding:0;
 }
 
+table{
+page-break-inside:auto;
+}
+
+tr{
+page-break-inside:avoid;
+}
+
+.cover-page{
+page-break-after:always;
+}
+
 }
 
 </style>
@@ -355,7 +418,7 @@ padding:0;
 
 <div class="logo">
 <h1>EduSmart SD</h1>
-<p>Sistem E-Rapor Ultimate</p>
+<p>Sistem E-Rapor</p>
 </div>
 
 <div class="input-group">
@@ -386,7 +449,11 @@ Masuk Dashboard
 
 <div class="menu">
 
-<button class="active" onclick="showSection('identitasSection',this)">
+<button class="active" onclick="showSection('dashboardSection',this)">
+🏠 Dashboard
+</button>
+
+<button onclick="showSection('identitasSection',this)">
 🏫 Identitas Sekolah
 </button>
 
@@ -414,6 +481,10 @@ Masuk Dashboard
 📈 Statistik
 </button>
 
+<button onclick="showSection('backupSection',this)">
+💾 Backup Data
+</button>
+
 <button onclick="logout()">
 🚪 Logout
 </button>
@@ -434,9 +505,45 @@ Masuk Dashboard
 
 </div>
 
+<!-- DASHBOARD HOME -->
+
+<div id="dashboardSection">
+
+<div class="card">
+
+<h2>🏠 Dashboard Sekolah</h2>
+
+<div class="form-grid">
+
+<div class="stat-box">
+<h2 id="dashTotalSiswa">0</h2>
+<p>Total Siswa</p>
+</div>
+
+<div class="stat-box">
+<h2 id="dashTuntas">0%</h2>
+<p>Ketuntasan</p>
+</div>
+
+<div class="stat-box">
+<h2 id="dashTerbaik">-</h2>
+<p>Siswa Terbaik</p>
+</div>
+
+<div class="stat-box">
+<h2 id="dashRata">0</h2>
+<p>Rata-rata Sekolah</p>
+</div>
+
+</div>
+
+</div>
+
+</div>
+
 <!-- IDENTITAS -->
 
-<div id="identitasSection">
+<div id="identitasSection" style="display:none;">
 
 <div class="card">
 
@@ -490,6 +597,14 @@ Masuk Dashboard
 <button class="save-btn" onclick="simpanSiswa()">
 💾 Simpan Siswa
 </button>
+
+<input
+type="text"
+id="searchSiswa"
+class="search-box"
+placeholder="🔍 Cari siswa..."
+onkeyup="cariSiswa()"
+/>
 
 <table>
 
@@ -760,6 +875,32 @@ Suryawati Effa S.Pd
 
 </div>
 
+<!-- BACKUP -->
+
+<div id="backupSection" style="display:none;">
+
+<div class="card">
+
+<h2>💾 Backup & Restore Data</h2>
+
+<button class="save-btn" onclick="exportData()">
+⬇ Export Backup
+</button>
+
+<input
+type="file"
+id="importFile"
+style="margin-top:20px;"
+/>
+
+<button class="save-btn" onclick="importData()">
+⬆ Restore Backup
+</button>
+
+</div>
+
+</div>
+
 </div>
 
 <script>
@@ -793,13 +934,15 @@ function showSection(sectionId,btn){
 
 const sections=[
 
+"dashboardSection",
 "identitasSection",
 "siswaSection",
 "nilaiSection",
 "raporSection",
 "rekapSection",
 "grafikSection",
-"statistikSection"
+"statistikSection",
+"backupSection"
 
 ];
 
@@ -823,15 +966,15 @@ button.classList.remove("active");
 btn.classList.add("active");
 
 if(sectionId==="rekapSection"){
-
 renderRekap();
-
 }
 
 if(sectionId==="statistikSection"){
-
 renderStatistik();
+}
 
+if(sectionId==="dashboardSection"){
+renderDashboard();
 }
 
 }
@@ -1024,6 +1167,33 @@ renderSiswa();
 
 }
 
+function cariSiswa(){
+
+const keyword =
+searchSiswa.value.toLowerCase();
+
+const rows =
+tableSiswa.querySelectorAll("tr");
+
+rows.forEach(row=>{
+
+const text =
+row.innerText.toLowerCase();
+
+if(text.includes(keyword)){
+
+row.style.display="";
+
+}else{
+
+row.style.display="none";
+
+}
+
+});
+
+}
+
 /* NILAI */
 
 function simpanNilai(){
@@ -1059,6 +1229,28 @@ JSON.stringify(nilaiSiswa)
 alert("Nilai tersimpan");
 
 }
+
+pilihNilaiSiswa.addEventListener(
+"change",
+function(){
+
+const index=this.value;
+
+const n=nilaiSiswa[index];
+
+if(!n) return;
+
+indo.value=n.indo || "";
+mtk.value=n.mtk || "";
+ipa.value=n.ipa || "";
+ips.value=n.ips || "";
+ppkn.value=n.ppkn || "";
+agamaNilai.value=n.agama || "";
+seni.value=n.seni || "";
+pjok.value=n.pjok || "";
+
+}
+);
 
 function predikat(nilai){
 
@@ -1167,6 +1359,14 @@ pelajaran.forEach(p=>{
 
 total+=p[1];
 
+let warna="#ef4444";
+
+if(p[1]>=75){
+
+warna="#22c55e";
+
+}
+
 nilaiBody.innerHTML += `
 
 <tr>
@@ -1175,7 +1375,13 @@ nilaiBody.innerHTML += `
 <td>${p[1]}</td>
 <td>${predikat(p[1])}</td>
 <td>75</td>
-<td>${statusTuntas(p[1])}</td>
+
+<td style="
+color:${warna};
+font-weight:700;
+">
+${statusTuntas(p[1])}
+</td>
 
 </tr>
 
@@ -1196,15 +1402,15 @@ ranking+" dari "+dataSiswa.length;
 
 if(ranking===1){
 
-rJuara.innerText="Juara 1";
+rJuara.innerText="🥇 Juara 1";
 
 }else if(ranking===2){
 
-rJuara.innerText="Juara 2";
+rJuara.innerText="🥈 Juara 2";
 
 }else if(ranking===3){
 
-rJuara.innerText="Juara 3";
+rJuara.innerText="🥉 Juara 3";
 
 }else{
 
@@ -1214,7 +1420,7 @@ rJuara.innerText="-";
 
 showSection(
 'raporSection',
-document.querySelectorAll('.menu button')[3]
+document.querySelectorAll('.menu button')[4]
 );
 
 }
@@ -1239,10 +1445,12 @@ const rata=
 Math.round(total/8);
 
 let status="Belum";
+let warna="#ef4444";
 
 if(rata>=75){
 
 status="Tuntas";
+warna="#22c55e";
 
 }
 
@@ -1254,7 +1462,13 @@ rekapBody.innerHTML += `
 <td>${s.kelas}</td>
 <td>${rata}</td>
 <td>${hitungRanking(index)}</td>
-<td>${status}</td>
+
+<td style="
+color:${warna};
+font-weight:700;
+">
+${status}
+</td>
 
 </tr>
 
@@ -1397,6 +1611,64 @@ persen+"%";
 
 }
 
+/* DASHBOARD */
+
+function renderDashboard(){
+
+dashTotalSiswa.innerText =
+dataSiswa.length;
+
+let totalSemua=0;
+let jumlah=0;
+
+let terbaik="-";
+let nilaiTerbaik=0;
+
+let tuntas=0;
+
+dataSiswa.forEach((s,index)=>{
+
+const n=nilaiSiswa[index];
+
+if(!n) return;
+
+const total=
+n.indo+n.mtk+n.ipa+n.ips+
+n.ppkn+n.agama+n.seni+n.pjok;
+
+const rata=total/8;
+
+totalSemua += rata;
+
+jumlah++;
+
+if(rata>nilaiTerbaik){
+
+nilaiTerbaik=rata;
+terbaik=s.nama;
+
+}
+
+if(rata>=75){
+
+tuntas++;
+
+}
+
+});
+
+dashRata.innerText =
+Math.round(totalSemua/jumlah || 0);
+
+dashTerbaik.innerText =
+terbaik;
+
+dashTuntas.innerText =
+Math.round((tuntas/jumlah)*100 || 0)
++"%";
+
+}
+
 /* PDF */
 
 function downloadPDF(){
@@ -1422,11 +1694,105 @@ html2pdf().set(opt).from(element).save();
 
 }
 
+/* EXPORT */
+
+function exportData(){
+
+const semuaData={
+
+sekolah,
+dataSiswa,
+nilaiSiswa
+
+};
+
+const dataStr=
+JSON.stringify(semuaData);
+
+const blob=new Blob(
+[dataStr],
+{type:"application/json"}
+);
+
+const url=
+URL.createObjectURL(blob);
+
+const a=
+document.createElement("a");
+
+a.href=url;
+
+a.download="backup-erapor.json";
+
+a.click();
+
+URL.revokeObjectURL(url);
+
+}
+
+/* IMPORT */
+
+function importData(){
+
+const file=
+document.getElementById("importFile")
+.files[0];
+
+if(!file){
+
+alert("Pilih file backup");
+return;
+
+}
+
+const reader=
+new FileReader();
+
+reader.onload=function(e){
+
+const data=
+JSON.parse(e.target.result);
+
+sekolah=
+data.sekolah || {};
+
+dataSiswa=
+data.dataSiswa || [];
+
+nilaiSiswa=
+data.nilaiSiswa || [];
+
+localStorage.setItem(
+"sekolah",
+JSON.stringify(sekolah)
+);
+
+localStorage.setItem(
+"dataSiswa",
+JSON.stringify(dataSiswa)
+);
+
+localStorage.setItem(
+"nilaiSiswa",
+JSON.stringify(nilaiSiswa)
+);
+
+alert("Restore berhasil");
+
+location.reload();
+
+};
+
+reader.readAsText(file);
+
+}
+
 /* INIT */
 
 window.onload=function(){
 
 renderSiswa();
+renderDashboard();
 
 if(sekolah.namaSekolah){
 
