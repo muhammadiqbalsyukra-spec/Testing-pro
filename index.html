@@ -1,45 +1,19 @@
-<!DOCTYPE html><html lang="id">
+<!DOCTYPE html>
+<html lang="id">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>EduSmart E-Rapor SD</title><!--
-FULL SINGLE FILE
-VERSI GABUNGAN TERBARU
 
-SUDAH TERMASUK:
-- Dashboard
-- Data siswa
-- NIS/NISN
-- Nilai
-- Ranking
-- Statistik
-- Grafik
-- Backup Restore
-- Export Excel
-- Export PDF
-- Logo Sekolah
-- Rapor resmi
-- Deskripsi otomatis
-- Input nilai massal model Excel
-- Auto save realtime
-- Filter kelas
-- Enter pindah kolom
+<title>EduSmart E-Rapor SD Premium</title>
 
-CATATAN:
-Karena ukuran file sekarang sudah sangat besar,
-aku gabungkan versi stabil inti terlebih dahulu.
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
-Selanjutnya kita bisa lanjut:
-- dark mode
-- cetak massal
-- multi kelas
-- PWA
-- Firebase
-secara bertahap.
---><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script><style>
+
+<style>
+
 *{
 margin:0;
 padding:0;
@@ -50,80 +24,104 @@ font-family:'Inter',sans-serif;
 body{
 background:#0f172a;
 color:white;
+display:flex;
+min-height:100vh;
 }
 
+/* SIDEBAR */
+
 .sidebar{
+width:260px;
+background:#020617;
+padding:20px;
 position:fixed;
 left:0;
 top:0;
-width:250px;
 height:100vh;
-background:#020617;
-padding:20px;
 overflow:auto;
 }
 
-.sidebar h2{
-margin-bottom:25px;
+.logo{
+font-size:28px;
+font-weight:800;
+margin-bottom:30px;
 }
 
-.sidebar button{
+.menu button{
 width:100%;
-padding:12px;
-margin-bottom:10px;
+padding:14px;
 border:none;
 border-radius:12px;
-background:#1e293b;
+margin-bottom:12px;
+background:#111827;
 color:white;
 cursor:pointer;
+font-size:15px;
+font-weight:600;
+transition:.2s;
 }
 
-.sidebar button:hover{
+.menu button:hover{
 background:#0ea5e9;
 }
 
+/* MAIN */
+
 .main{
-margin-left:270px;
-padding:20px;
+flex:1;
+margin-left:260px;
+padding:25px;
 }
 
 .card{
 background:#111827;
 padding:20px;
-border-radius:20px;
+border-radius:22px;
 margin-bottom:20px;
 }
 
-.form-grid{
+.card-title{
+font-size:24px;
+font-weight:700;
+margin-bottom:20px;
+}
+
+.grid{
 display:grid;
 grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
 gap:12px;
-margin-top:15px;
 }
 
-input,select{
+input,select,textarea{
 padding:12px;
 border:none;
 border-radius:10px;
 background:#1e293b;
 color:white;
+width:100%;
+}
+
+textarea{
+min-height:100px;
+resize:none;
 }
 
 .save-btn{
-padding:12px 20px;
+margin-top:15px;
+padding:14px;
 border:none;
-border-radius:10px;
+border-radius:12px;
 background:#0ea5e9;
 color:white;
 font-weight:700;
 cursor:pointer;
-margin-top:15px;
+width:100%;
 }
 
 table{
 width:100%;
 border-collapse:collapse;
-margin-top:15px;
+margin-top:20px;
 }
 
 th,td{
@@ -132,9 +130,23 @@ border-bottom:1px solid rgba(255,255,255,.1);
 text-align:left;
 }
 
-.excel-input{
-width:70px;
-text-align:center;
+.action-btn{
+padding:8px 14px;
+border:none;
+border-radius:8px;
+cursor:pointer;
+font-size:13px;
+font-weight:700;
+}
+
+.print-btn{
+background:#22c55e;
+color:white;
+}
+
+.delete-btn{
+background:#ef4444;
+color:white;
 }
 
 .stat-grid{
@@ -146,146 +158,366 @@ gap:15px;
 .stat-box{
 background:#1e293b;
 padding:20px;
-border-radius:16px;
+border-radius:18px;
+}
+
+.stat-box h1{
+font-size:32px;
+margin-bottom:8px;
+}
+
+/* RAPOR */
+
+.rapor-page{
+background:white;
+color:black;
+padding:40px;
+border-radius:20px;
+margin-top:20px;
+page-break-after:always;
+}
+
+.rapor-header{
+text-align:center;
+margin-bottom:30px;
+}
+
+.rapor-header h1{
+font-size:28px;
+margin-bottom:8px;
+}
+
+.identitas{
+margin-top:20px;
+line-height:2;
+}
+
+.nilai-table{
+width:100%;
+margin-top:20px;
+border-collapse:collapse;
+}
+
+.nilai-table th,
+.nilai-table td{
+border:1px solid #ccc;
+padding:10px;
+font-size:14px;
+}
+
+.ttd-area{
+margin-top:80px;
+display:flex;
+justify-content:space-between;
+}
+
+.ttd-box{
+width:250px;
 text-align:center;
 }
 
-.rapor-box{
+.ttd-space{
+height:80px;
+}
+
+.photo-box{
+width:120px;
+height:160px;
+border:2px solid #999;
+display:flex;
+align-items:center;
+justify-content:center;
+font-size:13px;
+margin-top:30px;
+}
+
+/* PRINT */
+
+@media print{
+
+body{
 background:white;
-color:black;
-padding:30px;
-border-radius:20px;
+}
+
+.sidebar,
+.no-print{
+display:none !important;
+}
+
+.main{
+margin:0;
+padding:0;
+}
+
+.rapor-page{
+box-shadow:none;
+border-radius:0;
+margin:0;
+width:100%;
+min-height:100vh;
+}
+
 }
 
 @media(max-width:768px){
+
 .sidebar{
 position:relative;
 width:100%;
 height:auto;
 }
+
 .main{
 margin-left:0;
 }
-}
-</style></head>
-<body><div class="sidebar">
-<h2>🎓 EduSmart</h2><button onclick="showSection('dashboardSection')">🏠 Dashboard</button> <button onclick="showSection('siswaSection')">👨‍🎓 Data Siswa</button> <button onclick="showSection('nilaiSection')">📚 Nilai</button> <button onclick="showSection('excelNilaiSection')">📋 Input Nilai Massal</button> <button onclick="showSection('raporSection')">🖨 E-Rapor</button> <button onclick="showSection('backupSection')">💾 Backup</button>
 
-</div><div class="main"><div id="dashboardSection" class="section">
+body{
+display:block;
+}
+
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- SIDEBAR -->
+
+<div class="sidebar">
+
+<div class="logo">
+🎓 EduSmart
+</div>
+
+<div class="menu">
+
+<button onclick="showSection('dashboardSection')">
+🏠 Dashboard
+</button>
+
+<button onclick="showSection('siswaSection')">
+👨‍🎓 Data Siswa
+</button>
+
+<button onclick="showSection('nilaiSection')">
+📚 Input Nilai
+</button>
+
+<button onclick="showSection('raporSection')">
+🖨️ E-Rapor
+</button>
+
+</div>
+
+</div>
+
+<!-- MAIN -->
+
+<div class="main">
+
+<!-- DASHBOARD -->
+
+<div id="dashboardSection" class="section">
+
 <div class="card">
-<h2>Dashboard Sekolah</h2>
+
+<div class="card-title">
+Dashboard Sekolah
+</div>
+
 <div class="stat-grid">
+
 <div class="stat-box">
-<h1 id="dashTotal">0</h1>
+<h1 id="totalSiswa">0</h1>
 <p>Total Siswa</p>
 </div>
+
 <div class="stat-box">
-<h1 id="dashRata">0</h1>
-<p>Rata-rata</p>
+<h1 id="rataNilai">0</h1>
+<p>Rata-rata Nilai</p>
 </div>
+
 </div>
+
 </div>
-</div><div id="siswaSection" class="section" style="display:none;">
+
+</div>
+
+<!-- DATA SISWA -->
+
+<div id="siswaSection" class="section" style="display:none;">
+
 <div class="card">
-<h2>Data Siswa</h2><div class="form-grid">
-<input type="text" id="nama" placeholder="Nama">
+
+<div class="card-title">
+📋 Data Lengkap Siswa
+</div>
+
+<div class="grid">
+
+<input type="text" id="nama" placeholder="Nama Siswa">
+
 <input type="text" id="nis" placeholder="NIS">
+
 <input type="text" id="nisn" placeholder="NISN">
+
 <input type="text" id="kelas" placeholder="Kelas">
-</div><button class="save-btn" onclick="simpanSiswa()">Simpan</button>
+
+<input type="text" id="ttl" placeholder="Tempat/Tanggal Lahir">
+
+<select id="jk">
+
+<option>Laki-laki</option>
+<option>Perempuan</option>
+
+</select>
+
+<input type="text" id="agama" placeholder="Agama">
+
+<input type="text" id="alamat" placeholder="Alamat">
+
+<input type="text" id="ayah" placeholder="Nama Ayah">
+
+<input type="text" id="ibu" placeholder="Nama Ibu">
+
+</div>
+
+<button class="save-btn" onclick="simpanSiswa()">
+💾 Simpan Data
+</button>
 
 <table>
-<thead>
-<tr>
-<th>Nama</th>
-<th>Kelas</th>
-</tr>
-</thead>
-<tbody id="tableSiswa"></tbody>
-</table>
-</div>
-</div><div id="nilaiSection" class="section" style="display:none;">
-<div class="card">
-<h2>Input Nilai</h2>
-<select id="pilihSiswa"></select>
-<div class="form-grid">
-<input type="number" id="indo" placeholder="Indonesia">
-<input type="number" id="mtk" placeholder="MTK">
-<input type="number" id="ipa" placeholder="IPA">
-</div>
-<button class="save-btn" onclick="simpanNilai()">Simpan Nilai</button>
-</div>
-</div><div id="excelNilaiSection" class="section" style="display:none;">
-<div class="card">
-<h2>📋 Input Nilai Massal</h2><select id="filterKelas" onchange="renderExcelNilai()">
-<option value="">Semua Kelas</option>
-</select><table>
-<thead>
-<tr>
-<th>Nama</th>
-<th>Kelas</th>
-<th>Indo</th>
-<th>MTK</th>
-<th>IPA</th>
-</tr>
-</thead>
-<tbody id="excelBody"></tbody>
-</table>
-</div>
-</div><div id="raporSection" class="section" style="display:none;">
-<div class="card">
-<h2>E-Rapor</h2>
-<select id="raporSelect" onchange="previewRapor()"></select>
-<button class="save-btn" onclick="window.print()">Print</button>
-</div><div class="rapor-box" id="raporArea">
-<h1 style="text-align:center;">LAPORAN HASIL BELAJAR</h1>
-<hr><br>
-<p>Nama: <span id="rNama"></span></p>
-<p>Kelas: <span id="rKelas"></span></p>
-<p>NISN: <span id="rNisn"></span></p><table>
-<thead>
-<tr>
-<th>Mapel</th>
-<th>Nilai</th>
-</tr>
-</thead>
-<tbody id="raporBody"></tbody>
-</table>
-</div>
-</div><div id="backupSection" class="section" style="display:none;">
-<div class="card">
-<h2>Backup</h2>
-<button class="save-btn" onclick="exportData()">Export Backup</button>
-<button class="save-btn" onclick="exportExcel()">Export Excel</button>
-<input type="file" id="importFile">
-<button class="save-btn" onclick="importData()">Restore Backup</button>
-</div>
-</div></div><script>
 
-let dataSiswa = JSON.parse(localStorage.getItem('dataSiswa')) || [];
-let nilaiSiswa = JSON.parse(localStorage.getItem('nilaiSiswa')) || [];
+<thead>
+
+<tr>
+
+<th>Nama</th>
+<th>Kelas</th>
+<th>Aksi</th>
+
+</tr>
+
+</thead>
+
+<tbody id="tableSiswa"></tbody>
+
+</table>
+
+</div>
+
+</div>
+
+<!-- INPUT NILAI -->
+
+<div id="nilaiSection" class="section" style="display:none;">
+
+<div class="card">
+
+<div class="card-title">
+📚 Input Nilai
+</div>
+
+<select id="pilihSiswa"></select>
+
+<div class="grid" style="margin-top:15px;">
+
+<input type="number" id="indo" placeholder="Bahasa Indonesia">
+
+<input type="number" id="mtk" placeholder="Matematika">
+
+<input type="number" id="ipa" placeholder="IPA">
+
+<input type="number" id="ips" placeholder="IPS">
+
+<input type="number" id="agamaNilai" placeholder="Agama">
+
+<input type="number" id="pjok" placeholder="PJOK">
+
+</div>
+
+<button class="save-btn" onclick="simpanNilai()">
+💾 Simpan Nilai
+</button>
+
+</div>
+
+</div>
+
+<!-- RAPOR -->
+
+<div id="raporSection" class="section" style="display:none;">
+
+<div class="card no-print">
+
+<div class="card-title">
+🖨️ Cetak E-Rapor
+</div>
+
+<select id="raporSelect" onchange="renderRapor()"></select>
+
+<button class="save-btn" onclick="downloadPDF()">
+⬇️ Download PDF
+</button>
+
+</div>
+
+<div id="raporArea"></div>
+
+</div>
+
+</div>
+
+<script>
+
+/* DATA */
+
+let dataSiswa =
+JSON.parse(localStorage.getItem('dataSiswa')) || [];
+
+let nilaiSiswa =
+JSON.parse(localStorage.getItem('nilaiSiswa')) || [];
+
+/* SECTION */
 
 function showSection(id){
 
-document.querySelectorAll('.section').forEach(sec=>{
+document.querySelectorAll('.section')
+.forEach(sec=>{
+
 sec.style.display='none';
+
 });
 
-document.getElementById(id).style.display='block';
+document.getElementById(id)
+.style.display='block';
 
-if(id==='excelNilaiSection'){
-renderExcelNilai();
+if(id==='raporSection'){
+
+renderRapor();
+
 }
 
 }
+
+/* SIMPAN SISWA */
 
 function simpanSiswa(){
 
 const siswa={
+
 nama:nama.value,
 nis:nis.value,
 nisn:nisn.value,
-kelas:kelas.value
+kelas:kelas.value,
+ttl:ttl.value,
+jk:jk.value,
+agama:agama.value,
+alamat:alamat.value,
+ayah:ayah.value,
+ibu:ibu.value
+
 };
 
 dataSiswa.push(siswa);
@@ -296,251 +528,420 @@ JSON.stringify(dataSiswa)
 );
 
 renderSiswa();
-renderDashboard();
 
-alert('Siswa tersimpan');
+alert('Data siswa tersimpan');
 
 }
+
+/* RENDER SISWA */
 
 function renderSiswa(){
 
 tableSiswa.innerHTML='';
 pilihSiswa.innerHTML='';
 raporSelect.innerHTML='';
-filterKelas.innerHTML='<option value="">Semua Kelas</option>';
-
-const kelasUnik=[...new Set(dataSiswa.map(s=>s.kelas))];
-
-kelasUnik.forEach(k=>{
-filterKelas.innerHTML += `<option>${k}</option>`;
-});
 
 dataSiswa.forEach((s,index)=>{
 
 tableSiswa.innerHTML += `
+
 <tr>
+
 <td>${s.nama}</td>
 <td>${s.kelas}</td>
+
+<td>
+
+<button
+class="action-btn print-btn"
+onclick="langsungRapor(${index})">
+
+Print
+
+</button>
+
+<button
+class="action-btn delete-btn"
+onclick="hapusSiswa(${index})">
+
+Hapus
+
+</button>
+
+</td>
+
 </tr>
+
 `;
 
 pilihSiswa.innerHTML += `
-<option value="${index}">${s.nama}</option>
+<option value="${index}">
+${s.nama}
+</option>
 `;
 
 raporSelect.innerHTML += `
-<option value="${index}">${s.nama}</option>
+<option value="${index}">
+${s.nama}
+</option>
 `;
 
 });
 
+updateDashboard();
+
 }
+
+/* HAPUS */
+
+function hapusSiswa(i){
+
+if(confirm('Hapus siswa?')){
+
+dataSiswa.splice(i,1);
+nilaiSiswa.splice(i,1);
+
+localStorage.setItem(
+'dataSiswa',
+JSON.stringify(dataSiswa)
+);
+
+localStorage.setItem(
+'nilaiSiswa',
+JSON.stringify(nilaiSiswa)
+);
+
+renderSiswa();
+
+}
+
+}
+
+/* SIMPAN NILAI */
 
 function simpanNilai(){
 
 const i=pilihSiswa.value;
 
 nilaiSiswa[i]={
+
 indo:Number(indo.value||0),
 mtk:Number(mtk.value||0),
-ipa:Number(ipa.value||0)
+ipa:Number(ipa.value||0),
+ips:Number(ips.value||0),
+agama:Number(agamaNilai.value||0),
+pjok:Number(pjok.value||0)
+
 };
 
 localStorage.setItem(
 'nilaiSiswa',
 JSON.stringify(nilaiSiswa)
 );
-
-renderDashboard();
 
 alert('Nilai tersimpan');
 
-}
-
-function renderExcelNilai(){
-
-excelBody.innerHTML='';
-
-const filter=filterKelas.value;
-
-dataSiswa.forEach((s,index)=>{
-
-if(filter && s.kelas!==filter){
-return;
-}
-
-const n=nilaiSiswa[index] || {};
-
-excelBody.innerHTML += `
-<tr>
-<td>${s.nama}</td>
-<td>${s.kelas}</td>
-
-<td>
-<input type="number" class="excel-input"
-value="${n.indo||''}"
-oninput="updateNilai(${index},'indo',this.value)">
-</td>
-
-<td>
-<input type="number" class="excel-input"
-value="${n.mtk||''}"
-oninput="updateNilai(${index},'mtk',this.value)">
-</td>
-
-<td>
-<input type="number" class="excel-input"
-value="${n.ipa||''}"
-oninput="updateNilai(${index},'ipa',this.value)">
-</td>
-
-</tr>
-`;
-
-});
+updateDashboard();
 
 }
 
-function updateNilai(index,mapel,value){
+/* DASHBOARD */
 
-if(!nilaiSiswa[index]){
-nilaiSiswa[index]={};
-}
+function updateDashboard(){
 
-let nilai=Number(value);
-
-if(nilai>100) nilai=100;
-if(nilai<0) nilai=0;
-
-nilaiSiswa[index][mapel]=nilai;
-
-localStorage.setItem(
-'nilaiSiswa',
-JSON.stringify(nilaiSiswa)
-);
-
-renderDashboard();
-
-}
-
-function previewRapor(){
-
-const i=raporSelect.value;
-
-const s=dataSiswa[i];
-const n=nilaiSiswa[i] || {};
-
-rNama.innerText=s.nama;
-rKelas.innerText=s.kelas;
-rNisn.innerText=s.nisn;
-
-raporBody.innerHTML=`
-<tr><td>Indonesia</td><td>${n.indo||0}</td></tr>
-<tr><td>MTK</td><td>${n.mtk||0}</td></tr>
-<tr><td>IPA</td><td>${n.ipa||0}</td></tr>
-`;
-
-}
-
-function renderDashboard(){
-
-dashTotal.innerText=dataSiswa.length;
+totalSiswa.innerText=
+dataSiswa.length;
 
 let total=0;
-let jumlah=0;
+let count=0;
 
 nilaiSiswa.forEach(n=>{
+
 if(!n) return;
 
 total += (
+n.indo+
+n.mtk+
+n.ipa+
+n.ips+
+n.agama+
+n.pjok
+)/6;
+
+count++;
+
+});
+
+rataNilai.innerText=
+Math.round(total/count || 0);
+
+}
+
+/* RAPOR */
+
+function renderRapor(){
+
+const i=raporSelect.value || 0;
+
+const s=dataSiswa[i];
+
+if(!s) return;
+
+const n=nilaiSiswa[i] || {};
+
+const rata = Math.round(
+
+(
 (n.indo||0)+
 (n.mtk||0)+
-(n.ipa||0)
-)/3;
+(n.ipa||0)+
+(n.ips||0)+
+(n.agama||0)+
+(n.pjok||0)
 
-jumlah++;
-});
+)/6
 
-dashRata.innerText=
-Math.round(total/jumlah||0);
-
-}
-
-function exportData(){
-
-const data={
-dataSiswa,
-nilaiSiswa
-};
-
-const blob=new Blob(
-[JSON.stringify(data)],
-{type:'application/json'}
 );
 
-const a=document.createElement('a');
-a.href=URL.createObjectURL(blob);
-a.download='backup-erapor.json';
-a.click();
+raporArea.innerHTML=`
+
+<div class="rapor-page">
+
+<div class="rapor-header">
+
+<h1>RAPOR PESERTA DIDIK</h1>
+
+<p>
+SEKOLAH DASAR
+</p>
+
+</div>
+
+<div class="identitas">
+
+<p>
+<b>Nama:</b> ${s.nama}
+</p>
+
+<p>
+<b>NIS:</b> ${s.nis}
+</p>
+
+<p>
+<b>NISN:</b> ${s.nisn}
+</p>
+
+<p>
+<b>Kelas:</b> ${s.kelas}
+</p>
+
+<p>
+<b>TTL:</b> ${s.ttl}
+</p>
+
+<p>
+<b>Jenis Kelamin:</b> ${s.jk}
+</p>
+
+<p>
+<b>Agama:</b> ${s.agama}
+</p>
+
+<p>
+<b>Alamat:</b> ${s.alamat}
+</p>
+
+<p>
+<b>Nama Ayah:</b> ${s.ayah}
+</p>
+
+<p>
+<b>Nama Ibu:</b> ${s.ibu}
+</p>
+
+</div>
+
+<table class="nilai-table">
+
+<thead>
+
+<tr>
+
+<th>No</th>
+<th>Mata Pelajaran</th>
+<th>Nilai</th>
+<th>Predikat</th>
+<th>Deskripsi</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+
+${buatBaris(
+1,
+'Bahasa Indonesia',
+n.indo
+)}
+
+${buatBaris(
+2,
+'Matematika',
+n.mtk
+)}
+
+${buatBaris(
+3,
+'IPA',
+n.ipa
+)}
+
+${buatBaris(
+4,
+'IPS',
+n.ips
+)}
+
+${buatBaris(
+5,
+'Agama',
+n.agama
+)}
+
+${buatBaris(
+6,
+'PJOK',
+n.pjok
+)}
+
+</tbody>
+
+</table>
+
+<div style="margin-top:25px;">
+
+<b>Rata-rata:</b>
+${rata}
+
+</div>
+
+<div class="ttd-area">
+
+<div>
+
+<div class="photo-box">
+
+Tempel Foto
+
+</div>
+
+</div>
+
+<div class="ttd-box">
+
+<p>Kepala Sekolah</p>
+
+<div class="ttd-space"></div>
+
+<b>Suryawati Effa S.Pd</b>
+
+<br>
+
+NIP 19580818 198411 2001
+
+</div>
+
+</div>
+
+</div>
+
+`;
 
 }
 
-function importData(){
+/* BARIS NILAI */
 
-const file=importFile.files[0];
-if(!file) return;
+function buatBaris(
+no,
+mapel,
+nilai
+){
 
-const reader=new FileReader();
+nilai = nilai || 0;
 
-reader.onload=function(e){
+let predikat='D';
+let desk='Perlu bimbingan';
 
-const data=JSON.parse(e.target.result);
+if(nilai>=90){
 
-dataSiswa=data.dataSiswa || [];
-nilaiSiswa=data.nilaiSiswa || [];
-
-localStorage.setItem('dataSiswa',JSON.stringify(dataSiswa));
-localStorage.setItem('nilaiSiswa',JSON.stringify(nilaiSiswa));
-
-location.reload();
-
-};
-
-reader.readAsText(file);
+predikat='A';
+desk='Sangat baik';
 
 }
 
-function exportExcel(){
+else if(nilai>=80){
 
-const excel=[];
-
-dataSiswa.forEach((s,index)=>{
-
-const n=nilaiSiswa[index] || {};
-
-excel.push({
-Nama:s.nama,
-Kelas:s.kelas,
-Indonesia:n.indo||0,
-MTK:n.mtk||0,
-IPA:n.ipa||0
-});
-
-});
-
-const ws=XLSX.utils.json_to_sheet(excel);
-const wb=XLSX.utils.book_new();
-
-XLSX.utils.book_append_sheet(wb,ws,'Nilai');
-
-XLSX.writeFile(wb,'rekap-nilai.xlsx');
+predikat='B';
+desk='Baik';
 
 }
 
-window.onload=function(){
+else if(nilai>=70){
+
+predikat='C';
+desk='Cukup';
+
+}
+
+return `
+
+<tr>
+
+<td>${no}</td>
+
+<td>${mapel}</td>
+
+<td>${nilai}</td>
+
+<td>${predikat}</td>
+
+<td>${desk}</td>
+
+</tr>
+
+`;
+
+}
+
+/* PRINT LANGSUNG */
+
+function langsungRapor(i){
+
+showSection('raporSection');
+
+raporSelect.value=i;
+
+renderRapor();
+
+}
+
+/* PDF */
+
+function downloadPDF(){
+
+const el=
+document.getElementById('raporArea');
+
+html2pdf().from(el).save();
+
+}
+
+/* START */
+
 renderSiswa();
-renderDashboard();
-};
 
-</script></body>
+</script>
+
+</body>
 </html>
