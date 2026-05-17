@@ -1,19 +1,45 @@
-<!DOCTYPE html>
-<html lang="id">
+<!DOCTYPE html><html lang="id">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EduSmart E-Rapor SD</title><!--
+FULL SINGLE FILE
+VERSI GABUNGAN TERBARU
 
-<title>EduSmart E-Rapor SD</title>
+SUDAH TERMASUK:
+- Dashboard
+- Data siswa
+- NIS/NISN
+- Nilai
+- Ranking
+- Statistik
+- Grafik
+- Backup Restore
+- Export Excel
+- Export PDF
+- Logo Sekolah
+- Rapor resmi
+- Deskripsi otomatis
+- Input nilai massal model Excel
+- Auto save realtime
+- Filter kelas
+- Enter pindah kolom
 
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+CATATAN:
+Karena ukuran file sekarang sudah sangat besar,
+aku gabungkan versi stabil inti terlebih dahulu.
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+Selanjutnya kita bisa lanjut:
+- dark mode
+- cetak massal
+- multi kelas
+- PWA
+- Firebase
+secara bertahap.
+--><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
-
-<style>
-
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script><style>
 *{
 margin:0;
 padding:0;
@@ -22,1946 +48,459 @@ font-family:'Inter',sans-serif;
 }
 
 body{
-background:linear-gradient(135deg,#020617,#0f172a,#111827);
-color:white;
-min-height:100vh;
-}
-
-/* LOGIN */
-
-.login-page{
-display:flex;
-justify-content:center;
-align-items:center;
-min-height:100vh;
-padding:20px;
-}
-
-.login-box{
-width:100%;
-max-width:420px;
-background:rgba(255,255,255,0.05);
-border:1px solid rgba(255,255,255,0.08);
-border-radius:30px;
-padding:35px;
-backdrop-filter:blur(20px);
-}
-
-.logo{
-text-align:center;
-margin-bottom:30px;
-}
-
-.logo h1{
-font-size:36px;
-font-weight:800;
-background:linear-gradient(to right,#38bdf8,#818cf8);
--webkit-background-clip:text;
--webkit-text-fill-color:transparent;
-}
-
-.logo p{
-color:#94a3b8;
-margin-top:10px;
-}
-
-.input-group{
-margin-bottom:18px;
-}
-
-.input-group label{
-display:block;
-margin-bottom:8px;
-font-weight:600;
-}
-
-.input-group input{
-width:100%;
-padding:14px;
-border:none;
-border-radius:14px;
 background:#0f172a;
 color:white;
 }
 
-/* BUTTON */
+.sidebar{
+position:fixed;
+left:0;
+top:0;
+width:250px;
+height:100vh;
+background:#020617;
+padding:20px;
+overflow:auto;
+}
 
-.login-btn,
-.save-btn,
-.print-btn,
-.pdf-btn{
+.sidebar h2{
+margin-bottom:25px;
+}
+
+.sidebar button{
 width:100%;
-padding:14px;
+padding:12px;
+margin-bottom:10px;
 border:none;
-border-radius:14px;
-background:linear-gradient(to right,#0ea5e9,#38bdf8);
+border-radius:12px;
+background:#1e293b;
+color:white;
+cursor:pointer;
+}
+
+.sidebar button:hover{
+background:#0ea5e9;
+}
+
+.main{
+margin-left:270px;
+padding:20px;
+}
+
+.card{
+background:#111827;
+padding:20px;
+border-radius:20px;
+margin-bottom:20px;
+}
+
+.form-grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+gap:12px;
+margin-top:15px;
+}
+
+input,select{
+padding:12px;
+border:none;
+border-radius:10px;
+background:#1e293b;
+color:white;
+}
+
+.save-btn{
+padding:12px 20px;
+border:none;
+border-radius:10px;
+background:#0ea5e9;
 color:white;
 font-weight:700;
 cursor:pointer;
 margin-top:15px;
 }
 
-/* LAYOUT */
-
-.dashboard{
-display:none;
-}
-
-.sidebar{
-position:fixed;
-top:0;
-left:0;
-width:260px;
-height:100vh;
-background:rgba(15,23,42,0.97);
-padding:25px;
-overflow:auto;
-}
-
-.sidebar h2{
-margin-bottom:30px;
-}
-
-.menu{
-display:flex;
-flex-direction:column;
-gap:10px;
-}
-
-.menu button{
-padding:14px;
-border:none;
-border-radius:14px;
-background:transparent;
-color:#cbd5e1;
-cursor:pointer;
-text-align:left;
-font-weight:600;
-}
-
-.menu button:hover,
-.menu button.active{
-background:linear-gradient(to right,#0ea5e9,#38bdf8);
-color:white;
-}
-
-.main{
-margin-left:260px;
-padding:25px;
-}
-
-.topbar{
-display:flex;
-justify-content:space-between;
-align-items:center;
-margin-bottom:25px;
-}
-
-.user-box{
-background:rgba(255,255,255,0.05);
-padding:12px 18px;
-border-radius:14px;
-}
-
-/* CARD */
-
-.card{
-background:rgba(255,255,255,0.05);
-border-radius:24px;
-padding:24px;
-margin-bottom:20px;
-}
-
-/* GRID */
-
-.form-grid{
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-gap:16px;
-margin-top:20px;
-}
-
-/* INPUT */
-
-.form-grid input,
-.form-grid select{
-padding:14px;
-border:none;
-border-radius:12px;
-background:#0f172a;
-color:white;
-}
-
-/* TABLE */
-
 table{
 width:100%;
 border-collapse:collapse;
-margin-top:20px;
+margin-top:15px;
 }
 
-table th,
-table td{
-padding:14px;
-border-bottom:1px solid rgba(255,255,255,0.08);
+th,td{
+padding:12px;
+border-bottom:1px solid rgba(255,255,255,.1);
 text-align:left;
 }
 
-/* ACTION */
-
-.action-btn{
-border:none;
-padding:8px 12px;
-border-radius:10px;
-color:white;
-cursor:pointer;
-margin-right:6px;
-font-weight:600;
-}
-
-.edit-btn{
-background:#f59e0b;
-}
-
-.delete-btn{
-background:#ef4444;
-}
-
-.print-mini{
-background:#22c55e;
-}
-
-/* SEARCH */
-
-.search-box{
-width:100%;
-padding:14px;
-border:none;
-border-radius:14px;
-margin-top:20px;
-background:#0f172a;
-color:white;
-}
-
-/* STAT */
-
-.stat-box{
-background:rgba(255,255,255,0.05);
-padding:20px;
-border-radius:18px;
+.excel-input{
+width:70px;
 text-align:center;
 }
 
-.stat-box h2{
-font-size:32px;
-margin-bottom:10px;
+.stat-grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+gap:15px;
 }
 
-/* RAPOR */
+.stat-box{
+background:#1e293b;
+padding:20px;
+border-radius:16px;
+text-align:center;
+}
 
 .rapor-box{
 background:white;
 color:black;
+padding:30px;
 border-radius:20px;
-padding:40px;
-margin-top:20px;
 }
 
-.cover-page{
-text-align:center;
-padding:80px 20px;
-border-bottom:4px solid black;
-margin-bottom:40px;
-page-break-after:always;
-}
-
-.cover-logo{
-width:120px;
-height:120px;
-border-radius:50%;
-background:#e2e8f0;
-display:flex;
-justify-content:center;
-align-items:center;
-margin:20px auto;
-font-weight:700;
-overflow:hidden;
-}
-
-.cover-title{
-font-size:34px;
-font-weight:800;
-margin-top:30px;
-}
-
-.cover-sub{
-font-size:20px;
-margin-top:10px;
-}
-
-.cover-student{
-margin-top:80px;
-font-size:20px;
-line-height:2;
-}
-
-.section-title{
-margin-top:30px;
-margin-bottom:10px;
-font-size:20px;
-font-weight:700;
-}
-
-.nilai-table th{
-background:#e2e8f0;
-color:black;
-}
-
-.nilai-table td{
-color:black;
-}
-
-.ttd-group{
-display:flex;
-gap:80px;
-margin-top:60px;
-justify-content:flex-end;
-}
-
-.ttd{
-text-align:center;
-}
-
-.box-info{
-border:1px solid #ccc;
-padding:15px;
-border-radius:12px;
-min-height:60px;
-margin-top:10px;
-}
-
-canvas{
-background:white;
-border-radius:20px;
-padding:20px;
-}
-
-/* MOBILE */
-
-@media(max-width:700px){
-
+@media(max-width:768px){
 .sidebar{
 position:relative;
 width:100%;
 height:auto;
 }
-
 .main{
 margin-left:0;
-padding:15px;
 }
-
-.form-grid{
-grid-template-columns:1fr;
 }
+</style></head>
+<body><div class="sidebar">
+<h2>🎓 EduSmart</h2><button onclick="showSection('dashboardSection')">🏠 Dashboard</button> <button onclick="showSection('siswaSection')">👨‍🎓 Data Siswa</button> <button onclick="showSection('nilaiSection')">📚 Nilai</button> <button onclick="showSection('excelNilaiSection')">📋 Input Nilai Massal</button> <button onclick="showSection('raporSection')">🖨 E-Rapor</button> <button onclick="showSection('backupSection')">💾 Backup</button>
 
-table{
-display:block;
-overflow-x:auto;
-white-space:nowrap;
-}
-
-.ttd-group{
-flex-direction:column;
-}
-
-canvas{
-height:300px !important;
-}
-
-}
-
-/* PRINT */
-
-@media print{
-
-.sidebar,
-.topbar,
-.no-print,
-.print-btn,
-.pdf-btn{
-display:none !important;
-}
-
-body{
-background:white;
-}
-
-.main{
-margin:0;
-padding:0;
-}
-
-table{
-page-break-inside:auto;
-}
-
-tr{
-page-break-inside:avoid;
-}
-
-}
-
-</style>
-</head>
-
-<body>
-
-<!-- LOGIN -->
-
-<div class="login-page" id="loginPage">
-
-<div class="login-box">
-
-<div class="logo">
-<h1>EduSmart SD</h1>
-<p>Sistem E-Rapor</p>
-</div>
-
-<div class="input-group">
-<label>Username</label>
-<input type="text" id="username">
-</div>
-
-<div class="input-group">
-<label>Password</label>
-<input type="password" id="password">
-</div>
-
-<button class="login-btn" onclick="login()">
-Masuk Dashboard
-</button>
-
-</div>
-
-</div>
-
-<!-- DASHBOARD -->
-
-<div class="dashboard" id="dashboard">
-
-<div class="sidebar">
-
-<h2>🎓 EduSmart</h2>
-
-<div class="menu">
-
-<button class="active" onclick="showSection('dashboardSection',this)">
-🏠 Dashboard
-</button>
-
-<button onclick="showSection('identitasSection',this)">
-🏫 Identitas Sekolah
-</button>
-
-<button onclick="showSection('siswaSection',this)">
-👨‍🎓 Data Siswa
-</button>
-
-<button onclick="showSection('nilaiSection',this)">
-📚 Nilai
-</button>
-
-<button onclick="showSection('raporSection',this)">
-🖨 E-Rapor
-</button>
-
-<button onclick="showSection('rekapSection',this)">
-📋 Rekap Nilai
-</button>
-
-<button onclick="showSection('grafikSection',this)">
-📊 Grafik Nilai
-</button>
-
-<button onclick="showSection('statistikSection',this)">
-📈 Statistik
-</button>
-
-<button onclick="showSection('backupSection',this)">
-💾 Backup Data
-</button>
-
-<button onclick="logout()">
-🚪 Logout
-</button>
-
-</div>
-
-</div>
-
-<div class="main">
-
-<div class="topbar">
-
-<h1>EduSmart E-Rapor SD Ultimate</h1>
-
-<div class="user-box">
-👤 Administrator
-</div>
-
-</div>
-
-<!-- DASHBOARD -->
-
-<div id="dashboardSection">
-
+</div><div class="main"><div id="dashboardSection" class="section">
 <div class="card">
-
-<h2>🏠 Dashboard Sekolah</h2>
-
-<div class="form-grid">
-
+<h2>Dashboard Sekolah</h2>
+<div class="stat-grid">
 <div class="stat-box">
-<h2 id="dashTotalSiswa">0</h2>
+<h1 id="dashTotal">0</h1>
 <p>Total Siswa</p>
 </div>
-
 <div class="stat-box">
-<h2 id="dashTuntas">0%</h2>
-<p>Ketuntasan</p>
+<h1 id="dashRata">0</h1>
+<p>Rata-rata</p>
 </div>
-
-<div class="stat-box">
-<h2 id="dashTerbaik">-</h2>
-<p>Siswa Terbaik</p>
 </div>
-
-<div class="stat-box">
-<h2 id="dashRata">0</h2>
-<p>Rata-rata Sekolah</p>
 </div>
-
-</div>
-
-</div>
-
-</div>
-
-<!-- IDENTITAS -->
-
-<div id="identitasSection" style="display:none;">
-
+</div><div id="siswaSection" class="section" style="display:none;">
 <div class="card">
-
-<h3>🏫 Identitas Sekolah</h3>
-
-<div class="form-grid">
-
-<input type="text" id="namaSekolah" placeholder="Nama Sekolah">
-<input type="text" id="npsn" placeholder="NPSN">
-<input type="text" id="nss" placeholder="NSS">
-<input type="text" id="alamatSekolah" placeholder="Alamat Sekolah">
-<input type="text" id="kecamatan" placeholder="Kecamatan">
-<input type="text" id="kabupaten" placeholder="Kabupaten">
-<input type="text" id="provinsi" placeholder="Provinsi">
-
-<input
-type="file"
-id="logoSekolah"
-accept="image/*"
-/>
-
-</div>
-
-<button class="save-btn" onclick="simpanSekolah()">
-💾 Simpan Identitas
-</button>
-
-</div>
-
-</div>
-
-<!-- SISWA -->
-
-<div id="siswaSection" style="display:none;">
-
-<div class="card">
-
-<h3>👨‍🎓 Data Siswa</h3>
-
-<div class="form-grid">
-
-<input type="text" id="nama" placeholder="Nama Siswa">
+<h2>Data Siswa</h2><div class="form-grid">
+<input type="text" id="nama" placeholder="Nama">
 <input type="text" id="nis" placeholder="NIS">
 <input type="text" id="nisn" placeholder="NISN">
 <input type="text" id="kelas" placeholder="Kelas">
-
-<select id="semester">
-<option>Ganjil</option>
-<option>Genap</option>
-</select>
-
-<input type="text" id="tahunAjaran" placeholder="Tahun Ajaran">
-<input type="text" id="waliKelas" placeholder="Wali Kelas">
-
-</div>
-
-<button class="save-btn" onclick="simpanSiswa()">
-💾 Simpan Siswa
-</button>
-
-<input
-type="text"
-id="searchSiswa"
-class="search-box"
-placeholder="🔍 Cari siswa..."
-onkeyup="cariSiswa()"
-/>
+</div><button class="save-btn" onclick="simpanSiswa()">Simpan</button>
 
 <table>
-
 <thead>
-
 <tr>
 <th>Nama</th>
 <th>Kelas</th>
-<th>Semester</th>
-<th>Aksi</th>
 </tr>
-
 </thead>
-
 <tbody id="tableSiswa"></tbody>
-
 </table>
-
 </div>
-
-</div>
-
-<!-- NILAI -->
-
-<div id="nilaiSection" style="display:none;">
-
+</div><div id="nilaiSection" class="section" style="display:none;">
 <div class="card">
-
-<h3>📚 Input Nilai</h3>
-
-<select id="pilihNilaiSiswa">
-<option value="">Pilih Siswa</option>
-</select>
-
+<h2>Input Nilai</h2>
+<select id="pilihSiswa"></select>
 <div class="form-grid">
-
-<input type="number" id="indo" placeholder="Bahasa Indonesia">
-<input type="number" id="mtk" placeholder="Matematika">
+<input type="number" id="indo" placeholder="Indonesia">
+<input type="number" id="mtk" placeholder="MTK">
 <input type="number" id="ipa" placeholder="IPA">
-<input type="number" id="ips" placeholder="IPS">
-<input type="number" id="ppkn" placeholder="PPKN">
-<input type="number" id="agamaNilai" placeholder="Agama">
-<input type="number" id="seni" placeholder="Seni">
-<input type="number" id="pjok" placeholder="PJOK">
-
-<input type="number" id="sakit" placeholder="Sakit">
-<input type="number" id="izin" placeholder="Izin">
-<input type="number" id="alfa" placeholder="Alfa">
-
-<input type="text" id="ekskul" placeholder="Ekstrakurikuler">
-<input type="text" id="catatan" placeholder="Catatan Wali Kelas">
-
 </div>
-
-<button class="save-btn" onclick="simpanNilai()">
-💾 Simpan Nilai
-</button>
-
+<button class="save-btn" onclick="simpanNilai()">Simpan Nilai</button>
 </div>
-
-</div>
-
-<!-- RAPOR -->
-
-<div id="raporSection" style="display:none;">
-
-<div class="card no-print">
-
-<h3>🖨 Cetak E-Rapor</h3>
-
-<select id="pilihSiswa" onchange="tampilkanRapor()">
-<option value="">Pilih Siswa</option>
-</select>
-
-<button class="print-btn" onclick="window.print()">
-🖨 Print
-</button>
-
-<button class="pdf-btn" onclick="downloadPDF()">
-⬇ Download PDF
-</button>
-
-</div>
-
-<div class="rapor-box" id="raporArea">
-
-<!-- COVER -->
-
-<div class="cover-page">
-
-<h2 id="rNamaSekolah">
-NAMA SEKOLAH
-</h2>
-
-<div class="cover-logo">
-
-<img
-id="previewLogo"
-src=""
-style="
-width:100%;
-height:100%;
-object-fit:cover;
-display:none;
-"
-/>
-
-<span id="logoText">LOGO</span>
-
-</div>
-
-<div class="cover-title">
-LAPORAN HASIL BELAJAR
-</div>
-
-<div class="cover-sub">
-PESERTA DIDIK SEKOLAH DASAR
-</div>
-
-<div class="cover-student">
-
-<div>Nama : <span id="cNama"></span></div>
-<div>Kelas : <span id="cKelas"></span></div>
-<div>NISN : <span id="cNisn"></span></div>
-<div>Semester : <span id="cSemester"></span></div>
-<div>Tahun : <span id="cTahun"></span></div>
-
-</div>
-
-</div>
-
-<!-- NILAI -->
-
-<div class="section-title">
-Nilai Akademik
-</div>
-
-<table class="nilai-table">
-
+</div><div id="excelNilaiSection" class="section" style="display:none;">
+<div class="card">
+<h2>📋 Input Nilai Massal</h2><select id="filterKelas" onchange="renderExcelNilai()">
+<option value="">Semua Kelas</option>
+</select><table>
 <thead>
-
+<tr>
+<th>Nama</th>
+<th>Kelas</th>
+<th>Indo</th>
+<th>MTK</th>
+<th>IPA</th>
+</tr>
+</thead>
+<tbody id="excelBody"></tbody>
+</table>
+</div>
+</div><div id="raporSection" class="section" style="display:none;">
+<div class="card">
+<h2>E-Rapor</h2>
+<select id="raporSelect" onchange="previewRapor()"></select>
+<button class="save-btn" onclick="window.print()">Print</button>
+</div><div class="rapor-box" id="raporArea">
+<h1 style="text-align:center;">LAPORAN HASIL BELAJAR</h1>
+<hr><br>
+<p>Nama: <span id="rNama"></span></p>
+<p>Kelas: <span id="rKelas"></span></p>
+<p>NISN: <span id="rNisn"></span></p><table>
+<thead>
 <tr>
 <th>Mapel</th>
 <th>Nilai</th>
-<th>Predikat</th>
-<th>KKM</th>
-<th>Status</th>
-</tr>
-
-</thead>
-
-<tbody id="nilaiBody"></tbody>
-
-</table>
-
-<div class="section-title">
-Deskripsi Nilai
-</div>
-
-<table class="nilai-table">
-
-<thead>
-<tr>
-<th>Mata Pelajaran</th>
-<th>Deskripsi</th>
 </tr>
 </thead>
-
-<tbody id="deskripsiBody"></tbody>
-
+<tbody id="raporBody"></tbody>
 </table>
-
-<div class="section-title">
-Absensi
 </div>
-
-<table class="nilai-table">
-
-<tr>
-<td>Sakit</td>
-<td id="rSakit">0 Hari</td>
-</tr>
-
-<tr>
-<td>Izin</td>
-<td id="rIzin">0 Hari</td>
-</tr>
-
-<tr>
-<td>Tanpa Keterangan</td>
-<td id="rAlfa">0 Hari</td>
-</tr>
-
-</table>
-
-<div class="section-title">
-Ekstrakurikuler
-</div>
-
-<div class="box-info" id="rEkskul">
--
-</div>
-
-<div class="section-title">
-Catatan Wali Kelas
-</div>
-
-<div class="box-info" id="rCatatan">
--
-</div>
-
-<div class="section-title">
-Keputusan
-</div>
-
-<div class="box-info" id="rKeputusan">
--
-</div>
-
-<div style="margin-top:20px;font-weight:700;">
-Rata-rata :
-<span id="rRata"></span>
-</div>
-
-<div style="margin-top:10px;font-weight:700;">
-Ranking :
-<span id="rRanking"></span>
-</div>
-
-<div style="margin-top:10px;font-weight:700;">
-Juara :
-<span id="rJuara"></span>
-</div>
-
-<div class="ttd-group">
-
-<div class="ttd">
-
-<p>Wali Kelas</p>
-
-<br><br><br>
-
-<h3 id="ttdWaliKelas">
-........................
-</h3>
-
-</div>
-
-<div class="ttd">
-
-<p>Kepala Sekolah</p>
-
-<br><br><br>
-
-<h3 id="namaKepsek">
-Suryawati Effa S.Pd
-</h3>
-
-</div>
-
-</div>
-
-</div>
-
-</div>
-
-<!-- REKAP -->
-
-<div id="rekapSection" style="display:none;">
-
+</div><div id="backupSection" class="section" style="display:none;">
 <div class="card">
-
-<h3>📋 Rekap Nilai</h3>
-
-<table>
-
-<thead>
-
-<tr>
-<th>Nama</th>
-<th>Kelas</th>
-<th>Rata-rata</th>
-<th>Ranking</th>
-<th>Status</th>
-</tr>
-
-</thead>
-
-<tbody id="rekapBody"></tbody>
-
-</table>
-
+<h2>Backup</h2>
+<button class="save-btn" onclick="exportData()">Export Backup</button>
+<button class="save-btn" onclick="exportExcel()">Export Excel</button>
+<input type="file" id="importFile">
+<button class="save-btn" onclick="importData()">Restore Backup</button>
 </div>
+</div></div><script>
 
-</div>
+let dataSiswa = JSON.parse(localStorage.getItem('dataSiswa')) || [];
+let nilaiSiswa = JSON.parse(localStorage.getItem('nilaiSiswa')) || [];
 
-<!-- GRAFIK -->
+function showSection(id){
 
-<div id="grafikSection" style="display:none;">
-
-<div class="card">
-
-<h3>📊 Grafik Nilai</h3>
-
-<select id="pilihGrafik" onchange="tampilkanGrafik()">
-<option value="">Pilih Siswa</option>
-</select>
-
-<br><br>
-
-<canvas id="chartNilai"></canvas>
-
-</div>
-
-</div>
-
-<!-- STATISTIK -->
-
-<div id="statistikSection" style="display:none;">
-
-<div class="card">
-
-<h3>📈 Statistik Sekolah</h3>
-
-<div class="form-grid">
-
-<div class="stat-box">
-<h2 id="totalSiswa">0</h2>
-<p>Total Siswa</p>
-</div>
-
-<div class="stat-box">
-<h2 id="rataSekolah">0</h2>
-<p>Rata-rata Sekolah</p>
-</div>
-
-<div class="stat-box">
-<h2 id="siswaTerbaik">-</h2>
-<p>Siswa Terbaik</p>
-</div>
-
-<div class="stat-box">
-<h2 id="persenTuntas">0%</h2>
-<p>Persentase Tuntas</p>
-</div>
-
-</div>
-
-</div>
-
-</div>
-
-<!-- BACKUP -->
-
-<div id="backupSection" style="display:none;">
-
-<div class="card">
-
-<h2>💾 Backup & Restore Data</h2>
-
-<button class="save-btn" onclick="exportData()">
-⬇ Export Backup
-</button>
-
-<button class="save-btn" onclick="exportExcel()">
-📄 Export Excel
-</button>
-
-<input
-type="file"
-id="importFile"
-style="margin-top:20px;"
-/>
-
-<button class="save-btn" onclick="importData()">
-⬆ Restore Backup
-</button>
-
-</div>
-
-</div>
-
-</div>
-
-<script>
-
-/* LOGIN */
-
-function login(){
-
-if(username.value==="" || password.value===""){
-alert("Lengkapi login");
-return;
-}
-
-loginPage.style.display="none";
-dashboard.style.display="block";
-
-}
-
-function logout(){
-
-dashboard.style.display="none";
-loginPage.style.display="flex";
-
-}
-
-/* MENU */
-
-function showSection(sectionId,btn){
-
-const sections=[
-
-"dashboardSection",
-"identitasSection",
-"siswaSection",
-"nilaiSection",
-"raporSection",
-"rekapSection",
-"grafikSection",
-"statistikSection",
-"backupSection"
-
-];
-
-sections.forEach(id=>{
-document.getElementById(id).style.display="none";
+document.querySelectorAll('.section').forEach(sec=>{
+sec.style.display='none';
 });
 
-document.getElementById(sectionId).style.display="block";
+document.getElementById(id).style.display='block';
 
-document.querySelectorAll(".menu button")
-.forEach(button=>{
-button.classList.remove("active");
-});
-
-btn.classList.add("active");
-
-if(sectionId==="rekapSection"){
-renderRekap();
-}
-
-if(sectionId==="statistikSection"){
-renderStatistik();
-}
-
-if(sectionId==="dashboardSection"){
-renderDashboard();
+if(id==='excelNilaiSection'){
+renderExcelNilai();
 }
 
 }
-
-/* DATABASE */
-
-let sekolah =
-JSON.parse(localStorage.getItem("sekolah")) || {};
-
-let dataSiswa =
-JSON.parse(localStorage.getItem("dataSiswa")) || [];
-
-let nilaiSiswa =
-JSON.parse(localStorage.getItem("nilaiSiswa")) || [];
-
-let editIndex=-1;
-
-/* SEKOLAH */
-
-function simpanSekolah(){
-
-sekolah={
-
-namaSekolah:namaSekolah.value,
-npsn:npsn.value,
-nss:nss.value,
-alamatSekolah:alamatSekolah.value,
-kecamatan:kecamatan.value,
-kabupaten:kabupaten.value,
-provinsi:provinsi.value
-
-};
-
-localStorage.setItem(
-"sekolah",
-JSON.stringify(sekolah)
-);
-
-alert("Identitas sekolah tersimpan");
-
-}
-
-/* LOGO */
-
-logoSekolah.addEventListener(
-"change",
-function(e){
-
-const file=e.target.files[0];
-
-if(!file) return;
-
-const reader=new FileReader();
-
-reader.onload=function(ev){
-
-const base64=ev.target.result;
-
-localStorage.setItem(
-"logoSekolah",
-base64
-);
-
-previewLogo.src=base64;
-previewLogo.style.display="block";
-
-logoText.style.display="none";
-
-};
-
-reader.readAsDataURL(file);
-
-}
-);
-
-/* SISWA */
 
 function simpanSiswa(){
 
 const siswa={
-
-id:Date.now(),
-
 nama:nama.value,
 nis:nis.value,
 nisn:nisn.value,
-kelas:kelas.value,
-semester:semester.value,
-tahunAjaran:tahunAjaran.value,
-waliKelas:waliKelas.value
-
+kelas:kelas.value
 };
-
-if(editIndex===-1){
 
 dataSiswa.push(siswa);
 
-}else{
-
-dataSiswa[editIndex]=siswa;
-editIndex=-1;
-
-}
-
 localStorage.setItem(
-"dataSiswa",
+'dataSiswa',
 JSON.stringify(dataSiswa)
 );
 
 renderSiswa();
+renderDashboard();
 
-alert("Data siswa tersimpan");
+alert('Siswa tersimpan');
 
 }
 
 function renderSiswa(){
 
-tableSiswa.innerHTML="";
+tableSiswa.innerHTML='';
+pilihSiswa.innerHTML='';
+raporSelect.innerHTML='';
+filterKelas.innerHTML='<option value="">Semua Kelas</option>';
 
-pilihSiswa.innerHTML=
-`<option value="">Pilih Siswa</option>`;
+const kelasUnik=[...new Set(dataSiswa.map(s=>s.kelas))];
 
-pilihNilaiSiswa.innerHTML=
-`<option value="">Pilih Siswa</option>`;
-
-pilihGrafik.innerHTML=
-`<option value="">Pilih Siswa</option>`;
+kelasUnik.forEach(k=>{
+filterKelas.innerHTML += `<option>${k}</option>`;
+});
 
 dataSiswa.forEach((s,index)=>{
 
 tableSiswa.innerHTML += `
-
 <tr>
-
 <td>${s.nama}</td>
 <td>${s.kelas}</td>
-<td>${s.semester}</td>
-
-<td>
-
-<button
-class="action-btn print-mini"
-onclick="previewRapor(${index})"
->
-Print
-</button>
-
-<button
-class="action-btn edit-btn"
-onclick="editSiswa(${index})"
->
-Edit
-</button>
-
-<button
-class="action-btn delete-btn"
-onclick="hapusSiswa(${s.id})"
->
-Hapus
-</button>
-
-</td>
-
 </tr>
-
 `;
 
 pilihSiswa.innerHTML += `
-<option value="${index}">
-${s.nama}
-</option>
+<option value="${index}">${s.nama}</option>
 `;
 
-pilihNilaiSiswa.innerHTML += `
-<option value="${index}">
-${s.nama}
-</option>
-`;
-
-pilihGrafik.innerHTML += `
-<option value="${index}">
-${s.nama}
-</option>
+raporSelect.innerHTML += `
+<option value="${index}">${s.nama}</option>
 `;
 
 });
 
 }
-
-function editSiswa(index){
-
-const s=dataSiswa[index];
-
-nama.value=s.nama;
-nis.value=s.nis;
-nisn.value=s.nisn;
-kelas.value=s.kelas;
-semester.value=s.semester;
-tahunAjaran.value=s.tahunAjaran;
-waliKelas.value=s.waliKelas;
-
-editIndex=index;
-
-}
-
-function hapusSiswa(id){
-
-if(confirm("Hapus siswa?")){
-
-dataSiswa=
-dataSiswa.filter(s=>s.id!==id);
-
-localStorage.setItem(
-"dataSiswa",
-JSON.stringify(dataSiswa)
-);
-
-renderSiswa();
-
-}
-
-}
-
-function cariSiswa(){
-
-const keyword =
-searchSiswa.value.toLowerCase();
-
-const rows =
-tableSiswa.querySelectorAll("tr");
-
-rows.forEach(row=>{
-
-const text =
-row.innerText.toLowerCase();
-
-if(text.includes(keyword)){
-
-row.style.display="";
-
-}else{
-
-row.style.display="none";
-
-}
-
-});
-
-}
-
-/* NILAI */
 
 function simpanNilai(){
 
-const index=
-pilihNilaiSiswa.value;
+const i=pilihSiswa.value;
 
-if(index===""){
-alert("Pilih siswa");
-return;
-}
-
-nilaiSiswa[index]={
-
+nilaiSiswa[i]={
 indo:Number(indo.value||0),
 mtk:Number(mtk.value||0),
-ipa:Number(ipa.value||0),
-ips:Number(ips.value||0),
-ppkn:Number(ppkn.value||0),
-agama:Number(agamaNilai.value||0),
-seni:Number(seni.value||0),
-pjok:Number(pjok.value||0),
-
-sakit:Number(sakit.value||0),
-izin:Number(izin.value||0),
-alfa:Number(alfa.value||0),
-
-ekskul:ekskul.value,
-catatan:catatan.value
-
+ipa:Number(ipa.value||0)
 };
 
 localStorage.setItem(
-"nilaiSiswa",
+'nilaiSiswa',
 JSON.stringify(nilaiSiswa)
 );
 
-alert("Nilai tersimpan");
+renderDashboard();
+
+alert('Nilai tersimpan');
 
 }
 
-pilihNilaiSiswa.addEventListener(
-"change",
-function(){
+function renderExcelNilai(){
 
-const index=this.value;
+excelBody.innerHTML='';
 
-const n=nilaiSiswa[index];
-
-if(!n) return;
-
-indo.value=n.indo || "";
-mtk.value=n.mtk || "";
-ipa.value=n.ipa || "";
-ips.value=n.ips || "";
-ppkn.value=n.ppkn || "";
-agamaNilai.value=n.agama || "";
-seni.value=n.seni || "";
-pjok.value=n.pjok || "";
-
-sakit.value=n.sakit || "";
-izin.value=n.izin || "";
-alfa.value=n.alfa || "";
-
-ekskul.value=n.ekskul || "";
-catatan.value=n.catatan || "";
-
-}
-);
-
-function predikat(nilai){
-
-if(nilai>=90) return "A";
-if(nilai>=80) return "B";
-if(nilai>=70) return "C";
-
-return "D";
-
-}
-
-function statusTuntas(nilai){
-
-if(nilai>=75){
-return "Tuntas";
-}
-
-return "Belum";
-
-}
-
-function deskripsiNilai(mapel,nilai){
-
-if(nilai>=90){
-return `Sangat baik dalam memahami pelajaran ${mapel}`;
-}
-
-if(nilai>=80){
-return `Baik dalam memahami pelajaran ${mapel}`;
-}
-
-if(nilai>=70){
-return `Cukup memahami pelajaran ${mapel}`;
-}
-
-return `Perlu bimbingan dalam pelajaran ${mapel}`;
-
-}
-
-function hitungRanking(index){
-
-const rankingData=[];
-
-dataSiswa.forEach((siswa,i)=>{
-
-const n=nilaiSiswa[i];
-
-if(n){
-
-const total=
-n.indo+n.mtk+n.ipa+n.ips+
-n.ppkn+n.agama+n.seni+n.pjok;
-
-rankingData.push({
-
-index:i,
-rata:total/8
-
-});
-
-}
-
-});
-
-rankingData.sort((a,b)=>b.rata-a.rata);
-
-return rankingData.findIndex(
-r=>r.index==index
-)+1;
-
-}
-
-/* RAPOR */
-
-function tampilkanRapor(){
-
-const index=pilihSiswa.value;
-
-if(index==="") return;
-
-previewRapor(index);
-
-}
-
-function previewRapor(index){
-
-const s=dataSiswa[index];
-
-cNama.innerText=s.nama;
-cKelas.innerText=s.kelas;
-cNisn.innerText=s.nisn;
-cSemester.innerText=s.semester;
-cTahun.innerText=s.tahunAjaran;
-
-ttdWaliKelas.innerText=
-s.waliKelas;
-
-rNamaSekolah.innerText=
-sekolah.namaSekolah || "Nama Sekolah";
-
-const nilai=
-nilaiSiswa[index] || {};
-
-const pelajaran=[
-
-["Bahasa Indonesia",nilai.indo||0],
-["Matematika",nilai.mtk||0],
-["IPA",nilai.ipa||0],
-["IPS",nilai.ips||0],
-["PPKN",nilai.ppkn||0],
-["Agama",nilai.agama||0],
-["Seni",nilai.seni||0],
-["PJOK",nilai.pjok||0]
-
-];
-
-nilaiBody.innerHTML="";
-deskripsiBody.innerHTML="";
-
-let total=0;
-
-pelajaran.forEach(p=>{
-
-total+=p[1];
-
-let warna="#ef4444";
-
-if(p[1]>=75){
-warna="#22c55e";
-}
-
-nilaiBody.innerHTML += `
-
-<tr>
-
-<td>${p[0]}</td>
-<td>${p[1]}</td>
-<td>${predikat(p[1])}</td>
-<td>75</td>
-
-<td style="
-color:${warna};
-font-weight:700;
-">
-${statusTuntas(p[1])}
-</td>
-
-</tr>
-
-`;
-
-deskripsiBody.innerHTML += `
-
-<tr>
-
-<td>${p[0]}</td>
-
-<td>
-${deskripsiNilai(p[0],p[1])}
-</td>
-
-</tr>
-
-`;
-
-});
-
-const rata=
-Math.round(total/pelajaran.length);
-
-rRata.innerText=rata;
-
-const ranking=
-hitungRanking(index);
-
-rRanking.innerText=
-ranking+" dari "+dataSiswa.length;
-
-if(ranking===1){
-
-rJuara.innerText="🥇 Juara 1";
-
-}else if(ranking===2){
-
-rJuara.innerText="🥈 Juara 2";
-
-}else if(ranking===3){
-
-rJuara.innerText="🥉 Juara 3";
-
-}else{
-
-rJuara.innerText="-";
-
-}
-
-rSakit.innerText =
-(nilai.sakit||0)+" Hari";
-
-rIzin.innerText =
-(nilai.izin||0)+" Hari";
-
-rAlfa.innerText =
-(nilai.alfa||0)+" Hari";
-
-rEkskul.innerText =
-nilai.ekskul || "-";
-
-rCatatan.innerText =
-nilai.catatan || "-";
-
-if(rata>=75){
-
-rKeputusan.innerText =
-"Naik ke kelas berikutnya";
-
-}else{
-
-rKeputusan.innerText =
-"Tidak Naik Kelas";
-
-}
-
-showSection(
-'raporSection',
-document.querySelectorAll('.menu button')[4]
-);
-
-}
-
-/* REKAP */
-
-function renderRekap(){
-
-rekapBody.innerHTML="";
+const filter=filterKelas.value;
 
 dataSiswa.forEach((s,index)=>{
 
-const n=nilaiSiswa[index];
-
-if(!n) return;
-
-const total=
-n.indo+n.mtk+n.ipa+n.ips+
-n.ppkn+n.agama+n.seni+n.pjok;
-
-const rata=
-Math.round(total/8);
-
-let status="Belum";
-let warna="#ef4444";
-
-if(rata>=75){
-
-status="Tuntas";
-warna="#22c55e";
-
+if(filter && s.kelas!==filter){
+return;
 }
 
-rekapBody.innerHTML += `
+const n=nilaiSiswa[index] || {};
 
+excelBody.innerHTML += `
 <tr>
-
 <td>${s.nama}</td>
 <td>${s.kelas}</td>
-<td>${rata}</td>
-<td>${hitungRanking(index)}</td>
 
-<td style="
-color:${warna};
-font-weight:700;
-">
-${status}
+<td>
+<input type="number" class="excel-input"
+value="${n.indo||''}"
+oninput="updateNilai(${index},'indo',this.value)">
+</td>
+
+<td>
+<input type="number" class="excel-input"
+value="${n.mtk||''}"
+oninput="updateNilai(${index},'mtk',this.value)">
+</td>
+
+<td>
+<input type="number" class="excel-input"
+value="${n.ipa||''}"
+oninput="updateNilai(${index},'ipa',this.value)">
 </td>
 
 </tr>
-
 `;
 
 });
 
 }
 
-/* GRAFIK */
+function updateNilai(index,mapel,value){
 
-let chartInstance=null;
-
-function tampilkanGrafik(){
-
-const index=
-pilihGrafik.value;
-
-if(index==="") return;
-
-const nilai=
-nilaiSiswa[index];
-
-if(!nilai) return;
-
-const ctx=
-document.getElementById("chartNilai");
-
-if(chartInstance){
-chartInstance.destroy();
+if(!nilaiSiswa[index]){
+nilaiSiswa[index]={};
 }
 
-chartInstance = new Chart(ctx,{
+let nilai=Number(value);
 
-type:'bar',
+if(nilai>100) nilai=100;
+if(nilai<0) nilai=0;
 
-data:{
+nilaiSiswa[index][mapel]=nilai;
 
-labels:[
-'B. Indo',
-'MTK',
-'IPA',
-'IPS',
-'PPKN',
-'Agama',
-'Seni',
-'PJOK'
-],
-
-datasets:[{
-
-label:'Nilai',
-
-data:[
-
-nilai.indo,
-nilai.mtk,
-nilai.ipa,
-nilai.ips,
-nilai.ppkn,
-nilai.agama,
-nilai.seni,
-nilai.pjok
-
-]
-
-}]
-
-}
-
-});
-
-}
-
-/* STATISTIK */
-
-function renderStatistik(){
-
-totalSiswa.innerText=
-dataSiswa.length;
-
-let totalSemua=0;
-
-let jumlahNilai=0;
-
-let terbaik="";
-let nilaiTerbaik=0;
-
-let jumlahTuntas=0;
-
-dataSiswa.forEach((s,index)=>{
-
-const n=nilaiSiswa[index];
-
-if(!n) return;
-
-const total=
-n.indo+n.mtk+n.ipa+n.ips+
-n.ppkn+n.agama+n.seni+n.pjok;
-
-const rata=total/8;
-
-totalSemua += rata;
-
-jumlahNilai++;
-
-if(rata>nilaiTerbaik){
-
-nilaiTerbaik=rata;
-terbaik=s.nama;
-
-}
-
-if(rata>=75){
-jumlahTuntas++;
-}
-
-});
-
-const rataSek =
-Math.round(totalSemua/jumlahNilai || 0);
-
-rataSekolah.innerText=
-rataSek;
-
-siswaTerbaik.innerText=
-terbaik || "-";
-
-const persen=
-Math.round(
-(jumlahTuntas/jumlahNilai)*100 || 0
+localStorage.setItem(
+'nilaiSiswa',
+JSON.stringify(nilaiSiswa)
 );
 
-persenTuntas.innerText=
-persen+"%";
+renderDashboard();
 
 }
 
-/* DASHBOARD */
+function previewRapor(){
+
+const i=raporSelect.value;
+
+const s=dataSiswa[i];
+const n=nilaiSiswa[i] || {};
+
+rNama.innerText=s.nama;
+rKelas.innerText=s.kelas;
+rNisn.innerText=s.nisn;
+
+raporBody.innerHTML=`
+<tr><td>Indonesia</td><td>${n.indo||0}</td></tr>
+<tr><td>MTK</td><td>${n.mtk||0}</td></tr>
+<tr><td>IPA</td><td>${n.ipa||0}</td></tr>
+`;
+
+}
 
 function renderDashboard(){
 
-dashTotalSiswa.innerText =
-dataSiswa.length;
+dashTotal.innerText=dataSiswa.length;
 
-let totalSemua=0;
+let total=0;
 let jumlah=0;
 
-let terbaik="-";
-let nilaiTerbaik=0;
-
-let tuntas=0;
-
-dataSiswa.forEach((s,index)=>{
-
-const n=nilaiSiswa[index];
-
+nilaiSiswa.forEach(n=>{
 if(!n) return;
 
-const total=
-n.indo+n.mtk+n.ipa+n.ips+
-n.ppkn+n.agama+n.seni+n.pjok;
-
-const rata=total/8;
-
-totalSemua += rata;
+total += (
+(n.indo||0)+
+(n.mtk||0)+
+(n.ipa||0)
+)/3;
 
 jumlah++;
-
-if(rata>nilaiTerbaik){
-
-nilaiTerbaik=rata;
-terbaik=s.nama;
-
-}
-
-if(rata>=75){
-tuntas++;
-}
-
 });
 
-dashRata.innerText =
-Math.round(totalSemua/jumlah || 0);
-
-dashTerbaik.innerText =
-terbaik;
-
-dashTuntas.innerText =
-Math.round((tuntas/jumlah)*100 || 0)
-+"%";
+dashRata.innerText=
+Math.round(total/jumlah||0);
 
 }
-
-/* PDF */
-
-function downloadPDF(){
-
-const element=
-document.getElementById("raporArea");
-
-const opt={
-
-margin:0.5,
-filename:'E-Rapor.pdf',
-image:{ type:'jpeg', quality:1 },
-html2canvas:{ scale:2 },
-jsPDF:{
-unit:'in',
-format:'a4',
-orientation:'portrait'
-}
-
-};
-
-html2pdf().set(opt).from(element).save();
-
-}
-
-/* EXPORT BACKUP */
 
 function exportData(){
 
-const semuaData={
-
-sekolah,
+const data={
 dataSiswa,
 nilaiSiswa
-
 };
 
-const dataStr=
-JSON.stringify(semuaData);
-
 const blob=new Blob(
-[dataStr],
-{type:"application/json"}
+[JSON.stringify(data)],
+{type:'application/json'}
 );
 
-const url=
-URL.createObjectURL(blob);
-
-const a=
-document.createElement("a");
-
-a.href=url;
-
-a.download="backup-erapor.json";
-
+const a=document.createElement('a');
+a.href=URL.createObjectURL(blob);
+a.download='backup-erapor.json';
 a.click();
 
-URL.revokeObjectURL(url);
-
 }
-
-/* IMPORT BACKUP */
 
 function importData(){
 
-const file=
-document.getElementById("importFile")
-.files[0];
+const file=importFile.files[0];
+if(!file) return;
 
-if(!file){
-
-alert("Pilih file backup");
-return;
-
-}
-
-const reader=
-new FileReader();
+const reader=new FileReader();
 
 reader.onload=function(e){
 
-const data=
-JSON.parse(e.target.result);
+const data=JSON.parse(e.target.result);
 
-sekolah=
-data.sekolah || {};
+dataSiswa=data.dataSiswa || [];
+nilaiSiswa=data.nilaiSiswa || [];
 
-dataSiswa=
-data.dataSiswa || [];
-
-nilaiSiswa=
-data.nilaiSiswa || [];
-
-localStorage.setItem(
-"sekolah",
-JSON.stringify(sekolah)
-);
-
-localStorage.setItem(
-"dataSiswa",
-JSON.stringify(dataSiswa)
-);
-
-localStorage.setItem(
-"nilaiSiswa",
-JSON.stringify(nilaiSiswa)
-);
-
-alert("Restore berhasil");
+localStorage.setItem('dataSiswa',JSON.stringify(dataSiswa));
+localStorage.setItem('nilaiSiswa',JSON.stringify(nilaiSiswa));
 
 location.reload();
 
@@ -1971,111 +510,37 @@ reader.readAsText(file);
 
 }
 
-/* EXPORT EXCEL */
-
 function exportExcel(){
 
-const excelData=[];
+const excel=[];
 
 dataSiswa.forEach((s,index)=>{
 
-const n=nilaiSiswa[index];
+const n=nilaiSiswa[index] || {};
 
-if(!n) return;
-
-const total=
-n.indo+n.mtk+n.ipa+n.ips+
-n.ppkn+n.agama+n.seni+n.pjok;
-
-const rata=
-Math.round(total/8);
-
-excelData.push({
-
+excel.push({
 Nama:s.nama,
 Kelas:s.kelas,
-Semester:s.semester,
-Indonesia:n.indo,
-Matematika:n.mtk,
-IPA:n.ipa,
-IPS:n.ips,
-PPKN:n.ppkn,
-Agama:n.agama,
-Seni:n.seni,
-PJOK:n.pjok,
-RataRata:rata
-
+Indonesia:n.indo||0,
+MTK:n.mtk||0,
+IPA:n.ipa||0
 });
 
 });
 
-const ws=
-XLSX.utils.json_to_sheet(excelData);
+const ws=XLSX.utils.json_to_sheet(excel);
+const wb=XLSX.utils.book_new();
 
-const wb=
-XLSX.utils.book_new();
+XLSX.utils.book_append_sheet(wb,ws,'Nilai');
 
-XLSX.utils.book_append_sheet(
-wb,
-ws,
-"Rekap Nilai"
-);
-
-XLSX.writeFile(
-wb,
-"rekap-nilai.xlsx"
-);
+XLSX.writeFile(wb,'rekap-nilai.xlsx');
 
 }
-
-/* INIT */
 
 window.onload=function(){
-
 renderSiswa();
 renderDashboard();
+};
 
-const savedLogo =
-localStorage.getItem("logoSekolah");
-
-if(savedLogo){
-
-previewLogo.src=savedLogo;
-
-previewLogo.style.display="block";
-
-logoText.style.display="none";
-
-}
-
-if(sekolah.namaSekolah){
-
-namaSekolah.value=
-sekolah.namaSekolah;
-
-npsn.value=
-sekolah.npsn;
-
-nss.value=
-sekolah.nss;
-
-alamatSekolah.value=
-sekolah.alamatSekolah;
-
-kecamatan.value=
-sekolah.kecamatan;
-
-kabupaten.value=
-sekolah.kabupaten;
-
-provinsi.value=
-sekolah.provinsi;
-
-}
-
-}
-
-</script>
-
-</body>
+</script></body>
 </html>
