@@ -10,6 +10,7 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
 
 <style>
 
@@ -271,6 +272,7 @@ text-align:center;
 padding:80px 20px;
 border-bottom:4px solid black;
 margin-bottom:40px;
+page-break-after:always;
 }
 
 .cover-logo{
@@ -283,6 +285,7 @@ justify-content:center;
 align-items:center;
 margin:20px auto;
 font-weight:700;
+overflow:hidden;
 }
 
 .cover-title{
@@ -327,6 +330,14 @@ justify-content:flex-end;
 
 .ttd{
 text-align:center;
+}
+
+.box-info{
+border:1px solid #ccc;
+padding:15px;
+border-radius:12px;
+min-height:60px;
+margin-top:10px;
 }
 
 canvas{
@@ -397,10 +408,6 @@ page-break-inside:auto;
 
 tr{
 page-break-inside:avoid;
-}
-
-.cover-page{
-page-break-after:always;
 }
 
 }
@@ -505,7 +512,7 @@ Masuk Dashboard
 
 </div>
 
-<!-- DASHBOARD HOME -->
+<!-- DASHBOARD -->
 
 <div id="dashboardSection">
 
@@ -558,6 +565,12 @@ Masuk Dashboard
 <input type="text" id="kecamatan" placeholder="Kecamatan">
 <input type="text" id="kabupaten" placeholder="Kabupaten">
 <input type="text" id="provinsi" placeholder="Provinsi">
+
+<input
+type="file"
+id="logoSekolah"
+accept="image/*"
+/>
 
 </div>
 
@@ -636,9 +649,7 @@ onkeyup="cariSiswa()"
 <h3>📚 Input Nilai</h3>
 
 <select id="pilihNilaiSiswa">
-
 <option value="">Pilih Siswa</option>
-
 </select>
 
 <div class="form-grid">
@@ -651,6 +662,13 @@ onkeyup="cariSiswa()"
 <input type="number" id="agamaNilai" placeholder="Agama">
 <input type="number" id="seni" placeholder="Seni">
 <input type="number" id="pjok" placeholder="PJOK">
+
+<input type="number" id="sakit" placeholder="Sakit">
+<input type="number" id="izin" placeholder="Izin">
+<input type="number" id="alfa" placeholder="Alfa">
+
+<input type="text" id="ekskul" placeholder="Ekstrakurikuler">
+<input type="text" id="catatan" placeholder="Catatan Wali Kelas">
 
 </div>
 
@@ -671,9 +689,7 @@ onkeyup="cariSiswa()"
 <h3>🖨 Cetak E-Rapor</h3>
 
 <select id="pilihSiswa" onchange="tampilkanRapor()">
-
 <option value="">Pilih Siswa</option>
-
 </select>
 
 <button class="print-btn" onclick="window.print()">
@@ -688,6 +704,8 @@ onkeyup="cariSiswa()"
 
 <div class="rapor-box" id="raporArea">
 
+<!-- COVER -->
+
 <div class="cover-page">
 
 <h2 id="rNamaSekolah">
@@ -695,7 +713,20 @@ NAMA SEKOLAH
 </h2>
 
 <div class="cover-logo">
-LOGO
+
+<img
+id="previewLogo"
+src=""
+style="
+width:100%;
+height:100%;
+object-fit:cover;
+display:none;
+"
+/>
+
+<span id="logoText">LOGO</span>
+
 </div>
 
 <div class="cover-title">
@@ -718,6 +749,8 @@ PESERTA DIDIK SEKOLAH DASAR
 
 </div>
 
+<!-- NILAI -->
+
 <div class="section-title">
 Nilai Akademik
 </div>
@@ -739,6 +772,70 @@ Nilai Akademik
 <tbody id="nilaiBody"></tbody>
 
 </table>
+
+<div class="section-title">
+Deskripsi Nilai
+</div>
+
+<table class="nilai-table">
+
+<thead>
+<tr>
+<th>Mata Pelajaran</th>
+<th>Deskripsi</th>
+</tr>
+</thead>
+
+<tbody id="deskripsiBody"></tbody>
+
+</table>
+
+<div class="section-title">
+Absensi
+</div>
+
+<table class="nilai-table">
+
+<tr>
+<td>Sakit</td>
+<td id="rSakit">0 Hari</td>
+</tr>
+
+<tr>
+<td>Izin</td>
+<td id="rIzin">0 Hari</td>
+</tr>
+
+<tr>
+<td>Tanpa Keterangan</td>
+<td id="rAlfa">0 Hari</td>
+</tr>
+
+</table>
+
+<div class="section-title">
+Ekstrakurikuler
+</div>
+
+<div class="box-info" id="rEkskul">
+-
+</div>
+
+<div class="section-title">
+Catatan Wali Kelas
+</div>
+
+<div class="box-info" id="rCatatan">
+-
+</div>
+
+<div class="section-title">
+Keputusan
+</div>
+
+<div class="box-info" id="rKeputusan">
+-
+</div>
 
 <div style="margin-top:20px;font-weight:700;">
 Rata-rata :
@@ -826,9 +923,7 @@ Suryawati Effa S.Pd
 <h3>📊 Grafik Nilai</h3>
 
 <select id="pilihGrafik" onchange="tampilkanGrafik()">
-
 <option value="">Pilih Siswa</option>
-
 </select>
 
 <br><br>
@@ -887,6 +982,10 @@ Suryawati Effa S.Pd
 ⬇ Export Backup
 </button>
 
+<button class="save-btn" onclick="exportExcel()">
+📄 Export Excel
+</button>
+
 <input
 type="file"
 id="importFile"
@@ -910,10 +1009,8 @@ style="margin-top:20px;"
 function login(){
 
 if(username.value==="" || password.value===""){
-
 alert("Lengkapi login");
 return;
-
 }
 
 loginPage.style.display="none";
@@ -947,20 +1044,14 @@ const sections=[
 ];
 
 sections.forEach(id=>{
-
-document.getElementById(id)
-.style.display="none";
-
+document.getElementById(id).style.display="none";
 });
 
-document.getElementById(sectionId)
-.style.display="block";
+document.getElementById(sectionId).style.display="block";
 
 document.querySelectorAll(".menu button")
 .forEach(button=>{
-
 button.classList.remove("active");
-
 });
 
 btn.classList.add("active");
@@ -1016,6 +1107,39 @@ JSON.stringify(sekolah)
 alert("Identitas sekolah tersimpan");
 
 }
+
+/* LOGO */
+
+logoSekolah.addEventListener(
+"change",
+function(e){
+
+const file=e.target.files[0];
+
+if(!file) return;
+
+const reader=new FileReader();
+
+reader.onload=function(ev){
+
+const base64=ev.target.result;
+
+localStorage.setItem(
+"logoSekolah",
+base64
+);
+
+previewLogo.src=base64;
+previewLogo.style.display="block";
+
+logoText.style.display="none";
+
+};
+
+reader.readAsDataURL(file);
+
+}
+);
 
 /* SISWA */
 
@@ -1152,9 +1276,7 @@ function hapusSiswa(id){
 if(confirm("Hapus siswa?")){
 
 dataSiswa=
-dataSiswa.filter(
-s=>s.id!==id
-);
+dataSiswa.filter(s=>s.id!==id);
 
 localStorage.setItem(
 "dataSiswa",
@@ -1202,10 +1324,8 @@ const index=
 pilihNilaiSiswa.value;
 
 if(index===""){
-
 alert("Pilih siswa");
 return;
-
 }
 
 nilaiSiswa[index]={
@@ -1217,7 +1337,14 @@ ips:Number(ips.value||0),
 ppkn:Number(ppkn.value||0),
 agama:Number(agamaNilai.value||0),
 seni:Number(seni.value||0),
-pjok:Number(pjok.value||0)
+pjok:Number(pjok.value||0),
+
+sakit:Number(sakit.value||0),
+izin:Number(izin.value||0),
+alfa:Number(alfa.value||0),
+
+ekskul:ekskul.value,
+catatan:catatan.value
 
 };
 
@@ -1249,6 +1376,13 @@ agamaNilai.value=n.agama || "";
 seni.value=n.seni || "";
 pjok.value=n.pjok || "";
 
+sakit.value=n.sakit || "";
+izin.value=n.izin || "";
+alfa.value=n.alfa || "";
+
+ekskul.value=n.ekskul || "";
+catatan.value=n.catatan || "";
+
 }
 );
 
@@ -1265,12 +1399,28 @@ return "D";
 function statusTuntas(nilai){
 
 if(nilai>=75){
-
 return "Tuntas";
-
 }
 
 return "Belum";
+
+}
+
+function deskripsiNilai(mapel,nilai){
+
+if(nilai>=90){
+return `Sangat baik dalam memahami pelajaran ${mapel}`;
+}
+
+if(nilai>=80){
+return `Baik dalam memahami pelajaran ${mapel}`;
+}
+
+if(nilai>=70){
+return `Cukup memahami pelajaran ${mapel}`;
+}
+
+return `Perlu bimbingan dalam pelajaran ${mapel}`;
 
 }
 
@@ -1352,6 +1502,7 @@ const pelajaran=[
 ];
 
 nilaiBody.innerHTML="";
+deskripsiBody.innerHTML="";
 
 let total=0;
 
@@ -1362,9 +1513,7 @@ total+=p[1];
 let warna="#ef4444";
 
 if(p[1]>=75){
-
 warna="#22c55e";
-
 }
 
 nilaiBody.innerHTML += `
@@ -1381,6 +1530,20 @@ color:${warna};
 font-weight:700;
 ">
 ${statusTuntas(p[1])}
+</td>
+
+</tr>
+
+`;
+
+deskripsiBody.innerHTML += `
+
+<tr>
+
+<td>${p[0]}</td>
+
+<td>
+${deskripsiNilai(p[0],p[1])}
 </td>
 
 </tr>
@@ -1415,6 +1578,33 @@ rJuara.innerText="🥉 Juara 3";
 }else{
 
 rJuara.innerText="-";
+
+}
+
+rSakit.innerText =
+(nilai.sakit||0)+" Hari";
+
+rIzin.innerText =
+(nilai.izin||0)+" Hari";
+
+rAlfa.innerText =
+(nilai.alfa||0)+" Hari";
+
+rEkskul.innerText =
+nilai.ekskul || "-";
+
+rCatatan.innerText =
+nilai.catatan || "-";
+
+if(rata>=75){
+
+rKeputusan.innerText =
+"Naik ke kelas berikutnya";
+
+}else{
+
+rKeputusan.innerText =
+"Tidak Naik Kelas";
 
 }
 
@@ -1498,9 +1688,7 @@ const ctx=
 document.getElementById("chartNilai");
 
 if(chartInstance){
-
 chartInstance.destroy();
-
 }
 
 chartInstance = new Chart(ctx,{
@@ -1585,9 +1773,7 @@ terbaik=s.nama;
 }
 
 if(rata>=75){
-
 jumlahTuntas++;
-
 }
 
 });
@@ -1650,9 +1836,7 @@ terbaik=s.nama;
 }
 
 if(rata>=75){
-
 tuntas++;
-
 }
 
 });
@@ -1694,7 +1878,7 @@ html2pdf().set(opt).from(element).save();
 
 }
 
-/* EXPORT */
+/* EXPORT BACKUP */
 
 function exportData(){
 
@@ -1730,7 +1914,7 @@ URL.revokeObjectURL(url);
 
 }
 
-/* IMPORT */
+/* IMPORT BACKUP */
 
 function importData(){
 
@@ -1787,12 +1971,82 @@ reader.readAsText(file);
 
 }
 
+/* EXPORT EXCEL */
+
+function exportExcel(){
+
+const excelData=[];
+
+dataSiswa.forEach((s,index)=>{
+
+const n=nilaiSiswa[index];
+
+if(!n) return;
+
+const total=
+n.indo+n.mtk+n.ipa+n.ips+
+n.ppkn+n.agama+n.seni+n.pjok;
+
+const rata=
+Math.round(total/8);
+
+excelData.push({
+
+Nama:s.nama,
+Kelas:s.kelas,
+Semester:s.semester,
+Indonesia:n.indo,
+Matematika:n.mtk,
+IPA:n.ipa,
+IPS:n.ips,
+PPKN:n.ppkn,
+Agama:n.agama,
+Seni:n.seni,
+PJOK:n.pjok,
+RataRata:rata
+
+});
+
+});
+
+const ws=
+XLSX.utils.json_to_sheet(excelData);
+
+const wb=
+XLSX.utils.book_new();
+
+XLSX.utils.book_append_sheet(
+wb,
+ws,
+"Rekap Nilai"
+);
+
+XLSX.writeFile(
+wb,
+"rekap-nilai.xlsx"
+);
+
+}
+
 /* INIT */
 
 window.onload=function(){
 
 renderSiswa();
 renderDashboard();
+
+const savedLogo =
+localStorage.getItem("logoSekolah");
+
+if(savedLogo){
+
+previewLogo.src=savedLogo;
+
+previewLogo.style.display="block";
+
+logoText.style.display="none";
+
+}
 
 if(sekolah.namaSekolah){
 
