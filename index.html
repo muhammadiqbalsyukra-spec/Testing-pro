@@ -9,6 +9,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <style>
 
@@ -170,8 +171,7 @@ margin-top:20px;
 }
 
 .form-grid input,
-.form-grid select,
-.form-grid textarea{
+.form-grid select{
 padding:14px;
 border:none;
 border-radius:12px;
@@ -214,7 +214,17 @@ background:#ef4444;
 background:#22c55e;
 }
 
-/* RAPOR */
+.stat-box{
+background:rgba(255,255,255,0.05);
+padding:20px;
+border-radius:18px;
+text-align:center;
+}
+
+.stat-box h2{
+font-size:32px;
+margin-bottom:10px;
+}
 
 .rapor-box{
 background:white;
@@ -267,11 +277,6 @@ font-size:20px;
 font-weight:700;
 }
 
-.biodata-table td:first-child{
-width:260px;
-font-weight:600;
-}
-
 .nilai-table th{
 background:#e2e8f0;
 color:black;
@@ -281,38 +286,21 @@ color:black;
 color:black;
 }
 
-.catatan-box{
-border:1px solid #ccc;
-padding:16px;
-border-radius:12px;
-min-height:80px;
-margin-top:10px;
-}
-
-.foto-ttd{
-display:flex;
-justify-content:space-between;
-align-items:flex-end;
-margin-top:60px;
-}
-
 .ttd-group{
 display:flex;
 gap:80px;
+margin-top:60px;
+justify-content:flex-end;
 }
 
 .ttd{
 text-align:center;
 }
 
-.edit-kepsek-btn{
-margin-top:10px;
-padding:10px 14px;
-border:none;
-border-radius:10px;
-background:#0ea5e9;
-color:white;
-cursor:pointer;
+canvas{
+background:white;
+border-radius:20px;
+padding:20px;
 }
 
 @media(max-width:900px){
@@ -327,11 +315,6 @@ height:auto;
 margin-left:0;
 }
 
-.foto-ttd{
-flex-direction:column;
-gap:40px;
-}
-
 .ttd-group{
 flex-direction:column;
 }
@@ -340,17 +323,11 @@ flex-direction:column;
 
 @media print{
 
-@page{
-size:A4;
-margin:15mm;
-}
-
 .sidebar,
 .topbar,
 .no-print,
 .print-btn,
-.pdf-btn,
-.edit-kepsek-btn{
+.pdf-btn{
 display:none !important;
 }
 
@@ -361,11 +338,6 @@ background:white;
 .main{
 margin:0;
 padding:0;
-}
-
-.rapor-box{
-border:none;
-box-shadow:none;
 }
 
 }
@@ -423,11 +395,23 @@ Masuk Dashboard
 </button>
 
 <button onclick="showSection('nilaiSection',this)">
-📚 Nilai & Semester
+📚 Nilai
 </button>
 
 <button onclick="showSection('raporSection',this)">
 🖨 E-Rapor
+</button>
+
+<button onclick="showSection('rekapSection',this)">
+📋 Rekap Nilai
+</button>
+
+<button onclick="showSection('grafikSection',this)">
+📊 Grafik Nilai
+</button>
+
+<button onclick="showSection('statistikSection',this)">
+📈 Statistik
 </button>
 
 <button onclick="logout()">
@@ -450,7 +434,7 @@ Masuk Dashboard
 
 </div>
 
-<!-- IDENTITAS SEKOLAH -->
+<!-- IDENTITAS -->
 
 <div id="identitasSection">
 
@@ -471,7 +455,7 @@ Masuk Dashboard
 </div>
 
 <button class="save-btn" onclick="simpanSekolah()">
-💾 Simpan Identitas Sekolah
+💾 Simpan Identitas
 </button>
 
 </div>
@@ -504,18 +488,20 @@ Masuk Dashboard
 </div>
 
 <button class="save-btn" onclick="simpanSiswa()">
-💾 Simpan Data
+💾 Simpan Siswa
 </button>
 
 <table>
 
 <thead>
+
 <tr>
 <th>Nama</th>
 <th>Kelas</th>
 <th>Semester</th>
 <th>Aksi</th>
 </tr>
+
 </thead>
 
 <tbody id="tableSiswa"></tbody>
@@ -532,7 +518,7 @@ Masuk Dashboard
 
 <div class="card">
 
-<h3>📚 Nilai Semester</h3>
+<h3>📚 Input Nilai</h3>
 
 <select id="pilihNilaiSiswa">
 
@@ -548,7 +534,7 @@ Masuk Dashboard
 <input type="number" id="ips" placeholder="IPS">
 <input type="number" id="ppkn" placeholder="PPKN">
 <input type="number" id="agamaNilai" placeholder="Agama">
-<input type="number" id="seni" placeholder="Seni Budaya">
+<input type="number" id="seni" placeholder="Seni">
 <input type="number" id="pjok" placeholder="PJOK">
 
 </div>
@@ -587,8 +573,6 @@ Masuk Dashboard
 
 <div class="rapor-box" id="raporArea">
 
-<!-- COVER -->
-
 <div class="cover-page">
 
 <h2 id="rNamaSekolah">
@@ -619,98 +603,6 @@ PESERTA DIDIK SEKOLAH DASAR
 
 </div>
 
-<!-- IDENTITAS SEKOLAH -->
-
-<div class="section-title">
-Identitas Sekolah
-</div>
-
-<table class="biodata-table">
-
-<tr>
-<td>Nama Sekolah</td>
-<td id="rrNamaSekolah"></td>
-</tr>
-
-<tr>
-<td>NPSN</td>
-<td id="rrNpsn"></td>
-</tr>
-
-<tr>
-<td>NSS</td>
-<td id="rrNss"></td>
-</tr>
-
-<tr>
-<td>Alamat</td>
-<td id="rrAlamat"></td>
-</tr>
-
-<tr>
-<td>Kecamatan</td>
-<td id="rrKecamatan"></td>
-</tr>
-
-<tr>
-<td>Kabupaten</td>
-<td id="rrKabupaten"></td>
-</tr>
-
-<tr>
-<td>Provinsi</td>
-<td id="rrProvinsi"></td>
-</tr>
-
-</table>
-
-<!-- BIODATA -->
-
-<div class="section-title">
-Identitas Peserta Didik
-</div>
-
-<table class="biodata-table">
-
-<tr>
-<td>Nama</td>
-<td id="rNama"></td>
-</tr>
-
-<tr>
-<td>NIS</td>
-<td id="rNis"></td>
-</tr>
-
-<tr>
-<td>NISN</td>
-<td id="rNisn"></td>
-</tr>
-
-<tr>
-<td>Kelas</td>
-<td id="rKelas"></td>
-</tr>
-
-<tr>
-<td>Semester</td>
-<td id="rSemester"></td>
-</tr>
-
-<tr>
-<td>Tahun Ajaran</td>
-<td id="rTahun"></td>
-</tr>
-
-<tr>
-<td>Wali Kelas</td>
-<td id="rWali"></td>
-</tr>
-
-</table>
-
-<!-- NILAI -->
-
 <div class="section-title">
 Nilai Akademik
 </div>
@@ -720,7 +612,7 @@ Nilai Akademik
 <thead>
 
 <tr>
-<th>Mata Pelajaran</th>
+<th>Mapel</th>
 <th>Nilai</th>
 <th>Predikat</th>
 <th>KKM</th>
@@ -748,10 +640,6 @@ Juara :
 <span id="rJuara"></span>
 </div>
 
-<!-- TTD -->
-
-<div class="foto-ttd">
-
 <div class="ttd-group">
 
 <div class="ttd">
@@ -776,15 +664,94 @@ Juara :
 Suryawati Effa S.Pd
 </h3>
 
-<button
-class="edit-kepsek-btn no-print"
-onclick="editKepsek()"
->
-✏️ Edit Kepala Sekolah
-</button>
+</div>
 
 </div>
 
+</div>
+
+</div>
+
+<!-- REKAP -->
+
+<div id="rekapSection" style="display:none;">
+
+<div class="card">
+
+<h3>📋 Rekap Nilai</h3>
+
+<table>
+
+<thead>
+
+<tr>
+<th>Nama</th>
+<th>Kelas</th>
+<th>Rata-rata</th>
+<th>Ranking</th>
+<th>Status</th>
+</tr>
+
+</thead>
+
+<tbody id="rekapBody"></tbody>
+
+</table>
+
+</div>
+
+</div>
+
+<!-- GRAFIK -->
+
+<div id="grafikSection" style="display:none;">
+
+<div class="card">
+
+<h3>📊 Grafik Nilai</h3>
+
+<select id="pilihGrafik" onchange="tampilkanGrafik()">
+
+<option value="">Pilih Siswa</option>
+
+</select>
+
+<br><br>
+
+<canvas id="chartNilai"></canvas>
+
+</div>
+
+</div>
+
+<!-- STATISTIK -->
+
+<div id="statistikSection" style="display:none;">
+
+<div class="card">
+
+<h3>📈 Statistik Sekolah</h3>
+
+<div class="form-grid">
+
+<div class="stat-box">
+<h2 id="totalSiswa">0</h2>
+<p>Total Siswa</p>
+</div>
+
+<div class="stat-box">
+<h2 id="rataSekolah">0</h2>
+<p>Rata-rata Sekolah</p>
+</div>
+
+<div class="stat-box">
+<h2 id="siswaTerbaik">-</h2>
+<p>Siswa Terbaik</p>
+</div>
+
+<div class="stat-box">
+<h2 id="persenTuntas">0%</h2>
+<p>Persentase Tuntas</p>
 </div>
 
 </div>
@@ -825,15 +792,21 @@ loginPage.style.display="flex";
 function showSection(sectionId,btn){
 
 const sections=[
+
 "identitasSection",
 "siswaSection",
 "nilaiSection",
-"raporSection"
+"raporSection",
+"rekapSection",
+"grafikSection",
+"statistikSection"
+
 ];
 
 sections.forEach(id=>{
 
-document.getElementById(id).style.display="none";
+document.getElementById(id)
+.style.display="none";
 
 });
 
@@ -848,6 +821,18 @@ button.classList.remove("active");
 });
 
 btn.classList.add("active");
+
+if(sectionId==="rekapSection"){
+
+renderRekap();
+
+}
+
+if(sectionId==="statistikSection"){
+
+renderStatistik();
+
+}
 
 }
 
@@ -939,6 +924,9 @@ pilihSiswa.innerHTML=
 pilihNilaiSiswa.innerHTML=
 `<option value="">Pilih Siswa</option>`;
 
+pilihGrafik.innerHTML=
+`<option value="">Pilih Siswa</option>`;
+
 dataSiswa.forEach((s,index)=>{
 
 tableSiswa.innerHTML += `
@@ -985,6 +973,12 @@ ${s.nama}
 `;
 
 pilihNilaiSiswa.innerHTML += `
+<option value="${index}">
+${s.nama}
+</option>
+`;
+
+pilihGrafik.innerHTML += `
 <option value="${index}">
 ${s.nama}
 </option>
@@ -1084,7 +1078,7 @@ return "Tuntas";
 
 }
 
-return "Belum Tuntas";
+return "Belum";
 
 }
 
@@ -1137,50 +1131,17 @@ function previewRapor(index){
 
 const s=dataSiswa[index];
 
-rNama.innerText=s.nama;
-rNis.innerText=s.nis;
-rNisn.innerText=s.nisn;
-rKelas.innerText=s.kelas;
-rSemester.innerText=s.semester;
-rTahun.innerText=s.tahunAjaran;
-rWali.innerText=s.waliKelas;
-
-ttdWaliKelas.innerText=
-s.waliKelas;
-
 cNama.innerText=s.nama;
 cKelas.innerText=s.kelas;
 cNisn.innerText=s.nisn;
 cSemester.innerText=s.semester;
 cTahun.innerText=s.tahunAjaran;
 
-/* SEKOLAH */
+ttdWaliKelas.innerText=
+s.waliKelas;
 
 rNamaSekolah.innerText=
 sekolah.namaSekolah || "Nama Sekolah";
-
-rrNamaSekolah.innerText=
-sekolah.namaSekolah || "-";
-
-rrNpsn.innerText=
-sekolah.npsn || "-";
-
-rrNss.innerText=
-sekolah.nss || "-";
-
-rrAlamat.innerText=
-sekolah.alamatSekolah || "-";
-
-rrKecamatan.innerText=
-sekolah.kecamatan || "-";
-
-rrKabupaten.innerText=
-sekolah.kabupaten || "-";
-
-rrProvinsi.innerText=
-sekolah.provinsi || "-";
-
-/* NILAI */
 
 const nilai=
 nilaiSiswa[index] || {};
@@ -1193,7 +1154,7 @@ const pelajaran=[
 ["IPS",nilai.ips||0],
 ["PPKN",nilai.ppkn||0],
 ["Agama",nilai.agama||0],
-["Seni Budaya",nilai.seni||0],
+["Seni",nilai.seni||0],
 ["PJOK",nilai.pjok||0]
 
 ];
@@ -1258,6 +1219,184 @@ document.querySelectorAll('.menu button')[3]
 
 }
 
+/* REKAP */
+
+function renderRekap(){
+
+rekapBody.innerHTML="";
+
+dataSiswa.forEach((s,index)=>{
+
+const n=nilaiSiswa[index];
+
+if(!n) return;
+
+const total=
+n.indo+n.mtk+n.ipa+n.ips+
+n.ppkn+n.agama+n.seni+n.pjok;
+
+const rata=
+Math.round(total/8);
+
+let status="Belum";
+
+if(rata>=75){
+
+status="Tuntas";
+
+}
+
+rekapBody.innerHTML += `
+
+<tr>
+
+<td>${s.nama}</td>
+<td>${s.kelas}</td>
+<td>${rata}</td>
+<td>${hitungRanking(index)}</td>
+<td>${status}</td>
+
+</tr>
+
+`;
+
+});
+
+}
+
+/* GRAFIK */
+
+let chartInstance=null;
+
+function tampilkanGrafik(){
+
+const index=
+pilihGrafik.value;
+
+if(index==="") return;
+
+const nilai=
+nilaiSiswa[index];
+
+if(!nilai) return;
+
+const ctx=
+document.getElementById("chartNilai");
+
+if(chartInstance){
+
+chartInstance.destroy();
+
+}
+
+chartInstance = new Chart(ctx,{
+
+type:'bar',
+
+data:{
+
+labels:[
+'B. Indo',
+'MTK',
+'IPA',
+'IPS',
+'PPKN',
+'Agama',
+'Seni',
+'PJOK'
+],
+
+datasets:[{
+
+label:'Nilai',
+
+data:[
+
+nilai.indo,
+nilai.mtk,
+nilai.ipa,
+nilai.ips,
+nilai.ppkn,
+nilai.agama,
+nilai.seni,
+nilai.pjok
+
+]
+
+}]
+
+}
+
+});
+
+}
+
+/* STATISTIK */
+
+function renderStatistik(){
+
+totalSiswa.innerText=
+dataSiswa.length;
+
+let totalSemua=0;
+
+let jumlahNilai=0;
+
+let terbaik="";
+let nilaiTerbaik=0;
+
+let jumlahTuntas=0;
+
+dataSiswa.forEach((s,index)=>{
+
+const n=nilaiSiswa[index];
+
+if(!n) return;
+
+const total=
+n.indo+n.mtk+n.ipa+n.ips+
+n.ppkn+n.agama+n.seni+n.pjok;
+
+const rata=total/8;
+
+totalSemua += rata;
+
+jumlahNilai++;
+
+if(rata>nilaiTerbaik){
+
+nilaiTerbaik=rata;
+terbaik=s.nama;
+
+}
+
+if(rata>=75){
+
+jumlahTuntas++;
+
+}
+
+});
+
+const rataSek =
+Math.round(totalSemua/jumlahNilai || 0);
+
+rataSekolah.innerText=
+rataSek;
+
+siswaTerbaik.innerText=
+terbaik || "-";
+
+const persen=
+Math.round(
+(jumlahTuntas/jumlahNilai)*100 || 0
+);
+
+persenTuntas.innerText=
+persen+"%";
+
+}
+
 /* PDF */
 
 function downloadPDF(){
@@ -1283,42 +1422,11 @@ html2pdf().set(opt).from(element).save();
 
 }
 
-/* KEPSEK */
-
-function editKepsek(){
-
-const namaBaru=prompt(
-"Nama Kepala Sekolah",
-namaKepsek.innerText
-);
-
-if(namaBaru){
-
-namaKepsek.innerText=namaBaru;
-
-localStorage.setItem(
-"namaKepsek",
-namaBaru
-);
-
-}
-
-}
-
 /* INIT */
 
 window.onload=function(){
 
 renderSiswa();
-
-const savedNama=
-localStorage.getItem("namaKepsek");
-
-if(savedNama){
-
-namaKepsek.innerText=savedNama;
-
-}
 
 if(sekolah.namaSekolah){
 
